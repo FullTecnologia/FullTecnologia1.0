@@ -1,4 +1,6 @@
 import Ficha from '../models/ficha.js';
+import Usuario from '../../models/usuario.js';
+import Habilidade from '../../models/habilidade.js';
 
 async function cadastrarFicha(req, res) {
     try {
@@ -37,8 +39,57 @@ async function editarFicha(req, res) {
     }
 }
 
+async function excluirFicha(req, res) {
+    try {
+        const { id } = req.params; // Obtém o ID da ficha a ser excluída
+
+        // Encontra a ficha pelo ID
+        const ficha = await Ficha.findByPk(id);
+
+        if (!ficha) {
+            return res.status(404).json({ mensagem: 'Ficha não encontrada.' });
+        }
+
+        // Exclui a ficha
+        await ficha.destroy();
+
+        return res.status(200).json({ mensagem: 'Ficha excluída com sucesso.' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensagem: 'Erro ao excluir ficha.' });
+    }
+}
+
+async function listagem(req, res) {
+    try {
+        const { idUsuario } = req.params;
+
+        // Consulta SQL para buscar um usuário específico com suas fichas e habilidades
+        const usuario = await Usuario.findByPk(idUsuario, {
+            include: [
+                {
+                    model: Ficha,
+                    as: 'fichas',
+                    include: Habilidade, // Inclui as habilidades relacionadas à ficha
+                },
+            ],
+        });
+
+        if (!usuario) {
+            return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
+        }
+
+        return res.status(200).json(usuario);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensagem: 'Erro ao listar usuário, fichas e habilidades.' });
+    }
+}
+
 
 export {
     cadastrarFicha,
-    editarFicha
+    editarFicha, 
+    excluirFicha,
+    listagem
 };

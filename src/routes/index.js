@@ -1,7 +1,7 @@
 import express from 'express';
 import { cadastrar } from '../controllers/cadastroController.js';
 import { login, logout } from '../controllers/loginController.js';
-import { cadastrarFicha, editarFicha } from '../controllers/RecursosHumanos/fichaController.js';
+import { cadastrarFicha, editarFicha, listagem, excluirFicha } from '../controllers/RecursosHumanos/fichaController.js';
 
 const router = express.Router();
 
@@ -29,5 +29,9 @@ router.get("/logout", async(req, res) => {
         res.status(400).send("Erro ao fazer requisição: " + error);
     }
 });
+
+router.get('/usuarios/:idUsuario/fichas-habilidades', listagem);
+
+router.delete('/:id', excluirFicha);
 
 export default router;
