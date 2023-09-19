@@ -1,4 +1,4 @@
-import Ficha from '../models/ficha.js';
+import Ficha from '../../models/ficha.js';
 import Usuario from '../../models/usuario.js';
 import Habilidade from '../../models/habilidade.js';
 

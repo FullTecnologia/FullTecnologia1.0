@@ -37,6 +37,74 @@ async function cadastrar(req, res) {
   }
 }
 
+async function editar(req, res) {
+  try {
+    const { id } = req.params;
+    const { nome, email, senha } = req.body;
+
+    // Verificar se o usuário existe
+    const usuario = await Usuario.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Atualizar os dados do usuário
+    usuario.nome = nome;
+    usuario.email = email;
+
+    if (senha) {
+      // Se uma nova senha for fornecida, criptografe-a e atualize-a
+      // (Você pode adicionar tratamento adicional para atualizar a senha no Firebase Auth, se necessário)
+      const senhaCriptografada = senha; 
+      usuario.senha = senhaCriptografada;
+    }
+
+    await usuario.save();
+
+    return res.status(200).json({ mensagem: "Usuário atualizado com sucesso." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro ao editar usuário." });
+  }
+}
+
+async function excluir(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Verificar se o usuário existe
+    const usuario = await Usuario.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Excluir o usuário
+    await usuario.destroy();
+
+    return res.status(200).json({ mensagem: "Usuário excluído com sucesso." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro ao excluir usuário." });
+  }
+}
+
+async function listarUsuarios(req, res) {
+  try {
+    // Consultar todos os usuários
+    const usuarios = await Usuario.findAll();
+
+    return res.status(200).json(usuarios);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro ao listar usuários." });
+  }
+}
+
 export {
   cadastrar,
+  editar,
+  excluir,
+  listarUsuarios
 };
