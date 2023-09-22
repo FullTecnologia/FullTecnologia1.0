@@ -68,7 +68,7 @@ Projeto.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'StatusProjeto',
+            model: StatusProjeto,
             as: 'id',
         }
     },

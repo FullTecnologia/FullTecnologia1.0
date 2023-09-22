@@ -6,6 +6,7 @@ import Ficha from "./ficha.js";
 import Habilidade from "./habilidade.js";
 import Projeto from "./projeto.js";
 import StatusProjeto from "./statusProjeto.js";
+import AtividadeProgramada from "./atividadeProgramada.js";
 
 export { 
     sequelize,
@@ -15,4 +16,5 @@ export {
     Habilidade,
     Projeto,
     StatusProjeto,
+    AtividadeProgramada
 };

@@ -16,13 +16,16 @@ async function login(req, res) {
             // busar pelo id so user no banco de usuarios
             const userId = await Usuario.findOne({ where: { email } });
             // Se as credenciais estiverem corretas, registre o login na tabela de logins
-            await Login.create({
+            const login = await Login.create({
                 id_usuario: userId, 
                 hora_login: new Date(), // Registra o horário de login
                 hora_logout: null, // Inicialmente, hora_logout é nula
             });
 
-            return res.status(200).json({ mensagem: "Login bem-sucedido." });
+            return res.status(200).json({ 
+                mensagem: "Login bem-sucedido.",
+                data: login,
+            });
         }
         
     } catch (error) {
@@ -31,8 +34,9 @@ async function login(req, res) {
     }
 }
 
-async function logout(idUsuario) {
-    try {
+async function logout(req, res) {
+    try {  
+        const idUsuario = req.params;
         // Encontre o registro de login mais recente para o usuário
         const recentLogin = await Login.findOne({
             where: { id_usuario: idUsuario },
@@ -44,7 +48,10 @@ async function logout(idUsuario) {
             // Atualiza a hora_logout no registro de login
             recentLogin.hora_logout = new Date();
             await recentLogin.save();
+
+            return res.status(200).json({ mensagem: "Logout bem-sucedido."});
         }
+
     } catch (error) {
         console.error(error);
     }
