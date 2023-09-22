@@ -10,14 +10,21 @@ async function login(req, res) {
         // Verifica as credenciais no Firebase
         const userCredential = await firebaseAuth.signInWithEmailAndPassword(email, senha);
 
-        // Se as credenciais estiverem corretas, registre o login na tabela de logins
-        await Login.create({
-            id_usuario: userCredential.user.uid,
-            hora_login: new Date(), // Registra o horário de login
-            hora_logout: null, // Inicialmente, hora_logout é nula
-        });
+        if (!userCredential) {
+            return res.status(404).json({ mensagem: "Usuário não encontrado." });
+        } else {
+            // busar pelo id so user no banco de usuarios
+            const userId = await Usuario.findOne({ where: { email } });
+            // Se as credenciais estiverem corretas, registre o login na tabela de logins
+            await Login.create({
+                id_usuario: userId, 
+                hora_login: new Date(), // Registra o horário de login
+                hora_logout: null, // Inicialmente, hora_logout é nula
+            });
 
-        return res.status(200).json({ mensagem: "Login bem-sucedido." });
+            return res.status(200).json({ mensagem: "Login bem-sucedido." });
+        }
+        
     } catch (error) {
         console.error(error);
         return res.status(500).json({ mensagem: "Erro ao logar usuário." });

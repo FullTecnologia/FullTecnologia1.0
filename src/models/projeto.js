@@ -2,6 +2,7 @@ import { sequelize } from '../config/configDataBase.js';
 import { Sequelize } from 'sequelize';
 const { DataTypes, Model } = Sequelize;
 import Usuario from './usuario.js';
+import StatusProjeto from './statusProjeto.js';
 
 class Projeto extends Model {}
 
@@ -9,16 +10,16 @@ Projeto.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true,
     },
     numeroContrato: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     id_empresa: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: 'Usuarios', 
             key: 'id', 
@@ -26,11 +27,11 @@ Projeto.init({
     },
     nomeProjeto: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     id_gestor: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: 'Usuarios', 
             key: 'id', 
@@ -42,7 +43,7 @@ Projeto.init({
     },
     dataInicio: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
     },
     dataFim: {
         type: DataTypes.DATE,
@@ -63,7 +64,7 @@ Projeto.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    etapa: {
+    id_status: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -85,6 +86,11 @@ Projeto.belongsTo(Usuario, {
 Projeto.belongsTo(Usuario, {
     foreignKey: 'id_gestor',
     as: 'gestor',
+});
+
+Projeto.belongsTo(StatusProjeto, {
+    foreignKey: 'id_status',
+    as: 'status',
 });
 
 export default Projeto;

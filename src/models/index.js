@@ -5,6 +5,7 @@ import Login from "./login.js";
 import Ficha from "./ficha.js";
 import Habilidade from "./habilidade.js";
 import Projeto from "./projeto.js";
+import StatusProjeto from "./statusProjeto.js";
 
 export { 
     sequelize,
@@ -12,5 +13,6 @@ export {
     Login,
     Ficha,
     Habilidade,
-    Projeto
+    Projeto,
+    StatusProjeto,
 };

@@ -5,7 +5,7 @@ import { cadastrarFicha, editarFicha, listagem, excluirFicha } from '../controll
 
 const router = express.Router();
 
-// Routes
+// Routas
 
 // Usuário Cadastro
 router.post("/cadastro", cadastrar);
@@ -20,7 +20,10 @@ router.get("/logout", logout);
 // Ficha
 router.post("/cadastrarFicha", cadastrarFicha);
 router.get('/usuarios/:idUsuario/fichas-habilidades', listagem);
-router.delete('/:id', excluirFicha);
+router.delete('/krfv :id', excluirFicha);
 router.put('/:id', editarFicha);
+
+// Projeto
+
 
 export default router;

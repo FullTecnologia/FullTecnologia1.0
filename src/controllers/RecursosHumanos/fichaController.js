@@ -86,10 +86,31 @@ async function listagem(req, res) {
     }
 }
 
+// Função para cadastrar uma nova habilidade
+async function cadastrarHabilidade(req, res) {
+  try {
+    const {idUsuario, habilidade, especialidade} = req.boby;
+    // Crie a habilidade usando o modelo Habilidade
+    const novaHabilidade = await Habilidade.create({
+      id_usuario: idUsuario,
+      habilidade: habilidade,
+      especialidade: especialidade,
+    });
+
+    // Retorne a habilidade recém-criada
+    return novaHabilidade;
+  } catch (error) {
+    // Trate os erros de validação ou outros erros aqui
+    console.error('Erro ao cadastrar habilidade:', error);
+    throw error;
+  }
+}
+
 
 export {
     cadastrarFicha,
     editarFicha, 
     excluirFicha,
-    listagem
+    listagem,
+    cadastrarHabilidade
 };

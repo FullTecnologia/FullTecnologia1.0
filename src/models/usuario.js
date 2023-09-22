@@ -8,22 +8,26 @@ Usuario.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true
     },
     nome: {
         type: DataTypes.STRING(100),
-        allowNull: false,
+        allowNull: true,
     },
     email: {
         type: DataTypes.STRING(150),
-        allowNull: false,
+        allowNull: true,
         unique: true
     },
-    senha: { 
+    firebase: { 
         type: DataTypes.STRING, 
-        allowNull: false,
+        allowNull: true,
     },
+    nivel: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    }
 }, {
     sequelize,
     modelName: 'Usuario', // Nome do modelo

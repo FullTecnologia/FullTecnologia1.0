@@ -10,12 +10,12 @@ Habilidade.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true,
     },
     id_usuario: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: Usuario,
             key: 'id',
@@ -23,7 +23,7 @@ Habilidade.init({
     },
     habilidade: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     especialidade: {
         type: DataTypes.TEXT,

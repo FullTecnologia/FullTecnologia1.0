@@ -3,7 +3,7 @@ import { firebaseAuth } from "../config/firebaseConfig.js";
 
 async function cadastrar(req, res) {
   try {
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha, nivel } = req.body;
 
     // Verificar se o email já está em uso
     const existingUser = await Usuario.findOne({ where: { email } });
@@ -19,13 +19,14 @@ async function cadastrar(req, res) {
     });
 
     // Obter a senha criptografada do Firebase
-    const senhaCriptografada = userRecord.toJSON().passwordHash;
+    const firebaseUi = userRecord.toJSON().uid;
 
     // Salvar o usuário no banco de dados com a senha criptografada
     const novoUsuario = new Usuario({
       nome,
       email,
-      senha: senhaCriptografada, // Salvar a senha criptografada no banco de dados
+      firebase: firebaseUi, // Salvar a senha criptografada no banco de dados
+      nivel,
     });
 
     await novoUsuario.save();
@@ -40,7 +41,7 @@ async function cadastrar(req, res) {
 async function editar(req, res) {
   try {
     const { id } = req.params;
-    const { nome, email, senha } = req.body;
+    const { nome, email, senha, nivel } = req.body;
 
     // Verificar se o usuário existe
     const usuario = await Usuario.findByPk(id);
@@ -52,12 +53,13 @@ async function editar(req, res) {
     // Atualizar os dados do usuário
     usuario.nome = nome;
     usuario.email = email;
+    usuario.nivel = nivel;
 
     if (senha) {
       // Se uma nova senha for fornecida, criptografe-a e atualize-a
-      // (Você pode adicionar tratamento adicional para atualizar a senha no Firebase Auth, se necessário)
+      // adicionar a autentificação do firebase
       const senhaCriptografada = senha; 
-      usuario.senha = senhaCriptografada;
+      usuario.firebase = senhaCriptografada;
     }
 
     await usuario.save();

@@ -10,12 +10,12 @@ Ficha.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true,
     },
     id_usuario: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: Usuario,
             key: 'id',
@@ -31,11 +31,11 @@ Ficha.init({
     },
     nome_mae: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     nome_pai: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     cpf: {
         type: DataTypes.STRING,
@@ -107,7 +107,7 @@ Ficha.init({
     },
     raca_cor: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
     },
     certificado_reservista_numero: {
         type: DataTypes.STRING,
