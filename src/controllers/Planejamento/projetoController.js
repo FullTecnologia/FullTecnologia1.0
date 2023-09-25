@@ -1,5 +1,5 @@
-import Projeto from "../../models";
-import StatusProjeto from "../../models";
+import Projeto from "../../models/projeto.js";
+import StatusProjeto from "../../models/statusProjeto.js";
 
 async function cadastrarProjeto(req, res) {
     try {
