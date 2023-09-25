@@ -30,7 +30,7 @@ async function login(req, res) {
         
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ mensagem: "Erro ao logar usuário." });
+        return res.status(500).json({ mensagem: "Erro ao logar usuário." , error: error});
     }
 }
 
