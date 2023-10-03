@@ -34,11 +34,15 @@ router.get("/logout/:id", logout);
 // Recursos Humanos
 router.post("/cadastrarFicha", cadastrarFicha);
 router.get('/usuarios/:idUsuario/fichas-habilidades', listagem);
-router.delete('/krfv :id', excluirFicha);
-router.put('/editarFicha/:id', editarFicha);
+router.delete("/krfv :id", excluirFicha);
+router.put("/editarFicha/:id", editarFicha);
 
 // Planejamento 
-
-
+router.post("/cadastrarProjeto", cadastrarProjeto);
+router.put("/editarProjet", editarProjeto);
+router.delete("/excluirProjeto", excluirProjeto);
+router.get("/listarProjeto", listarProjetos);
+router.put("/editarStatusProjeto", editarStatusProjeto);
+router.post("/cadastrarStatus", cadastrarStatusProjeto);
 
 export default router;

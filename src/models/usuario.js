@@ -8,25 +8,25 @@ Usuario.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        allowNull: true,
+        allowNull: false,
         primaryKey: true
     },
     nome: {
         type: DataTypes.STRING(100),
-        allowNull: true,
+        allowNull: false,
     },
     email: {
         type: DataTypes.STRING(150),
-        allowNull: true,
+        allowNull: false,
         unique: true
     },
-    firebase: { 
+    senha: { 
         type: DataTypes.STRING, 
         allowNull: true,
     },
     nivel: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
     }
 }, {
     sequelize,

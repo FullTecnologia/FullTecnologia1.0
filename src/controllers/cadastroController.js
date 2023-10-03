@@ -1,5 +1,5 @@
 import Usuario from "../models/usuario.js";
-import { firebaseAuth } from "../config/firebaseConfig.js"; 
+import bcrypt from 'bcrypt';
 
 async function cadastrar(req, res) {
   try {
@@ -12,20 +12,14 @@ async function cadastrar(req, res) {
       return res.status(400).json({ mensagem: "Email já está em uso." });
     }
 
-    // Criptografar a senha usando o Firebase Auth
-    const userRecord = await firebaseAuth.createUser({
-      email,
-      password: senha,
-    });
-
-    // Obter a senha criptografada do Firebase
-    const firebaseUi = userRecord.toJSON().uid;
+    // Criptografar a senha usando bcrypt (ou qualquer outra biblioteca de sua preferência)
+    const senhaCriptografada = await bcrypt.hash(senha, 10); // 10 é o número de rounds de criptografia
 
     // Salvar o usuário no banco de dados com a senha criptografada
     const novoUsuario = new Usuario({
       nome,
       email,
-      firebase: firebaseUi, // Salvar a senha criptografada no banco de dados
+      senha: senhaCriptografada,
       nivel,
     });
 
@@ -57,7 +51,7 @@ async function editar(req, res) {
 
     if (senha) {
       // Se uma nova senha for fornecida, criptografe-a e atualize-a
-      // adicionar a autentificação do firebase
+      // adicionar a autentificação 
       const senhaCriptografada = senha; 
       usuario.firebase = senhaCriptografada;
     }

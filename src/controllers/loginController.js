@@ -1,38 +1,35 @@
 import Usuario from '../models/usuario.js';
 import Login from '../models/login.js';
-import { firebaseAuth } from '../config/firebaseConfig.js';
+import bcrypt from 'bcrypt';
+import { generateToken } from '../config/configJWT.js';
 
 async function login(req, res) {
     try {
-        // Extrai o email e senha dos parâmetros da solicitação
-        const { email, senha } = req.body;
-
-        // Verifica as credenciais no Firebase
-        const userCredential = await firebaseAuth.signInWithEmailAndPassword(email, senha);
-
-        if (!userCredential) {
-            return res.status(404).json({ mensagem: "Usuário não encontrado." });
-        } else {
-            // busar pelo id so user no banco de usuarios
-            const userId = await Usuario.findOne({ where: { email } });
-            // Se as credenciais estiverem corretas, registre o login na tabela de logins
-            const login = await Login.create({
-                id_usuario: userId, 
-                hora_login: new Date(), // Registra o horário de login
-                hora_logout: null, // Inicialmente, hora_logout é nula
-            });
-
-            return res.status(200).json({ 
-                mensagem: "Login bem-sucedido.",
-                data: login,
-            });
-        }
-        
+      const { email, senha } = req.body;
+  
+      // Verifique as credenciais
+      const usuario = await Usuario.findOne({ where: { email } });
+  
+      if (!usuario) {
+        return res.status(404).json({ mensagem: "Usuário não encontrado." });
+      }
+  
+      // Verifique se a senha é válida
+      const senhaValida = await bcrypt.compare(senha, usuario.senha);
+  
+      if (!senhaValida) {
+        return res.status(401).json({ mensagem: "Credenciais inválidas." });
+      }
+  
+      // Gere um token JWT e envie-o como resposta
+      const token = generateToken(usuario.id);
+  
+      return res.status(200).json({ token , mensagem: "Login realizado com sucesso!"});
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ mensagem: "Erro ao logar usuário." , error: error});
+      console.error(error);
+      return res.status(500).json({ mensagem: "Erro ao logar usuário." });
     }
-}
+  }
 
 async function logout(req, res) {
     try {  
