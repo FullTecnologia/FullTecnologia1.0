@@ -23,13 +23,23 @@ async function login(req, res) {
   
       // Gere um token JWT e envie-o como resposta
       const token = generateToken(usuario.id);
-  
-      return res.status(200).json({ token , mensagem: "Login realizado com sucesso!"});
+
+      // Registre o horário de login
+      const hora_login = new Date();
+
+      // Crie um registro de login no banco de dados
+      const login = await Login.create({
+        id_usuario: usuario.id,
+        hora_login,
+        hora_logout: null, // Inicialmente, hora_logout é nula
+      });
+      
+      return res.status(200).json({ token, login, mensagem: "Login realizado com sucesso!"});
     } catch (error) {
       console.error(error);
       return res.status(500).json({ mensagem: "Erro ao logar usuário." });
     }
-  }
+}
 
 async function logout(req, res) {
     try {  

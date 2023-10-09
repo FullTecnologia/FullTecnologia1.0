@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use('/api', Router);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 app.listen(PORT, () => {
     console.log(`Servidor em execução na porta ${PORT}`);
