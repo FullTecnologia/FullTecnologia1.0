@@ -12,8 +12,6 @@ import {
     editarProjeto, 
     excluirProjeto, 
     listarProjetos, 
-    editarStatusProjeto, 
-    cadastrarStatusProjeto
 } from '../controllers/Planejamento/projetoController.js';
 import {
     cadastrarAtividade,
@@ -36,7 +34,7 @@ import {
     cadastrarEtapaProjeto,
     listarEtapasProjetos,
     excluirEtapaProjeto,
-} from '../controllers/RecursosHumanos/statusController.js'
+} from '../controllers/Planejamento/statusController.js'
 
 
 const router = express.Router();
@@ -69,16 +67,14 @@ router.put("/editarFicha/:id", editarPedidoEPI);
 router.post("/cadastrarHabilidades", cadastrarHabilidade);
 router.get("/listarHabilidades", listarHabilidadesDoUsuario);
 router.delete("/excluirHabilidade/:id", excluirHabilidade);
-router.post("/cadastrarEtapa", cadastrarEtapaProjeto);
-router.get("/listarEtapas", listarEtapasProjetos);
-router.delete("/excluirEtapa/:id", excluirEtapaProjeto);
 
 // Planejamento 
 router.post("/cadastrarProjeto", cadastrarProjeto);
-router.put("/editarProjet", editarProjeto);
-router.delete("/excluirProjeto", excluirProjeto);
+router.put("/editarProjet/:id", editarProjeto);
+router.delete("/excluirProjeto/:id", excluirProjeto);
 router.get("/listarProjeto", listarProjetos);
-router.put("/editarStatusProjeto", editarStatusProjeto);
-router.post("/cadastrarStatus", cadastrarStatusProjeto);
+router.post("/cadastrarEtapa", cadastrarEtapaProjeto);
+router.get("/listarEtapas", listarEtapasProjetos);
+router.delete("/excluirEtapa/:id", excluirEtapaProjeto);
 
 export default router;
