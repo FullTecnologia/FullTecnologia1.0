@@ -1,18 +1,14 @@
 import express from 'express';
 import { cadastrar, editar, excluir, listarUsuarios } from '../controllers/cadastroController.js';
 import { login, logout } from '../controllers/loginController.js';
+
+// Recursos Humanos
 import { 
     cadastrarFicha, 
     editarFicha, 
     listagem, 
     excluirFicha 
 } from '../controllers/RecursosHumanos/fichaController.js';
-import {
-    cadastrarProjeto, 
-    editarProjeto, 
-    excluirProjeto, 
-    listarProjetos, 
-} from '../controllers/Planejamento/projetoController.js';
 import {
     cadastrarAtividade,
     editarAtividade,
@@ -30,6 +26,14 @@ import {
     excluirHabilidade,
     listarHabilidadesDoUsuario,
 } from '../controllers/RecursosHumanos/habilidadesController.js';
+
+// Planejamento
+import {
+    cadastrarProjeto, 
+    editarProjeto, 
+    excluirProjeto, 
+    listarProjetos, 
+} from '../controllers/Planejamento/projetoController.js';
 import {
     cadastrarEtapaProjeto,
     listarEtapasProjetos,
