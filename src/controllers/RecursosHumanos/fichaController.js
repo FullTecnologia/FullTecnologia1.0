@@ -62,10 +62,10 @@ async function excluirFicha(req, res) {
 
 async function listagem(req, res) {
     try {
-        const { idUsuario } = req.params;
+        const { id } = req.params;
 
         // Consulta SQL para buscar um usuário específico com suas fichas e habilidades
-        const usuario = await Usuario.findByPk(idUsuario, {
+        const usuario = await Usuario.findByPk(id, {
             include: [
                 {
                     model: Ficha,

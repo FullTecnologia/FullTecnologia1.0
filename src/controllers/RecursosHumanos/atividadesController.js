@@ -61,12 +61,12 @@ async function excluirAtividade(req, res) {
 
 async function listarAtividades(req, res) {
     try {
-        const { idUsuario } = req.params;
+        const { id } = req.params;
 
         // Consulte todas as atividades programadas para o usuário específico
         const atividades = await AtividadeProgramada.findAll({
             where: {
-                id_usuario: idUsuario,
+                id_usuario: id,
             },
         });
 

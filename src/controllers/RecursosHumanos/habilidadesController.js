@@ -46,11 +46,11 @@ async function excluirHabilidade(req, res) {
 // Função para listar as habilidades de um usuário pelo ID do usuário
 async function listarHabilidadesDoUsuario(req, res) {
     try {
-        const { idUsuario } = req.params; // Supondo que você está passando o ID do usuário como parâmetro na rota
+        const { id } = req.params; // Supondo que você está passando o ID do usuário como parâmetro na rota
 
         // Consulte as habilidades do usuário com base no ID do usuário
         const habilidades = await Habilidade.findAll({
-            where: { id_usuario: idUsuario },
+            where: { id_usuario: id },
         });
 
         // Retorna a lista de habilidades do usuário
