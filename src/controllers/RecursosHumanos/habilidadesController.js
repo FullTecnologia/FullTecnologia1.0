@@ -1,5 +1,5 @@
-// Importe o modelo Habilidade
 import Habilidade from '../../models/habilidade.js'
+
 // Função para cadastrar uma nova habilidade
 async function cadastrarHabilidade(req, res) {
     try {
