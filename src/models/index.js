@@ -7,6 +7,7 @@ import Habilidade from "./habilidade.js";
 import Projeto from "./projeto.js";
 import StatusProjeto from "./statusProjeto.js";
 import AtividadeProgramada from "./atividadeProgramada.js";
+import PedidosEPIs from "./pedidos_epis.js";
 
 export { 
     sequelize,
@@ -16,5 +17,6 @@ export {
     Habilidade,
     Projeto,
     StatusProjeto,
-    AtividadeProgramada
+    AtividadeProgramada,
+    PedidosEPIs,
 };

@@ -117,6 +117,10 @@ Ficha.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
+    nome_companheiro: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     endereco: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -147,6 +151,10 @@ Ficha.init({
     },
     cargo: {
         type: DataTypes.STRING,
+        allowNull: true,
+    },
+    cbo: {
+        type: DataTypes.INTEGER,
         allowNull: true,
     },
     data_admissao: {

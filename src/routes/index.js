@@ -14,7 +14,19 @@ import {
     listarProjetos, 
     editarStatusProjeto, 
     cadastrarStatusProjeto
-} from '../controllers/Planejamento/projetoController.js'
+} from '../controllers/Planejamento/projetoController.js';
+import {
+    cadastrarAtividade,
+    editarAtividade,
+    excluirAtividade,
+    listarAtividades,
+} from '../controllers/RecursosHumanos/atividadesController.js';
+import {
+    cadastrarPedidoEPI,
+    editarPedidoEPI,
+    excluirPedidoEPI,
+    listarPedidosEPI,
+} from '../controllers/RecursosHumanos/epiControllers.js';
 
 
 const router = express.Router();
@@ -34,8 +46,16 @@ router.get("/logout/:id", logout);
 // Recursos Humanos
 router.post("/cadastrarFicha", cadastrarFicha);
 router.get('/usuarios/:idUsuario/fichas-habilidades', listagem);
-router.delete("/krfv :id", excluirFicha);
+router.delete("/excluirFucha/:id", excluirFicha);
 router.put("/editarFicha/:id", editarFicha);
+router.post("/cadastrarAtividade", cadastrarAtividade);
+router.get('/listarAtividade/:id', listarAtividades);
+router.delete("/excluirAtividade/:id", excluirAtividade);
+router.put("/editarAtividade/:id", editarAtividade,);
+router.post("/cadastrarPedidoEPI", cadastrarPedidoEPI);
+router.get('/listarPedidosEPI', listarPedidosEPI);
+router.delete("/excluirPedidoEPI/:id", excluirPedidoEPI);
+router.put("/editarFicha/:id", editarPedidoEPI);
 
 // Planejamento 
 router.post("/cadastrarProjeto", cadastrarProjeto);
