@@ -8,6 +8,7 @@ import Projeto from "./projeto.js";
 import StatusProjeto from "./statusProjeto.js";
 import AtividadeProgramada from "./atividadeProgramada.js";
 import PedidosEPIs from "./pedidos_epis.js";
+import EncargosObrigacoes from "./encargosObrigacoes.js";
 
 export { 
     sequelize,
@@ -19,4 +20,5 @@ export {
     StatusProjeto,
     AtividadeProgramada,
     PedidosEPIs,
+    EncargosObrigacoes,
 };

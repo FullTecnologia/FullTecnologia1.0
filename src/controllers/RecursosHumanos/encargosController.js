@@ -1,4 +1,4 @@
-import EncargosObrigacoes from "../../models/encargosObrigacoes";
+import EncargosObrigacoes from "../../models/encargosObrigacoes.js";
 
 // Função para cadastrar um novo encargo/obrigação
 async function cadastrarEncargo(req, res) {
