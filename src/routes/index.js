@@ -26,6 +26,12 @@ import {
     excluirHabilidade,
     listarHabilidadesDoUsuario,
 } from '../controllers/RecursosHumanos/habilidadesController.js';
+import {
+    cadastrarEncargo, 
+    editarEncargo, 
+    excluirEncargo, 
+    listarEncargos 
+} from '../controllers/RecursosHumanos/encargosController.js';
 
 // Planejamento
 import {
@@ -71,6 +77,10 @@ router.put("/editarFicha/:id", editarPedidoEPI);
 router.post("/cadastrarHabilidades", cadastrarHabilidade);
 router.get("/listarHabilidades", listarHabilidadesDoUsuario);
 router.delete("/excluirHabilidade/:id", excluirHabilidade);
+router.post("/encargos", cadastrarEncargo);
+router.put("/encargos/:id", editarEncargo);
+router.delete("/encargos/:id", excluirEncargo);
+router.get("/encargos", listarEncargos);
 
 // Planejamento 
 router.post("/cadastrarProjeto", cadastrarProjeto);
