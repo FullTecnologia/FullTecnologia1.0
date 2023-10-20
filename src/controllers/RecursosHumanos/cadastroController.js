@@ -1,4 +1,4 @@
-import Usuario from "../models/usuario.js";
+import Usuario from "../../models/usuario.js";
 import bcrypt from 'bcrypt';
 
 async function cadastrar(req, res) {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { cadastrar, editar, excluir, listarUsuarios } from '../controllers/cadastroController.js';
+import { cadastrar, editar, excluir, listarUsuarios } from '../controllers/RecursosHumanos/cadastroController.js';
 import { login, logout } from '../controllers/loginController.js';
 
 // Recursos Humanos
