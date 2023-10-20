@@ -5,6 +5,13 @@ import Habilidade from '../../models/habilidade.js';
 async function cadastrarFicha(req, res) {
     try {
         const { dadosFicha } = req.boby;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
+
         // Insere os dados da ficha no banco de dados
         const ficha = await Ficha.create(dadosFicha);
 
@@ -20,6 +27,12 @@ async function editarFicha(req, res) {
     try {
         const { id } = req.params; // Obtém o ID da ficha a ser editada
         const { dadosFicha } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Encontra a ficha pelo ID
         const ficha = await Ficha.findByPk(id);
@@ -42,6 +55,12 @@ async function editarFicha(req, res) {
 async function excluirFicha(req, res) {
     try {
         const { id } = req.params; // Obtém o ID da ficha a ser excluída
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Encontra a ficha pelo ID
         const ficha = await Ficha.findByPk(id);
@@ -63,6 +82,16 @@ async function excluirFicha(req, res) {
 async function listagem(req, res) {
     try {
         const { id } = req.params;
+        const { dataInicio, dataFim, termoBusca } = req.query;
+
+        // Construa as condições de pesquisa com base nos filtros de data e termo de busca
+        const conditions = { id_usuario: id };
+        if (dataInicio && dataFim) {
+            conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+        }
+        if (termoBusca) {
+            conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+        }
 
         // Consulta SQL para buscar um usuário específico com suas fichas e habilidades
         const usuario = await Usuario.findByPk(id, {
@@ -73,6 +102,7 @@ async function listagem(req, res) {
                     include: Habilidade, // Inclui as habilidades relacionadas à ficha
                 },
             ],
+            where: conditions 
         });
 
         if (!usuario) {
@@ -86,31 +116,9 @@ async function listagem(req, res) {
     }
 }
 
-// Função para cadastrar uma nova habilidade
-async function cadastrarHabilidade(req, res) {
-  try {
-    const {idUsuario, habilidade, especialidade} = req.boby;
-    // Crie a habilidade usando o modelo Habilidade
-    const novaHabilidade = await Habilidade.create({
-      id_usuario: idUsuario,
-      habilidade: habilidade,
-      especialidade: especialidade,
-    });
-
-    // Retorne a habilidade recém-criada
-    return novaHabilidade;
-  } catch (error) {
-    // Trate os erros de validação ou outros erros aqui
-    console.error('Erro ao cadastrar habilidade:', error);
-    throw error;
-  }
-}
-
-
 export {
     cadastrarFicha,
     editarFicha, 
     excluirFicha,
     listagem,
-    cadastrarHabilidade
 };

@@ -3,6 +3,13 @@ import AtividadeProgramada from "../../models/atividadeProgramada.js";
 async function cadastrarAtividade(req, res) {
     try {
         const {dadosAtividade} = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
+
         // Insere os dados da atividade no banco de dados
         const atividade = await AtividadeProgramada.create(dadosAtividade);
 
@@ -18,6 +25,12 @@ async function editarAtividade(req, res) {
     try {
         const { id } = req.params; 
         const { dadosAtividade } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Verifique se a atividade existe
         const atividade = await AtividadeProgramada.findByPk(id);
@@ -40,6 +53,12 @@ async function editarAtividade(req, res) {
 async function excluirAtividade(req, res) {
     try {
         const { id } = req.params; 
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Verifique se a atividade existe
         const atividade = await AtividadeProgramada.findByPk(id);
@@ -62,11 +81,22 @@ async function excluirAtividade(req, res) {
 async function listarAtividades(req, res) {
     try {
         const { id } = req.params;
+        const { dataInicio, dataFim, termoBusca } = req.query;
+
+        // Construa as condições de pesquisa com base nos filtros de data e termo de busca
+        const conditions = { id_usuario: id };
+        if (dataInicio && dataFim) {
+            conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+        }
+        if (termoBusca) {
+            conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+        }
 
         // Consulte todas as atividades programadas para o usuário específico
         const atividades = await AtividadeProgramada.findAll({
             where: {
                 id_usuario: id,
+                conditions,
             },
         });
 

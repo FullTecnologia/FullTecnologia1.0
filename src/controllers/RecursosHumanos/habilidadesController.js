@@ -4,6 +4,12 @@ import Habilidade from '../../models/habilidade.js'
 async function cadastrarHabilidade(req, res) {
     try {
         const { id_usuario, habilidade, especialidade } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Insira os dados da habilidade no banco de dados
         const novaHabilidade = await Habilidade.create({
@@ -24,6 +30,12 @@ async function cadastrarHabilidade(req, res) {
 async function excluirHabilidade(req, res) {
     try {
         const { id } = req.params;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Verifique se a habilidade existe
         const habilidade = await Habilidade.findByPk(id);
@@ -47,6 +59,16 @@ async function excluirHabilidade(req, res) {
 async function listarHabilidadesDoUsuario(req, res) {
     try {
         const { id } = req.params; // Supondo que você está passando o ID do usuário como parâmetro na rota
+        const { dataInicio, dataFim, termoBusca } = req.query;
+
+        // Construa as condições de pesquisa com base nos filtros de data e termo de busca
+        const conditions = { id_usuario: id };
+        if (dataInicio && dataFim) {
+            conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+        }
+        if (termoBusca) {
+            conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+        }
 
         // Consulte as habilidades do usuário com base no ID do usuário
         const habilidades = await Habilidade.findAll({

@@ -2,6 +2,13 @@ import PedidosEPIs from "../../models/pedidos_epis.js";
 
 async function cadastrarPedidoEPI(req, res) {
     try {
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
+
         const { dadosPedido } = req.body;
         // Insere os dados do pedido no banco de dados
         const pedido = await PedidosEPIs.create(dadosPedido);
@@ -18,6 +25,12 @@ async function editarPedidoEPI(req, res) {
     try {
         const { id } = req.params;
         const { dadosPedido } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+        return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Verifique se o pedido existe
         const pedido = await PedidosEPIs.findByPk(id);
@@ -40,6 +53,12 @@ async function editarPedidoEPI(req, res) {
 async function excluirPedidoEPI(req, res) {
     try {
         const { id } = req.params;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Verifique se o pedido existe
         const pedido = await PedidosEPIs.findByPk(id);
@@ -61,8 +80,19 @@ async function excluirPedidoEPI(req, res) {
 
 async function listarPedidosEPI(req, res) {
     try {
+        const { dataInicio, dataFim, termoBusca } = req.query;
+
+        // Construa as condições de pesquisa com base nos filtros de data e termo de busca
+        const conditions = { id_usuario: id };
+        if (dataInicio && dataFim) {
+            conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+        }
+        if (termoBusca) {
+            conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+        }
+        
         // Consulte todos os pedidos de EPI
-        const pedidos = await PedidosEPIs.findAll();
+        const pedidos = await PedidosEPIs.findAll({ where: conditions });
 
         // Retorna a lista de pedidos
         return res.status(200).json(pedidos);

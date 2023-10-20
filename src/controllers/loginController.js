@@ -22,7 +22,7 @@ async function login(req, res) {
       }
   
       // Gere um token JWT e envie-o como resposta
-      const token = generateToken(usuario.id);
+      const token = generateToken({ id: usuario.id, nivel: usuario.nivel });
 
       // Registre o horário de login
       const hora_login = new Date();
