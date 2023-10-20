@@ -1,6 +1,7 @@
 import express from 'express';
 import { sequelize } from './src/models/index.js';
 import Router from './src/routes/index.js';
+import cors from 'cors'; // Importe o pacote 'cors'
 
 const app = express();
 
@@ -11,6 +12,13 @@ sequelize.sync().then(() => {
 });
 
 app.use(express.json());
+
+// Configurar o middleware de CORS para permitir solicitações da origem do seu frontend
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+}));
 
 app.use('/api', Router);
 
