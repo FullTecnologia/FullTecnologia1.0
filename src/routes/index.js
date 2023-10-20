@@ -75,7 +75,7 @@ router.get('/listarPedidosEPI', listarPedidosEPI);
 router.delete("/excluirPedidoEPI/:id", excluirPedidoEPI);
 router.put("/editarFicha/:id", editarPedidoEPI);
 router.post("/cadastrarHabilidades", cadastrarHabilidade);
-router.get("/listarHabilidades", listarHabilidadesDoUsuario);
+router.get("/listarHabilidades/:id", listarHabilidadesDoUsuario);
 router.delete("/excluirHabilidade/:id", excluirHabilidade);
 router.post("/encargos", cadastrarEncargo);
 router.put("/encargos/:id", editarEncargo);

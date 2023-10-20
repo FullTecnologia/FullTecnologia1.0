@@ -83,7 +83,7 @@ async function listarPedidosEPI(req, res) {
         const { dataInicio, dataFim, termoBusca } = req.query;
 
         // Construa as condições de pesquisa com base nos filtros de data e termo de busca
-        const conditions = { id_usuario: id };
+        const conditions = 0;
         if (dataInicio && dataFim) {
             conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
         }
