@@ -80,7 +80,7 @@ router.delete("/excluirHabilidade/:id", excluirHabilidade);
 router.post("/encargos", cadastrarEncargo);
 router.put("/encargos/:id", editarEncargo);
 router.delete("/encargos/:id", excluirEncargo);
-router.get("/encargos", listarEncargos);
+router.get("/listar-encargos", listarEncargos);
 
 // Planejamento 
 router.post("/cadastrarProjeto", cadastrarProjeto);
