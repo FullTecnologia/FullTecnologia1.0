@@ -1,6 +1,7 @@
 import express from 'express';
 import { sequelize } from './src/models/index.js';
-import cadastroRouter from './src/routes/cadastro.js';
+import Router from './src/routes/index.js';
+import cors from 'cors'; // Importe o pacote 'cors'
 
 const app = express();
 
@@ -12,9 +13,16 @@ sequelize.sync().then(() => {
 
 app.use(express.json());
 
-app.use('/api', cadastroRouter);
+// Configurar o middleware de CORS para permitir solicitações da origem do seu frontend
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+}));
 
-const PORT = process.env.PORT || 3000;
+app.use('/api', Router);
+
+const PORT = process.env.PORT || 3003;
 
 app.listen(PORT, () => {
     console.log(`Servidor em execução na porta ${PORT}`);
