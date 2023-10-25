@@ -1,26 +1,41 @@
-# FullTecnologia1.0
+# FullTecnologia 1.0
 
-Versão 1.0
+**Versão 1.0**
+
+## Sumário
+
+- [Branchs](#branchs)
+- [Comandos](#comandos)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+- [Informações](#informações)
 
 ## Branchs:
 
-    Main - branch principal
+- **Main:** A branch principal do projeto.
 
-Quando for realizar uma nova atividade se deve criar uma branch da de origem e só depois dos teste ser mesclada e excluida.
+  Quando for realizar uma nova atividade, siga o seguinte procedimento:
+
+  1. Crie uma nova branch a partir da branch de origem.
+  2. Após concluir as atividades e testar, mescle a nova branch na Main.
+  3. Exclua a branch de desenvolvimento quando não for mais necessária.
 
 ## Comandos
 
 ### Backend:
 
-Para rodar o back é necessário dar os seguintes comandos:
+Para executar o servidor back-end, siga os comandos a seguir:
 
-    npm install ou npm i
-    nodemon index.js
+1. Instale as dependências:
 
-Dessa forma as extensões seram baixadas e o codigo vai fazer conexção com o banco.
+   npm install
 
-### Frontend:
+2. Inicie o servidor usando Nodemon:
 
-## Informações:
+   nodemon index.js
 
-Para que o front faça conecção com back é necessário que o banco esteja rodando na maquina.
+### FRontend:
+
+## Informações
+
+Para que o front-end se conecte ao back-end, é necessário que o servidor back-end esteja em execução na máquina local.
