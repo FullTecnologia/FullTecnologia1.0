@@ -4,6 +4,12 @@ import StatusProjeto from '../../models/statusProjeto.js';
 async function cadastrarEtapaProjeto(req, res) {
     try {
         const { etapa } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Insira a nova etapa de projeto no banco de dados
         const novaEtapa = await StatusProjeto.create({
@@ -21,8 +27,19 @@ async function cadastrarEtapaProjeto(req, res) {
 // Função para listar todas as etapas de projetos
 async function listarEtapasProjetos(req, res) {
     try {
+        const { dataInicio, dataFim, termoBusca } = req.query;
+
+        // Construa as condições de pesquisa com base nos filtros de data e termo de busca
+        const conditions = 0;
+        if (dataInicio && dataFim) {
+            conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+        }
+        if (termoBusca) {
+            conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+        }
+
         // Consulte todas as etapas de projetos
-        const etapas = await StatusProjeto.findAll();
+        const etapas = await StatusProjeto.findAll({ where: conditions });
 
         // Retorna a lista de etapas de projetos
         return res.status(200).json(etapas);
@@ -36,6 +53,12 @@ async function listarEtapasProjetos(req, res) {
 async function excluirEtapaProjeto(req, res) {
     try {
         const { id } = req.params;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Verifique se a etapa de projeto existe
         const etapaProjeto = await StatusProjeto.findByPk(id);

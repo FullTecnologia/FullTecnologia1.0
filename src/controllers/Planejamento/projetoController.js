@@ -4,6 +4,12 @@ import StatusProjeto from "../../models/statusProjeto.js";
 async function cadastrarProjeto(req, res) {
     try {
         const { dadosProjeto } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Insere os dados do projeto no banco de dados
         const projeto = await Projeto.create(dadosProjeto);
@@ -20,6 +26,12 @@ async function editarProjeto(req, res) {
     try {
         const { id } = req.params;
         const { dadosProjeto } = req.body;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Encontra o projeto pelo ID e atualiza os dados
         const projeto = await Projeto.findByPk(id);
@@ -40,6 +52,12 @@ async function editarProjeto(req, res) {
 async function excluirProjeto(req, res) {
     try {
         const { id } = req.params;
+        const nivelUsuario = req.user.nivel;
+
+        // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
+        if (nivelUsuario < 3) {
+            return res.status(403).json({ mensagem: "Permissão negada." });
+        }
 
         // Encontra o projeto pelo ID e o exclui
         const projeto = await Projeto.findByPk(id);
@@ -59,8 +77,19 @@ async function excluirProjeto(req, res) {
 
 async function listarProjetos(req, res) {
     try {
+        const { dataInicio, dataFim, termoBusca } = req.query;
+
+        // Construa as condições de pesquisa com base nos filtros de data e termo de busca
+        const conditions = 0;
+        if (dataInicio && dataFim) {
+            conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+        }
+        if (termoBusca) {
+            conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+        }
+
         // Lista todos os projetos do banco de dados
-        const projetos = await Projeto.findAll();
+        const projetos = await Projeto.findAll({ where: conditions });
 
         // Retorna a lista de projetos
         return res.json(projetos);
