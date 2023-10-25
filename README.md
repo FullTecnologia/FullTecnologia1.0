@@ -22,6 +22,25 @@
 
 ## Comandos
 
+### Branchs:
+
+Para acessar uma branch:
+
+     git checkout main
+
+Para criar uma branch:
+
+    git checkout -b minha-branch
+
+Para mesclar a branch:
+
+    git merge minha-branch
+
+Para excluir a branch:
+
+    git branch -d minha-branch
+    git push origin --delete master
+
 ### Backend:
 
 Para executar o servidor back-end, siga os comandos a seguir:
