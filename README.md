@@ -34,7 +34,17 @@ Para executar o servidor back-end, siga os comandos a seguir:
 
    nodemon index.js
 
-### FRontend:
+### Frontend:
+
+Para executar o servidor front-end, siga os comandos a seguir:
+
+1. Instale as dependência:
+
+   npm install
+
+2. Inicie o servidor usando o Npm:
+
+   npm start
 
 ## Informações
 
