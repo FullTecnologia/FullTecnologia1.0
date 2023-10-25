@@ -39,7 +39,7 @@ Para mesclar a branch:
 Para excluir a branch:
 
     git branch -d minha-branch
-    git push origin --delete master
+    git push origin --delete minha-branch
 
 ### Backend:
 
