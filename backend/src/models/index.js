@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { sequelize } from "../config/configDataBase.js";
-
-export { sequelize };
-=======
 import { sequelize } from "../config/configDataBase.js";
 
 import Usuario from "./usuario.js";
@@ -27,4 +22,3 @@ export {
     PedidosEPIs,
     EncargosObrigacoes,
 };
->>>>>>> master
