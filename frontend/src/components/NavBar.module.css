@@ -1,0 +1,56 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightblue;
+    width: 200px;
+    padding: 20px 0;
+    height: 100vh;
+}
+
+.navbar img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+
+.userProfile p {
+    text-align: center;
+}
+
+.logoImage {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: auto;
+    padding-bottom: 10px;
+}
+
+.linksList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.linksList li {
+    margin: 10px 0;
+}
+
+.linksList a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.linksList a:hover {
+    color: #0077b6;
+}
+
+.logout button {
+    background: none;
+    border: none;
+    color: #0077b6;
+    cursor: pointer;
+}
