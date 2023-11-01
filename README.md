@@ -1,70 +1,70 @@
-# FullTecnologia 1.0
+# Getting Started with Create React App
 
-**Versão 1.0**
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Sumário
+## Available Scripts
 
-- [Branchs](#branchs)
-- [Comandos](#comandos)
-  - [Backend](#backend)
-  - [Frontend](#frontend)
-- [Informações](#informações)
+In the project directory, you can run:
 
-## Branchs:
+### `npm start`
 
-- **Main:** A branch principal do projeto.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-  Quando for realizar uma nova atividade, siga o seguinte procedimento:
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-  1. Crie uma nova branch a partir da branch de origem.
-  2. Após concluir as atividades e testar, mescle a nova branch na Main.
-  3. Exclua a branch de desenvolvimento quando não for mais necessária.
+### `npm test`
 
-## Comandos
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### Branchs:
+### `npm run build`
 
-Para acessar uma branch:
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-     git checkout main
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-Para criar uma branch:
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-    git checkout -b minha-branch
+### `npm run eject`
 
-Para mesclar a branch:
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-    git merge minha-branch
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Para excluir a branch:
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-    git branch -d minha-branch
-    git push origin --delete minha-branch
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-### Backend:
+## Learn More
 
-Para executar o servidor back-end, siga os comandos a seguir:
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-1. Instale as dependências:
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-       npm install
+### Code Splitting
 
-2. Inicie o servidor usando Nodemon:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-       nodemon index.js
+### Analyzing the Bundle Size
 
-### Frontend:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-Para executar o servidor front-end, siga os comandos a seguir:
+### Making a Progressive Web App
 
-1. Instale as dependência:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-       npm install
+### Advanced Configuration
 
-2. Inicie o servidor usando o Npm:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-       npm start
+### Deployment
 
-## Informações
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-Para que o front-end se conecte ao back-end, é necessário que o servidor back-end esteja em execução na máquina local.
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

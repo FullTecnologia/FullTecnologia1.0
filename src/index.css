@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'MinhaFontePersonalizada';
+  src: url(https://www.dafont.com/pt/anface.font?fpp=100&psize=s&text=Full+Engenharia) format('anface');
+  /* Outros formatos de fonte podem ser adicionados aqui, como woff, ttf, etc. */
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
