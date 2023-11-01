@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom'
 
 import styles from "./NavBar.module.css";
 
-import LogoImage from '../assets/Logo-Full-Engenharia.png';
-import AvatarImage from '../assets/avatar.png'
+import LogoImage from '../../assets/Logo-Full-Engenharia.png';
+import AvatarImage from '../../assets/avatar.png'
 
 const NavBar = ({ user, username, logout }) => {
     return (
