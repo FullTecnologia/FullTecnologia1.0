@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+// RecursosHumanos.js
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Table from '../../components/Table/Table'; // Importe o componente Table
+import Table from '../../components/Table/Table';
 import styles from './RecursosHumanos.module.css';
-import NavBar from '../../components/NavBar/NavBar'; // Importe a NavBar
-import '../../components/Popup/styles.css';
+import NavBar from '../../components/NavBar/NavBar';
+import '../../components/Popup/style.css';
 
 function RecursosHumanos() {
     const location = useLocation();
@@ -16,37 +17,16 @@ function RecursosHumanos() {
         // Adicione mais dados conforme necessário
     ];
 
-    const [mostrarPopup, setMostrarPopup] = useState(false); // Adicione este estado
+    function showModal() {
+        var element = document.getElementById("modal");
+        element.classList.add("show-modal");
+    }
 
-    const abrirPopup = () => {
-        setMostrarPopup(true);
-    };
-
-    const fecharPopup = () => {
-        setMostrarPopup(false);
-    };
-
-    const renderizarPopup = () => {
-        if (!mostrarPopup) {
-            return null;
-        }
-
-        return (
-            <div className="popup-wrapper">
-                <div className="popup">
-                    <div className="popup-close" onClick={fecharPopup}>x</div>
-                    <div className="popup-content">
-                        <h2>Cadastrar Atividade</h2>
-                        <p>Dados da Atividade</p>
-                        <button className="popup-link" onClick={fecharPopup}>
-                            Cadastrar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
+    function closeModal() {
+        var element = document.getElementById("modal");
+        element.classList.remove("show-modal");
+    }
+    
     return (
         <div>
             <NavBar />
@@ -55,14 +35,19 @@ function RecursosHumanos() {
                 <h2>Recursos Humanos</h2>
                 <p>Essa página ficará encarregada do RH</p>
                 <div>
-                    <button onClick={abrirPopup}>
-                        Cadastrar Atividade
-                    </button>
-                    {renderizarPopup}
+                    <button className="trigger" onClick={showModal}>Cadastrar Atividade</button>
+                    <div className="modal" id="modal">
+                        <div className="modal-content">
+                            <span className="close-button" onClick={closeModal}>
+                                &times;
+                            </span>
+                            <h1>Cadastrar Atividade</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <Table data={dadosDaTabela} /> {/* Passe os dados para o componente Table */}
+            <Table data={dadosDaTabela} />
         </div>
     );
 }
