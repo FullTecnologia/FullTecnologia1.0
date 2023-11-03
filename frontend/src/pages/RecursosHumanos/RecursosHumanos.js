@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import NavBar from '../../components/NavBar/NavBar';
 import Table from '../../components/Table/Table'; // Importe o componente Table
 import styles from './RecursosHumanos.module.css';
 import NavBar from '../../components/NavBar/NavBar'; // Importe a NavBar
-import styles from './RecursosHumanos.module.css'; // Importe o arquivo de módulo CSS
 import Popup from '../../components/Popup/Popup';
 
 function RecursosHumanos() {
@@ -18,10 +16,6 @@ function RecursosHumanos() {
         // Adicione mais dados conforme necessário
     ];
 
-    useEffect(() => {
-        console.log('Nome do Usuário:', nomeDoUsuario);
-        console.log('Email do Usuário:', emailDoUsuario);
-    }, [nomeDoUsuario, emailDoUsuario]);
     const [mostrarPopup, setMostrarPopup] = useState(false); // Adicione este estado
 
     const abrirPopup = () => {
