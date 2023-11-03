@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     height: 100vh;
 }
+
 
 .bodyRecursos h2 {
     font-size: 24px;

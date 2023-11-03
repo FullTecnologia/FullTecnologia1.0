@@ -164,11 +164,10 @@ function RecursosHumanos() {
             </form>
         );
     }
-    
+
     return (
         <div>
             <NavBar />
-
             <div className={styles.bodyRecursos}>
                 <h2>Recursos Humanos</h2>
                 <p>Essa página ficará encarregada do RH</p>

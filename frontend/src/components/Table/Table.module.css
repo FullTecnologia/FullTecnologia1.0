@@ -1,29 +1,23 @@
-/* Table.module.css */
+.textTable {
+    text-align: center;
+    padding-left: 100px;
+}
 
-.table-container {
-    width: 100%;
+.centeredTable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
     border-collapse: collapse;
-    text-align: center;
-    /* Centraliza o conteúdo da tabela */
+    width: 100%;
+    max-width: 50px;
 }
 
-.table-header {
-    background-color: #e0e0e0;
-    padding: 10px;
+.table th,
+.table td {
     border: 1px solid #000;
-    text-align: center;
-}
-
-.table-cell {
     padding: 10px;
-    border: 1px solid #000;
     text-align: center;
-}
-
-.title {
-    text-align: center;
-    /* Centraliza o título */
-    margin-bottom: 20px;
-
-    /* Adiciona um espaço entre o título e a tabela */
 }
