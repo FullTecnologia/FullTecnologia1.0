@@ -11,13 +11,6 @@ function RecursosHumanos() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
 
-    // Dados fictícios (substitua por dados reais do banco de dados)
-    const dadosDaTabela = [
-        { id: 1, nome: 'Atividade 1', data: '2023-11-01' },
-        { id: 2, nome: 'Atividade 2', data: '2023-11-02' },
-        // Adicione mais dados conforme necessário
-    ];
-
     const [atividade, setAtividade] = useState({
         responsavel: '',
         descricao: '',
@@ -27,6 +20,13 @@ function RecursosHumanos() {
     });
 
     const [validationErrors, setValidationErrors] = useState({});
+
+    const [colaborador, setColaborador] = useState({
+        nome: '',
+        email: '',
+        senha: '',
+        nivel: 0, 
+    });
 
     function showModal() {
         var element = document.getElementById("modal");
@@ -165,6 +165,107 @@ function RecursosHumanos() {
         );
     }
 
+    function handleColaboradorInputChange(event) {
+        const { name, value } = event.target;
+        setColaborador({
+            ...colaborador,
+            [name]: value,
+        });
+    }
+
+    function handleColaboradorSubmit(event) {
+        event.preventDefault();
+        const errors = validateForm(colaborador);
+    
+        if (Object.keys(errors).length === 0) {
+            // Dados do formulário de colaborador são válidos
+            fetch("/cadastro", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(colaborador),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        // A solicitação foi bem-sucedida
+                        return response.json();
+                    } else {
+                        // A solicitação falhou
+                        throw new Error("Erro na solicitação");
+                    }
+                })
+                .then((data) => {
+                    // Lidar com a resposta do servidor, se houver
+                    console.log(data);
+                    closeModal("modalColaborador", setColaborador);
+                })
+                .catch((error) => {
+                    // Lidar com erros de solicitação
+                    console.error(error);
+                });
+        } else {
+            setValidationErrors(errors);
+        }
+    }
+     
+    function renderColaboradorForm() {
+    return (
+        <form onSubmit={handleColaboradorSubmit}>
+            <div>
+                <label htmlFor="nome">Nome:</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    value={colaborador.nome}
+                    onChange={handleColaboradorInputChange}
+                />
+                <span className="error">{validationErrors.nome}</span>
+            </div>
+            <div>
+                <label htmlFor="email">E-mail:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={colaborador.email}
+                    onChange={handleColaboradorInputChange}
+                />
+                <span className="error">{validationErrors.email}</span>
+            </div>
+            <div>
+                <label htmlFor="senha">Senha:</label>
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    value={colaborador.senha}
+                    onChange={handleColaboradorInputChange}
+                />
+                <span className="error">{validationErrors.senha}</span>
+            </div>
+            <div>
+                <label htmlFor="nivel">Nível:</label>
+                <select
+                    id="nivel"
+                    name="nivel"
+                    value={colaborador.nivel}
+                    onChange={handleColaboradorInputChange}
+                >
+                    <option value={0}>Nível 0</option>
+                    <option value={1}>Nível 1</option>
+                    {/* Adicione mais opções de nível conforme necessário */}
+                </select>
+                <span className="error">{validationErrors.nivel}</span>
+            </div>
+            <div>
+                <button type="submit" className="submit-button">Cadastrar</button>
+            </div>
+        </form>
+    );
+    }
+
     return (
         <div>
             <NavBar />
@@ -182,10 +283,21 @@ function RecursosHumanos() {
                             {renderForm()}
                         </div>
                     </div>
+                    <button className="trigger" onClick={showModal}>Cadastrar Colaborador</button>
+                    <div className="modal" id="modal">
+                        <div className="modal-content">
+                            <span className="close-button" onClick={closeModal}>
+                                &times;
+                            </span>
+                            <h1>Cadastrar Colaborador</h1>
+                            {renderColaboradorForm()}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <Table />
                 </div>
             </div>
-
-            <Table data={dadosDaTabela} />
         </div>
     );
 }
