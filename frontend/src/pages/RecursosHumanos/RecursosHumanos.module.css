@@ -14,3 +14,13 @@
     font-size: 18px;
     text-align: center;
 }
+
+button {
+    display: block;
+    margin: 20px auto;
+    background: #0077b6;
+    color: white;
+    border: 0;
+    cursor: pointer;
+    padding: 6px 10px;
+}
