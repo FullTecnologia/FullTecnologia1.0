@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Table from '../../components/Table/Table'; // Importe o componente Table
 import styles from './RecursosHumanos.module.css';
 import NavBar from '../../components/NavBar/NavBar'; // Importe a NavBar
-import Popup from '../../components/Popup/Popup';
+import '../../components/Popup/styles.css';
 
 function RecursosHumanos() {
     const location = useLocation();
@@ -26,6 +26,27 @@ function RecursosHumanos() {
         setMostrarPopup(false);
     };
 
+    const renderizarPopup = () => {
+        if (!mostrarPopup) {
+            return null;
+        }
+
+        return (
+            <div className="popup-wrapper">
+                <div className="popup">
+                    <div className="popup-close" onClick={fecharPopup}>x</div>
+                    <div className="popup-content">
+                        <h2>Cadastrar Atividade</h2>
+                        <p>Dados da Atividade</p>
+                        <button className="popup-link" onClick={fecharPopup}>
+                            Cadastrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div>
             <NavBar />
@@ -37,7 +58,7 @@ function RecursosHumanos() {
                     <button onClick={abrirPopup}>
                         Cadastrar Atividade
                     </button>
-                    {<Popup mostrar={abrirPopup} />}
+                    {renderizarPopup}
                 </div>
             </div>
 
