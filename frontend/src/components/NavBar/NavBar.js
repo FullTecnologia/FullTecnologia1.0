@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import styles from "./NavBar.module.css";
 
 import LogoImage from '../../assets/Logo-Full-Engenharia.png';
-import AvatarImage from '../../assets/avatar.png'
+import AvatarImage from '../../assets/avatar.png';
 
 const NavBar = ({ user, username, logout }) => {
     return (
@@ -26,55 +26,55 @@ const NavBar = ({ user, username, logout }) => {
 
             <ul className={styles.linksList}>
                 <li>
-                    <NavLink to="/home" activeClassName={styles.active}>
+                    <NavLink to="/home" activeclass={styles.active}>
                         Home
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/profissional" activeClassName={styles.active}>
+                    <NavLink to="/profissional" activeclass={styles.active}>
                         Profissional
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/lider" activeClassName={styles.active}>
+                    <NavLink to="/lider" activeclass={styles.active}>
                         Líder
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/planejamento" activeClassName={styles.active}>
+                    <NavLink to="/planejamento" activeclass={styles.active}>
                         Planejamento
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/comercial" activeClassName={styles.active}>
+                    <NavLink to="/comercial" activeclass={styles.active}>
                         Comercial
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/financeiro" activeClassName={styles.active}>
+                    <NavLink to="/financeiro" activeclass={styles.active}>
                         Financeiro
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/recursoshumanos" activeClassName={styles.active}>
+                    <NavLink to="/recursoshumanos" activeclass={styles.active}>
                         Recursos Humanos
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/diretoria" activeClassName={styles.active}>
+                    <NavLink to="/diretoria" activeclass={styles.active}>
                         Diretoria
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/" activeClassName={styles.active}>
+                    <NavLink to="/" activeclass={styles.active}>
                         Sair
                     </NavLink>
                 </li>
