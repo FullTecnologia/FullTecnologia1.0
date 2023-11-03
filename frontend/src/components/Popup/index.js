@@ -1,18 +1,18 @@
 import Popup from './Popup';
 export default Popup;
 
-const button = document.getElementById('openPopup');
+const button = document.getElementById('button');
 const popup = document.querySelector('.popup-wrapper');
-const closePopupButton = document.getElementById('closePopup');
 
-if (button && popup && closePopupButton) {
-    button.addEventListener('click', () => {
-        popup.style.display = 'block';
-    });
+button.addEventListener('click', () => {
+    popup.computedStyleMap.display = 'block'
+})
+popup.addEventListener('click', event => {
+    const classNameClickedElement = event.target.classList[0]
+    const className = ['popup-close', 'popup-wrapper', 'popup-link']
+    const shouldClosePopup = className.some(className => className === classNameClickedElement)
 
-    closePopupButton.addEventListener('click', () => {
-        popup.style.display = 'none';
-    });
-} else {
-    console.error('Elementos não encontrados no DOM.');
-}
+    if(shouldClosePopup){
+        popup.style.display = 'none'
+    }
+})
