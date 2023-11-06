@@ -12,14 +12,25 @@
     opacity: 0;
     visibility: hidden;
     transform: scale(1.1);
+<<<<<<< HEAD
     transition: visibility 0.25s ease-in-out, opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+=======
+    transition: visibility 0.25s ease-in-out , opacity 0.25s ease-in-out, transform 0.25s ease-in-out;   
+    overflow-y: auto;
+>>>>>>> 4f4f9f5330fb99614a4eedd9f5209a9931026b2b
 }
 
 .modal-content {
     background-color: white;
+<<<<<<< HEAD
     max-width: 100%;
     padding: 16px 24px;
     width: 584px;
+=======
+    max-width: 90%;
+    padding: 16px 24px;    
+    width: 600px;
+>>>>>>> 4f4f9f5330fb99614a4eedd9f5209a9931026b2b
     border-radius: 0.5rem;
 }
 
@@ -62,16 +73,30 @@ label {
     display: block;
     margin-bottom: 5px;
 }
+<<<<<<< HEAD
 
 input[type="text"] {
     width: 90%;
+=======
+  
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+    width: 45%; /* Reduza a largura das caixas de texto */
+    display: inline-block; /* Permitem que fiquem lado a lado */
+    margin-right: 2%; /* Adicione margem direita para separá-las */
+>>>>>>> 4f4f9f5330fb99614a4eedd9f5209a9931026b2b
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
     padding: 10px;
 }
 
+<<<<<<< HEAD
 input[type="date"] {
+=======
+input[type="date"]{
+>>>>>>> 4f4f9f5330fb99614a4eedd9f5209a9931026b2b
     width: 20%;
     padding: 10px;
     border: 1px solid #ccc;
