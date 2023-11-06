@@ -1,5 +1,4 @@
 .modal{
-    z-index:1;
     position: fixed;
     top:0;
     left:0;
@@ -18,8 +17,9 @@
 
 .modal-content{
     background-color: white;
+    max-width: 100%;
     padding: 16px 24px;    
-    width: 384px;
+    width: 584px;
     border-radius: 0.5rem;
 }
 .close-button{
@@ -33,10 +33,70 @@
 }
 .close-button:hover{
     background-color: darkgray;
+    color: #0077b6
 }
 
 .show-modal{
     opacity: 1;
     visibility: visible;
     transform: scale(1.0);    
+}
+form {
+    width: 90%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
+form div {
+    margin-bottom: 15px;
+}
+  
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+  
+input[type="text"]{
+    width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 10px;
+}
+input[type="date"]{
+    width: 20%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+select {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    height: 38px;
+}
+  
+button[type="submit"] {
+    background: #0077b6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+  
+button[type="submit"]:hover {
+    background: #005c8b;
+}
+  
+.error {
+    color: red;
+    font-size: 14px;
 }
