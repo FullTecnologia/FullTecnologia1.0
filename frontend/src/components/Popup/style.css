@@ -1,46 +1,49 @@
-.modal{
+.modal {
     position: fixed;
-    top:0;
-    left:0;
-    padding:0;
+    top: 0;
+    left: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
     transform: scale(1.1);
-    transition: visibility 0.25s ease-in-out , opacity 0.25s ease-in-out, transform 0.25s ease-in-out;   
+    transition: visibility 0.25s ease-in-out, opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
 }
 
-.modal-content{
+.modal-content {
     background-color: white;
     max-width: 100%;
-    padding: 16px 24px;    
+    padding: 16px 24px;
     width: 584px;
     border-radius: 0.5rem;
 }
-.close-button{
-   float: right;
-   width: 24px;
-   line-height: 24px;
-   text-align: center;
-   cursor: pointer;
-   border-radius: 0.25rem;
-   background-color: lightgray;
+
+.close-button {
+    float: right;
+    width: 24px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: lightgray;
 }
-.close-button:hover{
+
+.close-button:hover {
     background-color: darkgray;
     color: #0077b6
 }
 
-.show-modal{
+.show-modal {
     opacity: 1;
     visibility: visible;
-    transform: scale(1.0);    
+    transform: scale(1.0);
 }
+
 form {
     width: 90%;
     max-width: 100%;
@@ -50,29 +53,31 @@ form {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-  
+
 form div {
     margin-bottom: 15px;
 }
-  
+
 label {
     display: block;
     margin-bottom: 5px;
 }
-  
-input[type="text"]{
+
+input[type="text"] {
     width: 90%;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
     padding: 10px;
 }
-input[type="date"]{
+
+input[type="date"] {
     width: 20%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 select {
     width: 90%;
     padding: 10px;
@@ -81,7 +86,7 @@ select {
     font-size: 16px;
     height: 38px;
 }
-  
+
 button[type="submit"] {
     background: #0077b6;
     color: #fff;
@@ -91,11 +96,11 @@ button[type="submit"] {
     font-size: 16px;
     cursor: pointer;
 }
-  
+
 button[type="submit"]:hover {
     background: #005c8b;
 }
-  
+
 .error {
     color: red;
     font-size: 14px;

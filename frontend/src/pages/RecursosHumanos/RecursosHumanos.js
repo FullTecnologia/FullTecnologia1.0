@@ -1,11 +1,10 @@
-// RecursosHumanos.js
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import Table from '../../components/Table/Table';
-import styles from './RecursosHumanos.module.css';
+import { Table, Colab } from '../../components/Table/Table';
 import NavBar from '../../components/NavBar/NavBar';
 import { validateForm } from '../../hooks/validation';
+import { useLocation } from 'react-router-dom';
 import '../../components/Popup/style.css';
+import styles from './RecursosHumanos.module.css';
 
 function RecursosHumanos() {
     const location = useLocation();
@@ -37,7 +36,6 @@ function RecursosHumanos() {
         var element = document.getElementById("modal");
         element.classList.remove("show-modal");
 
-        // Redefina o estado 'atividade' para valores iniciais
         setAtividade({
             responsavel: '',
             descricao: '',
@@ -46,7 +44,6 @@ function RecursosHumanos() {
             tipo: 0,
         });
 
-        // Limpe quaisquer erros de validação
         setValidationErrors({});
     }
 
@@ -55,7 +52,7 @@ function RecursosHumanos() {
         setAtividade({
             ...atividade,
             [name]: value,
-        })
+        });
     }
 
     function handleSubmit(event) {
@@ -63,30 +60,25 @@ function RecursosHumanos() {
         const errors = validateForm(atividade);
 
         if (Object.keys(errors).length === 0) {
-            // Dados do formulário são válidos
             fetch("/cadastrarAtividade", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(atividade), // Envia os dados como JSON
+                body: JSON.stringify(atividade),
             })
                 .then((response) => {
                     if (response.ok) {
-                        // A solicitação foi bem-sucedida
                         return response.json();
                     } else {
-                        // A solicitação falhou
                         throw new Error("Erro na solicitação");
                     }
                 })
                 .then((data) => {
-                    // Os dados de resposta do servidor, se houver
                     console.log(data);
                     closeModal();
                 })
                 .catch((error) => {
-                    // Lidar com erros de solicitação
                     console.error(error);
                 });
         } else {
@@ -178,7 +170,6 @@ function RecursosHumanos() {
         const errors = validateForm(colaborador);
 
         if (Object.keys(errors).length === 0) {
-            // Dados do formulário de colaborador são válidos
             fetch("/cadastro", {
                 method: "POST",
                 headers: {
@@ -188,20 +179,16 @@ function RecursosHumanos() {
             })
                 .then((response) => {
                     if (response.ok) {
-                        // A solicitação foi bem-sucedida
                         return response.json();
                     } else {
-                        // A solicitação falhou
                         throw new Error("Erro na solicitação");
                     }
                 })
                 .then((data) => {
-                    // Lidar com a resposta do servidor, se houver
                     console.log(data);
                     closeModal("modalColaborador", setColaborador);
                 })
                 .catch((error) => {
-                    // Lidar com erros de solicitação
                     console.error(error);
                 });
         } else {
@@ -255,7 +242,6 @@ function RecursosHumanos() {
                     >
                         <option value={0}>Nível 0</option>
                         <option value={1}>Nível 1</option>
-                        {/* Adicione mais opções de nível conforme necessário */}
                     </select>
                     <span className="error">{validationErrors.nivel}</span>
                 </div>
@@ -270,8 +256,6 @@ function RecursosHumanos() {
         <div>
             <NavBar />
             <div className={styles.bodyRecursos}>
-                <h2>Recursos Humanos</h2>
-                <p>Essa página ficará encarregada do RH</p>
                 <div>
                     <button className="trigger" onClick={showModal}>Cadastrar Atividade</button>
                     <div className="modal" id="modal">
@@ -296,6 +280,7 @@ function RecursosHumanos() {
                 </div>
                 <div>
                     <Table />
+                    <Colab />
                 </div>
             </div>
         </div>

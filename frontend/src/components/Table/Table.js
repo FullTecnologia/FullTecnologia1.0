@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Table.module.css'; // Importe seu arquivo CSS
 import axios from 'axios';
+
+import styles from './Table.module.css'
 
 const Table = () => {
     const [atividades, setAtividades] = useState([]);
@@ -9,7 +10,7 @@ const Table = () => {
         // Função para buscar os dados do banco de dados
         const fetchDataFromDatabase = async () => {
             try {
-                const response = await axios.get('http://localhost:3003/api/sua-rota-aqui'); // Substitua pela rota correta
+                const response = await axios.get('http://localhost:3003/api/sua-rota-atividades'); // Substitua pela rota correta
 
                 if (response.status === 200) {
                     setAtividades(response.data);
@@ -27,29 +28,156 @@ const Table = () => {
 
     return (
         <div>
-            <h1 className={styles.textTable}>Tabela de Atividades</h1>
-            <table className={styles.centeredTable}> {/* Aplicando as classes CSS */}
-                <thead className={styles.table}>
+            <h1>Minhas Atividades</h1>
+            <table className={styles.table}>
+                <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nome da Atividade</th>
-                        <th>Data</th>
-                        {/* Adicione mais colunas conforme necessário */}
+                        <th>Título</th>
+                        <th>Responsável</th>
+                        <th>Descrição</th>
+                        <th>Data-Fim</th>
+                        <th>Status</th>
+                        <th>Tipo</th>
                     </tr>
                 </thead>
                 <tbody>
                     {atividades.map((atividade) => (
-                        <tr key={atividade.id}>
-                            <td>{atividade.id}</td>
-                            <td>{atividade.nome_atividade}</td>
-                            <td>{atividade.data_atividade}</td>
-                            {/* Adicione mais colunas conforme necessário */}
+                        <tr key={atividade.id} className={styles.row}>
+                            <td>{atividade.titulo}</td>
+                            <td>{atividade.responsavel}</td>
+                            <td>{atividade.descricao}</td>
+                            <td>{atividade.dataFim}</td>
+                            <td>{atividade.status}</td>
+                            <td>{atividade.tipo}</td>
                         </tr>
                     ))}
+                    <tr className={styles.row}>
+                        <td>Exemplo 1</td>
+                        <td>João</td>
+                        <td>Fazer relatório</td>
+                        <td>2023-11-15</td>
+                        <td>Em andamento</td>
+                        <td>Trabalho</td>
+                    </tr>
+                    <tr className={styles.row}>
+                        <td>Exemplo 2</td>
+                        <td>Maria</td>
+                        <td>Reunião de equipe</td>
+                        <td>2023-11-20</td>
+                        <td>Pendente</td>
+                        <td>Reunião</td>
+                    </tr>
+                    <tr className={styles.row}>
+                        <td>Exemplo 3</td>
+                        <td>Carlos</td>
+                        <td>Entregar projeto</td>
+                        <td>2023-11-25</td>
+                        <td>Concluído</td>
+                        <td>Projeto</td>
+                    </tr>
                 </tbody>
             </table>
-        </div >
+        </div>
     );
+
+
 };
 
-export default Table;
+const Colab = () => {
+    const [colaboradores, setColaboradores] = useState([]);
+    const [searchName, setSearchName] = useState('');
+
+    useEffect(() => {
+        // Função para buscar os dados dos colaboradores do banco de dados
+        const fetchDataFromDatabase = async () => {
+            try {
+                const response = await axios.get('http://localhost:3003/api/sua-rota-colaboradores'); // Substitua pela rota correta
+
+                if (response.status === 200) {
+                    setColaboradores(response.data);
+                } else {
+                    console.error('Erro ao buscar dados do banco de dados.');
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados do banco de dados:', error);
+            }
+        };
+
+        // Chama a função para buscar os dados ao carregar o componente
+        fetchDataFromDatabase();
+    }, []);
+
+    const handleSearch = () => {
+        // Filtra os colaboradores com base no nome
+        const filteredColaboradores = colaboradores.filter((colaborador) => {
+            // Transforma o nome e a pesquisa em letras minúsculas para comparar sem diferenciação de maiúsculas e minúsculas
+            const nomeColaborador = colaborador.nome.toLowerCase();
+            const nomePesquisa = searchName.toLowerCase();
+
+            // Verifica se o nome do colaborador contém a pesquisa
+            return nomeColaborador.includes(nomePesquisa);
+        });
+
+        // Atualiza a lista de colaboradores com o resultado da pesquisa
+        setColaboradores(filteredColaboradores);
+    };
+
+    return (
+        <div>
+            <h1>Gerenciamento de Colaboradores</h1>
+            <div>
+                <label>
+                    Digite o nome do colaborador:{" "}
+                    <input
+                        type="text"
+                        value={searchName}
+                        onChange={(e) => setSearchName(e.target.value)}
+                    />
+                </label>
+                <button onClick={handleSearch}>Pesquisar</button>
+            </div>
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cargo</th>
+                        <th>Email</th>
+                        <th>Data-Nascimento</th>
+                        <th>CPF</th>
+                        <th>PIS</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {colaboradores.map((colaborador) => (
+                        <tr key={colaborador.id} className={styles.row}>
+                            <td>{colaborador.nome}</td>
+                            <td>{colaborador.cargo}</td>
+                            <td>{colaborador.email}</td>
+                            <td>{colaborador.dataNascimento}</td>
+                            <td>{colaborador.cpf}</td>
+                            <td>{colaborador.pis}</td>
+                            <td>
+                                <button className={styles.editButton}>Editar</button>
+                            </td>
+                        </tr>
+                    ))}
+                    <tr className={styles.row}>
+                        <td>Colaborador</td>
+                        <td>Analista</td>
+                        <td>exemplo@empresa.com</td>
+                        <td>1990-05-15</td>
+                        <td>123.456.789-00</td>
+                        <td>12345678900</td>
+                        <td>
+                            <button className={styles.editButton}>Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+
+};
+
+export { Table, Colab };
