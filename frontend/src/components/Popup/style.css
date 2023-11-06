@@ -13,13 +13,14 @@
     visibility: hidden;
     transform: scale(1.1);
     transition: visibility 0.25s ease-in-out , opacity 0.25s ease-in-out, transform 0.25s ease-in-out;   
+    overflow-y: auto;
 }
 
 .modal-content{
     background-color: white;
-    max-width: 100%;
+    max-width: 90%;
     padding: 16px 24px;    
-    width: 584px;
+    width: 600px;
     border-radius: 0.5rem;
 }
 .close-button{
@@ -60,13 +61,18 @@ label {
     margin-bottom: 5px;
 }
   
-input[type="text"]{
-    width: 90%;
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+    width: 45%; /* Reduza a largura das caixas de texto */
+    display: inline-block; /* Permitem que fiquem lado a lado */
+    margin-right: 2%; /* Adicione margem direita para separá-las */
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
     padding: 10px;
 }
+
 input[type="date"]{
     width: 20%;
     padding: 10px;
