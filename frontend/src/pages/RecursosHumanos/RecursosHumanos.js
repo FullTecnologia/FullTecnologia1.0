@@ -10,13 +10,6 @@ function RecursosHumanos() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
 
-    // Dados fictícios (substitua por dados reais do banco de dados)
-    const dadosDaTabela = [
-        { id: 1, nome: 'Atividade 1', data: '2023-11-01' },
-        { id: 2, nome: 'Atividade 2', data: '2023-11-02' },
-        // Adicione mais dados conforme necessário
-    ];
-
     function showModal() {
         var element = document.getElementById("modal");
         element.classList.add("show-modal");
@@ -44,9 +37,9 @@ function RecursosHumanos() {
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <Table data={dadosDaTabela} />
+                <Table data={dadosDaTabela} />
+            </div>
         </div>
     );
 }
