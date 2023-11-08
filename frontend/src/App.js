@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import RecursosHumanos from './pages/RecursosHumanos/RecursosHumanos';
+import {RecursosHumanos, closeModal} from './pages/RecursosHumanos/RecursosHumanos';
 import Home from './pages/Home/Home';
 import Profissional from './pages/Profissional/Profissional';
 import Lider from './pages/Lider/Lider';
