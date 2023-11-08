@@ -6,9 +6,6 @@ import '../../components/Popup/style.css';
 import styles from './RecursosHumanos.module.css';
 
 function RecursosHumanos() {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-
     const [atividade, setAtividade] = useState({
         responsavel: '',
         descricao: '',
