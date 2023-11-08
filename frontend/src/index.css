@@ -1,13 +1,11 @@
 @font-face {
-  font-family: 'MinhaFontePersonalizada';
-  src: url(https://www.dafont.com/pt/anface.font?fpp=100&psize=s&text=Full+Engenharia) format('anface');
-  /* Outros formatos de fonte podem ser adicionados aqui, como woff, ttf, etc. */
-  font-weight: normal;
-  font-style: normal;
+  font-family: 'Ketika  ';
+  src: url(./fonts/KetikaSans-Regular.ttf) format('ttf');
 }
 
 body {
   margin: 0;
+  font-family: ketika, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

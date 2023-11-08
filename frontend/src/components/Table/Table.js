@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from './Table.module.css';
 
-import styles from './Table.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 const Table = () => {
     const [atividades, setAtividades] = useState([]);
@@ -79,8 +82,6 @@ const Table = () => {
             </table>
         </div>
     );
-
-
 };
 
 const Colab = () => {
@@ -125,16 +126,18 @@ const Colab = () => {
     return (
         <div>
             <h1>Gerenciamento de Colaboradores</h1>
-            <div>
-                <label>
-                    Digite o nome do colaborador:{" "}
-                    <input
-                        type="text"
-                        value={searchName}
-                        onChange={(e) => setSearchName(e.target.value)}
-                    />
-                </label>
-                <button onClick={handleSearch}>Pesquisar</button>
+            <div className={styles.searchContainer}>
+                <input
+                    type="text"
+                    id="searchBar"
+                    placeholder='Digite o nome do colaborador'
+                    className={styles.searchBar}
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                />
+                <button onClick={handleSearch} className={styles.searchButton}>
+                    Pesquisar
+                </button>
             </div>
             <table className={styles.table}>
                 <thead>
@@ -158,7 +161,10 @@ const Colab = () => {
                             <td>{colaborador.cpf}</td>
                             <td>{colaborador.pis}</td>
                             <td>
-                                <button className={styles.editButton}>Editar</button>
+                                <button className={styles.editButton}>
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                    {/* Adicione o ícone de lápis aqui */}
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -170,7 +176,11 @@ const Colab = () => {
                         <td>123.456.789-00</td>
                         <td>12345678900</td>
                         <td>
-                            <button className={styles.editButton}>Editar</button>
+                            <button className={styles.editIcon}>
+                                <span className={styles.editIcon}>
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                </span>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

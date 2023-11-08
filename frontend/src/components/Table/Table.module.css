@@ -31,7 +31,7 @@
 }
 
 .editButton {
-    background-color: #007bff;
+    background-color: #0056b3;
     color: #fff;
     border: none;
     padding: 5px 10px;
@@ -40,5 +40,58 @@
 }
 
 .editButton:hover {
+    background-color: #007bff;
+}
+
+.searchContainer {
+    display: flex;
+    /* Define o container como flexível */
+    align-items: center;
+    /* Centraliza verticalmente os elementos */
+    margin: 20px 0;
+}
+
+/* Rótulo da barra de pesquisa */
+label {
+    font-family: Arial, sans-serif;
+    margin-right: 10px;
+    /* Adicione um espaçamento à direita */
+}
+
+/* Barra de pesquisa */
+.searchBar {
+    width: 10px;
+    /* Defina a largura desejada, por exemplo, 200px */
+    padding: 5px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+}
+
+/* Botão de pesquisa */
+.searchButton {
     background-color: #0056b3;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.searchButton:hover {
+    background-color: #007bff;
+}
+
+.editIcon {
+    background-color: white;
+    /* Cor do fundo branco */
+    border-radius: 50%;
+    /* Crie um fundo circular */
+    padding: 5px;
+    /* Espaço interno do fundo */
+    display: inline-block;
+    color: #0056b3;
+    /* Cor azul para o lápis */
+    font-size: 20px;
+    /* Tamanho do ícone */
 }
