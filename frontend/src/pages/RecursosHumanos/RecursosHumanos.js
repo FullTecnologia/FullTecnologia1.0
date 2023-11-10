@@ -242,7 +242,7 @@ function RecursosHumanos() {
 
                 <div className={styles.activitySection}>
 
-                    <div>
+                    <div className={styles.ajusteContainer}>
 
                         <button className={styles.trigger} onClick={() => showModal('Atividade')}>Cadastrar Atividade</button>
                         <Table />

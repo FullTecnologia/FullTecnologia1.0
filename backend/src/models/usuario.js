@@ -27,6 +27,10 @@ Usuario.init({
     nivel: {
         type: DataTypes.INTEGER,
         allowNull: false,
+    },
+    fotoPerfil: {
+        type: DataTypes.STRING, // Pode ser uma string para o caminho do arquivo ou um BLOB para armazenar diretamente a imagem.
+        allowNull: true,
     }
 }, {
     sequelize,
