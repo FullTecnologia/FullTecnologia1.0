@@ -129,8 +129,8 @@ const Colab = () => {
                     type="text"
                     id="searchBar"
                     placeholder='Digite o nome do colaborador'
-                    className={styles.searchBar}
                     value={searchName}
+                    className='tamanho-barra'
                     onChange={(e) => setSearchName(e.target.value)}
                 />
                 <button onClick={handleSearch} className={styles.searchButton}>
