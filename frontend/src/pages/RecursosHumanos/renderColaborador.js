@@ -76,41 +76,12 @@ function RegistroColaborador() {
     setCurrentStep(currentStep - 1);
   }
 
-  function handleColaboradorInputChange(event, fieldType) {
-    const { name, value, type } = event.target;
-
-    if (
-      fieldType === "usuario" ||
-      fieldType === "ficha" ||
-      fieldType === "habilidades"
-    ) {
-      setColaborador((colaborador) => {
-        return {
-          ...colaborador,
-          [fieldType]: {
-            ...colaborador[fieldType],
-            [name]: value,
-          },
-        };
-      });
-    } else if (fieldType === "fotoPerfil" && type === "file") {
-      // Lidar com a mudança na foto de perfil
-      const file = event.target.files[0];
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setColaborador((colaborador) => {
-          return {
-            ...colaborador,
-            fotoPerfil: reader.result, // Armazenar a imagem como uma string base64 ou usar como desejar
-          };
-        });
-      };
-
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    }
+  function handleColaboradorInputChange(event) {
+    const { name, value } = event.target;
+    setColaborador({
+      ...colaborador,
+      [name]: value,
+    });
   }
 
   function handleColaboradorSubmit(event, type) {
@@ -140,7 +111,12 @@ function RegistroColaborador() {
           .then((data) => {
             // Lidar com a resposta do servidor, se houver
             console.log(data);
-            closeModal();
+            closeModal(
+              "modalColaborador",
+              0,
+              setColaborador,
+              setValidationErrors
+            );
           })
           .catch((error) => {
             // Lidar com erros de solicitação
@@ -167,7 +143,12 @@ function RegistroColaborador() {
           .then((data) => {
             // Lidar com a resposta do servidor, se houver
             console.log(data);
-            closeModal();
+            closeModal(
+              "modalColaborador",
+              0,
+              setColaborador,
+              setValidationErrors
+            );
           })
           .catch((error) => {
             // Lidar com erros de solicitação
@@ -194,7 +175,12 @@ function RegistroColaborador() {
           .then((data) => {
             // Lidar com a resposta do servidor, se houver
             console.log(data);
-            closeModal();
+            closeModal(
+              "modalColaborador",
+              0,
+              setColaborador,
+              setValidationErrors
+            );
           })
           .catch((error) => {
             // Lidar com erros de solicitação
@@ -209,7 +195,7 @@ function RegistroColaborador() {
   }
 
   // Componente para a etapa de informações pessoais
-  function InformacoesPessoais({ colaborador, onChange, validationErrors }) {
+  function InformacoesPessoais(colaborador) {
     return (
       <form onSubmit={handleColaboradorSubmit} className="modalColab">
         <div className="caixinha">
@@ -219,7 +205,7 @@ function RegistroColaborador() {
             id="nome"
             name="nome"
             value={colaborador?.usuario?.nome}
-            onChange={(event) => handleColaboradorInputChange(event, "usuario")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.nome}</span>
         </div>
@@ -230,7 +216,7 @@ function RegistroColaborador() {
             id="email"
             name="email"
             value={colaborador?.usuario?.email}
-            onChange={(event) => handleColaboradorInputChange(event, "usuario")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.email}</span>
         </div>
@@ -241,7 +227,7 @@ function RegistroColaborador() {
             id="senha"
             name="senha"
             value={colaborador?.usuario?.senha}
-            onChange={(event) => handleColaboradorInputChange(event, "usuario")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.senha}</span>
         </div>
@@ -251,7 +237,7 @@ function RegistroColaborador() {
             id="nivel"
             name="nivel"
             value={colaborador?.usuario?.nivel}
-            onChange={(event) => handleColaboradorInputChange(event, "usuario")}
+            onChange={handleColaboradorInputChange}
           >
             <option value="1">Nível 1</option>
             <option value="2">Nível 2</option>
@@ -265,7 +251,7 @@ function RegistroColaborador() {
             type="file" // Alterado para o tipo "file"
             id="fotoPerfil" // Adicionei o id "fotoPerfil"
             name="fotoPerfil" // Adicionei o name "fotoPerfil"
-            onChange={(event) => handleColaboradorInputChange(event, "usuario")} // Adicionei um novo manipulador de eventos para a mudança de fotoPerfil
+            onChange={handleColaboradorInputChange} // Adicionei um novo manipulador de eventos para a mudança de fotoPerfil
           />
           <span className="error">{validationErrors.fotoPerfil}</span>
         </div>
@@ -276,7 +262,7 @@ function RegistroColaborador() {
             id="data_nascimento"
             name="data_nascimento"
             value={colaborador?.ficha?.data_nascimento}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.data_nascimento}</span>
         </div>
@@ -287,7 +273,7 @@ function RegistroColaborador() {
             id="naturalidade"
             name="naturalidade"
             value={colaborador?.ficha?.naturalidade}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.naturalidade}</span>
         </div>
@@ -298,7 +284,7 @@ function RegistroColaborador() {
             id="nome_mae"
             name="nome_mae"
             value={colaborador?.ficha?.nome_mae}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.nome_mae}</span>
         </div>
@@ -309,7 +295,7 @@ function RegistroColaborador() {
             id="nome_pai"
             name="nome_pai"
             value={colaborador?.ficha?.nome_pai}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.nome_pai}</span>
         </div>
@@ -320,7 +306,7 @@ function RegistroColaborador() {
             id="cpf"
             name="cpf"
             value={colaborador?.ficha?.cpf} // Certifique-se de usar a propriedade correta
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")} // Certifique-se de usar o tip
+            onChange={handleColaboradorInputChange} // Certifique-se de usar o tip
           />
           <span className="error">{validationErrors.cpf}</span>
         </div>
@@ -331,7 +317,7 @@ function RegistroColaborador() {
             id="raca_cor"
             name="raca_cor"
             value={colaborador?.ficha?.raca_cor}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.raca_cor}</span>
         </div>
@@ -342,7 +328,7 @@ function RegistroColaborador() {
             id="nome_companheiro"
             name="nome_companheiro"
             value={colaborador?.ficha?.nome_companheiro}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.nome_companheiro}</span>
         </div>
@@ -353,7 +339,7 @@ function RegistroColaborador() {
             id="endereco"
             name="endereco"
             value={colaborador?.ficha?.endereco}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco}</span>
         </div>
@@ -364,7 +350,7 @@ function RegistroColaborador() {
             id="endereco_numero"
             name="endereco_numero"
             value={colaborador?.ficha?.endereco_numero}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco_numero}</span>
         </div>
@@ -375,7 +361,7 @@ function RegistroColaborador() {
             id="endereco_cep"
             name="endereco_cep"
             value={colaborador?.ficha?.endereco_cep}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco_cep}</span>
         </div>
@@ -386,7 +372,7 @@ function RegistroColaborador() {
             id="endereco_complemento"
             name="endereco_complemento"
             value={colaborador?.ficha?.endereco_complemento}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco_complemento}</span>
         </div>
@@ -397,7 +383,7 @@ function RegistroColaborador() {
             id="endereco_cidade"
             name="endereco_cidade"
             value={colaborador?.ficha?.endereco_cidade}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco_cidade}</span>
         </div>
@@ -408,7 +394,7 @@ function RegistroColaborador() {
             id="endereco_bairro"
             name="endereco_bairro"
             value={colaborador?.ficha?.endereco_bairro}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco_bairro}</span>
         </div>
@@ -419,7 +405,7 @@ function RegistroColaborador() {
             id="endereco_uf"
             name="endereco_uf"
             value={colaborador?.ficha?.endereco_uf}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.endereco_uf}</span>
         </div>
@@ -428,7 +414,7 @@ function RegistroColaborador() {
   }
 
   // Componente para a etapa de informações de contato
-  function InformacoesContato({ colaborador, onChange, validationErrors }) {
+  function InformacoesContato(colaborador) {
     return (
       <div className="modalColab">
         <div className="caixinha">
@@ -438,7 +424,7 @@ function RegistroColaborador() {
             id="carteira_identidade"
             name="carteira_identidade"
             value={colaborador?.ficha?.carteira_identidade}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.carteira_identidade}</span>
         </div>
@@ -451,7 +437,7 @@ function RegistroColaborador() {
             id="expedidor_identidade"
             name="expedidor_identidade"
             value={colaborador?.ficha?.expedidor_identidade}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.expedidor_identidade}</span>
         </div>
@@ -464,7 +450,7 @@ function RegistroColaborador() {
             id="data_emissao_identidade"
             name="data_emissao_identidade"
             value={colaborador?.ficha?.data_emissao_identidade}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.data_emissao_identidade}
@@ -479,7 +465,7 @@ function RegistroColaborador() {
             id="titulo_eleitor_numero"
             name="titulo_eleitor_numero"
             value={colaborador?.ficha?.titulo_eleitor_numero}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.titulo_eleitor_numero}
@@ -492,7 +478,7 @@ function RegistroColaborador() {
             id="titulo_eleitor_zona"
             name="titulo_eleitor_zona"
             value={colaborador?.ficha?.titulo_eleitor_zona}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.titulo_eleitor_zona}</span>
         </div>
@@ -503,7 +489,7 @@ function RegistroColaborador() {
             id="titulo_eleitor_secao"
             name="titulo_eleitor_secao"
             value={colaborador?.ficha?.titulo_eleitor_secao}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.titulo_eleitor_secao}</span>
         </div>
@@ -514,7 +500,7 @@ function RegistroColaborador() {
             id="ctps_numero"
             name="ctps_numero"
             value={colaborador?.ficha?.ctps_numero}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.ctps_numero}</span>
         </div>
@@ -525,7 +511,7 @@ function RegistroColaborador() {
             id="ctps_serie"
             name="ctps_serie"
             value={colaborador?.ficha?.ctps_serie}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.ctps_serie}</span>
         </div>
@@ -536,7 +522,7 @@ function RegistroColaborador() {
             id="ctps_uf"
             name="ctps_uf"
             value={colaborador?.ficha?.ctps_uf}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.ctps_uf}</span>
         </div>
@@ -547,7 +533,7 @@ function RegistroColaborador() {
             id="ctps_data_emissao"
             name="ctps_data_emissao"
             value={colaborador?.ficha?.ctps_data_emissao}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.ctps_data_emissao}</span>
         </div>
@@ -558,7 +544,7 @@ function RegistroColaborador() {
             id="pis_numero"
             name="pis_numero"
             value={colaborador?.ficha?.pis_numero}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.pis_numero}</span>
         </div>
@@ -569,7 +555,7 @@ function RegistroColaborador() {
             id="pis_data_cadastro"
             name="pis_data_cadastro"
             value={colaborador?.ficha?.pis_data_cadastro}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.pis_data_cadastro}</span>
         </div>
@@ -582,7 +568,7 @@ function RegistroColaborador() {
             id="carteira_habilitacao_numero"
             name="carteira_habilitacao_numero"
             value={colaborador?.ficha?.carteira_habilitacao_numero}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.carteira_habilitacao_numero}
@@ -595,7 +581,7 @@ function RegistroColaborador() {
             id="carteira_habilitacao_categoria"
             name="carteira_habilitacao_categoria"
             value={colaborador?.ficha?.carteira_habilitacao_categoria}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.carteira_habilitacao_categoria}
@@ -608,7 +594,7 @@ function RegistroColaborador() {
             id="estado_civil"
             name="estado_civil"
             value={colaborador?.ficha?.estado_civil}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.estado_civil}</span>
         </div>
@@ -619,7 +605,7 @@ function RegistroColaborador() {
             id="escolaridade"
             name="escolaridade"
             value={colaborador?.ficha?.escolaridade}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.escolaridade}</span>
         </div>
@@ -628,7 +614,7 @@ function RegistroColaborador() {
   }
 
   // Componente para a etapa de habilidades
-  function Habilidades({ colaborador, onChange, validationErrors }) {
+  function Habilidades(colaborador) {
     return (
       <div className="modalColab">
         <div className="caixinha">
@@ -640,7 +626,7 @@ function RegistroColaborador() {
             id="certificado_reservista_numero"
             name="certificado_reservista_numero"
             value={colaborador?.ficha?.certificado_reservista_numero}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.certificado_reservista_numero}
@@ -653,7 +639,7 @@ function RegistroColaborador() {
             id="certificado_reservista_categoria"
             name="certificado_reservista_categoria"
             value={colaborador?.ficha?.certificado_reservista_categoria}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.certificado_reservista_categoria}
@@ -666,7 +652,7 @@ function RegistroColaborador() {
             id="cargo"
             name="cargo"
             value={colaborador?.ficha?.cargo}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.cargo}</span>
         </div>
@@ -677,7 +663,7 @@ function RegistroColaborador() {
             id="cbo"
             name="cbo"
             value={colaborador?.ficha?.cbo}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.cbo}</span>
         </div>
@@ -688,7 +674,7 @@ function RegistroColaborador() {
             id="data_admissao"
             name="data_admissao"
             value={colaborador?.ficha?.data_admissao}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.data_admissao}</span>
         </div>
@@ -699,7 +685,7 @@ function RegistroColaborador() {
             id="salario"
             name="salario"
             value={colaborador?.ficha?.salario}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.salario}</span>
         </div>
@@ -710,7 +696,7 @@ function RegistroColaborador() {
             id="intervalo"
             name="intervalo"
             value={colaborador?.ficha?.intervalo}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.intervalo}</span>
         </div>
@@ -721,7 +707,7 @@ function RegistroColaborador() {
             id="descanso"
             name="descanso"
             value={colaborador?.ficha?.descanso}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.descanso}</span>
         </div>
@@ -734,7 +720,7 @@ function RegistroColaborador() {
             id="horario_sabado"
             name="horario_sabado"
             value={colaborador?.ficha?.horario_sabado}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.horario_sabado}</span>
         </div>
@@ -744,7 +730,7 @@ function RegistroColaborador() {
             id="vale_transporte"
             name="vale_transporte"
             value={colaborador?.ficha?.vale_transporte}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           >
             <option value={true}>Sim</option>
             <option value={false}>Não</option>
@@ -760,7 +746,7 @@ function RegistroColaborador() {
             id="informacoes_complementares"
             name="informacoes_complementares"
             value={colaborador?.ficha?.informacoes_complementares}
-            onChange={(event) => handleColaboradorInputChange(event, "ficha")}
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">
             {validationErrors.informacoes_complementares}
@@ -773,9 +759,7 @@ function RegistroColaborador() {
             id="habilidades"
             name="habilidade"
             value={colaborador?.habilidades?.habilidade}
-            onChange={(event) =>
-              handleColaboradorInputChange(event, "habilidades")
-            }
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.habilidade}</span>
         </div>
@@ -786,9 +770,7 @@ function RegistroColaborador() {
             id="especialidade"
             name="especialidade"
             value={colaborador?.habilidades?.especialidade}
-            onChange={(event) =>
-              handleColaboradorInputChange(event, "habilidades")
-            }
+            onChange={handleColaboradorInputChange}
           />
           <span className="error">{validationErrors.especialidade}</span>
         </div>
@@ -798,27 +780,9 @@ function RegistroColaborador() {
 
   return (
     <div>
-      {currentStep === 1 && (
-        <InformacoesPessoais
-          colaborador={colaborador.usuario}
-          onChange={handleColaboradorInputChange}
-          validationErrors={validationErrors}
-        />
-      )}
-      {currentStep === 2 && (
-        <InformacoesContato
-          colaborador={colaborador.ficha}
-          onChange={handleColaboradorInputChange}
-          validationErrors={validationErrors}
-        />
-      )}
-      {currentStep === 3 && (
-        <Habilidades
-          colaborador={colaborador.habilidades}
-          onChange={handleColaboradorInputChange}
-          validationErrors={validationErrors}
-        />
-      )}
+      {currentStep === 1 && InformacoesPessoais(colaborador)}
+      {currentStep === 2 && InformacoesContato(colaborador)}
+      {currentStep === 3 && Habilidades(colaborador)}
 
       <div className="modalColab">
         {currentStep > 1 && <button onClick={prevStep}>Anterior</button>}

@@ -134,7 +134,7 @@ button[type="submit"]:hover {
 }
 
 .error {
-    color: red;
+    color: #0077b6;
     font-size: 14px;
 }
 
