@@ -32,6 +32,7 @@
     cursor: pointer;
     border-radius: 0.25rem;
     background-color: lightgray;
+    font-size: 30px;
 }
 
 .close-button:hover {
@@ -45,18 +46,13 @@
     transform: scale(1.0);
 }
 
-form {
-    width: 90%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.modalColab {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-form div {
-    margin-bottom: 15px;
+.caixinha {
+    margin-top: 5px;
 }
 
 label {
@@ -68,19 +64,15 @@ input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"] {
-    width: 45%;
-    /* Reduza a largura das caixas de texto */
+    width: 70%;
     display: inline-block;
-    /* Permitem que fiquem lado a lado */
     margin-right: 2%;
-    /* Adicione margem direita para separá-las */
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
 }
 
 input[type="date"] {
-    width: 20%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -113,3 +105,13 @@ button[type="submit"]:hover {
     color: red;
     font-size: 14px;
 }
+
+.caixinha-foto {
+    align-items: center;
+}
+
+.caixinha-foto label {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
