@@ -17,8 +17,8 @@ const NavBar = ({ user, username, logout }) => {
 
             <div className={styles.userProfile}>
                 <div>
-                    <img src={AvatarImage} alt="Avatar" />
-                    <p>Usuário</p>
+                    <img src={AvatarImage} alt="Avatar" className={styles.logoImageAvatar} />
+                    <p>Eduardo da Silva Torres Grillo</p>
                 </div>
 
                 <div className={styles.userName}>

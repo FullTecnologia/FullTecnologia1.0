@@ -5,7 +5,7 @@
         flex-direction: column;
         align-items: center;
         background-color: #94cff0;
-        width: 200px;
+        width: 220px;
         padding: 20px 0;
         height: 100vh;
     }
@@ -19,9 +19,18 @@
 
     .userProfile p {
         text-align: center;
+        font-size: 90%;
     }
 
     .logoImage {
+        display: block;
+        margin: 0 auto;
+        width: 150px;
+        height: auto;
+        padding-bottom: 10px;
+    }
+
+    .logoImageAvatar {
         display: block;
         margin: 0 auto;
         width: 150px;

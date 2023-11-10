@@ -31,7 +31,6 @@ const Table = () => {
 
     return (
         <div>
-            <h1>Minhas Atividades</h1>
             <table className={styles.table}>
                 <thead>
                     <tr>
@@ -125,7 +124,6 @@ const Colab = () => {
 
     return (
         <div>
-            <h1>Gerenciamento de Colaboradores</h1>
             <div className={styles.searchContainer}>
                 <input
                     type="text"

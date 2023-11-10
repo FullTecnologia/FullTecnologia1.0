@@ -36,7 +36,7 @@
 
 .close-button:hover {
     background-color: darkgray;
-    color: #0077b6
+    color: #0077b6;
 }
 
 .show-modal {
@@ -69,11 +69,8 @@ input[type="email"],
 input[type="password"],
 input[type="number"] {
     width: 45%;
-    /* Reduza a largura das caixas de texto */
     display: inline-block;
-    /* Permitem que fiquem lado a lado */
     margin-right: 2%;
-    /* Adicione margem direita para separá-las */
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
@@ -107,6 +104,38 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background: #005c8b;
+}
+
+.activitySection,
+.colaboradorSection {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Alterado para centralizar os elementos no eixo transversal */
+}
+
+.activitySection h2,
+.colaboradorSection h2 {
+    margin-bottom: 5px;
+}
+
+.activitySection button,
+.colaboradorSection button {
+    margin-bottom: 10px;
+}
+
+/* Adicione novas regras para posicionar os botões acima das tabelas */
+.activitySection {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.colaboradorSection {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .error {

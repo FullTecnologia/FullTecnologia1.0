@@ -2,12 +2,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
 }
 
+.titlePage h1 {
+    margin-left: 250px;
+}
 
-.bodyRecursos h2 {
-    font-size: 24px;
+.titlePage h2 {
+    margin-right: 807px;
+}
+
+.titlePageColab h2 {
+    margin-right: 625px;
 }
 
 .bodyRecursos p {
@@ -23,4 +29,31 @@ button {
     border: 0;
     cursor: pointer;
     padding: 6px 10px;
+}
+
+.trigger {
+    background-color: #0056b3;
+    font-weight: bold;
+    margin-left: 700px;
+
+}
+
+.trigger:hover {
+    background-color: #007bff;
+}
+
+.colaboradorSection {
+    position: relative;
+}
+
+.triggerColab {
+    background-color: #0056b3;
+    font-weight: bold;
+    position: absolute;
+    left: 700px;
+    top: 10px;
+}
+
+.triggerColab:hover {
+    background-color: #007bff;
 }
