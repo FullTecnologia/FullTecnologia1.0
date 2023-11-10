@@ -84,11 +84,11 @@ function RegistroColaborador() {
       fieldType === "ficha" ||
       fieldType === "habilidades"
     ) {
-      setColaborador((prevColaborador) => {
+      setColaborador((colaborador) => {
         return {
-          ...prevColaborador,
+          ...colaborador,
           [fieldType]: {
-            ...prevColaborador[fieldType],
+            ...colaborador[fieldType],
             [name]: value,
           },
         };
@@ -99,9 +99,9 @@ function RegistroColaborador() {
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setColaborador((prevColaborador) => {
+        setColaborador((colaborador) => {
           return {
-            ...prevColaborador,
+            ...colaborador,
             fotoPerfil: reader.result, // Armazenar a imagem como uma string base64 ou usar como desejar
           };
         });
@@ -140,6 +140,7 @@ function RegistroColaborador() {
           .then((data) => {
             // Lidar com a resposta do servidor, se houver
             console.log(data);
+            closeModal();
           })
           .catch((error) => {
             // Lidar com erros de solicitação
@@ -166,6 +167,7 @@ function RegistroColaborador() {
           .then((data) => {
             // Lidar com a resposta do servidor, se houver
             console.log(data);
+            closeModal();
           })
           .catch((error) => {
             // Lidar com erros de solicitação
@@ -192,6 +194,7 @@ function RegistroColaborador() {
           .then((data) => {
             // Lidar com a resposta do servidor, se houver
             console.log(data);
+            closeModal();
           })
           .catch((error) => {
             // Lidar com erros de solicitação
@@ -208,7 +211,7 @@ function RegistroColaborador() {
   // Componente para a etapa de informações pessoais
   function InformacoesPessoais({ colaborador, onChange, validationErrors }) {
     return (
-      <div className="modalColab">
+      <form onSubmit={handleColaboradorSubmit} className="modalColab">
         <div className="caixinha">
           <label htmlFor="nome">Nome:</label>
           <input
@@ -420,7 +423,7 @@ function RegistroColaborador() {
           />
           <span className="error">{validationErrors.endereco_uf}</span>
         </div>
-      </div>
+      </form>
     );
   }
 
