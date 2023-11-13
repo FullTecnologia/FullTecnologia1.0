@@ -6,6 +6,7 @@
     border: 1px solid #ccc;
 }
 
+
 .table th {
     background-color: #f2f2f2;
     font-weight: bold;
@@ -48,7 +49,6 @@
     align-items: center;
     margin: 20px 0;
     width: 45%;
-
 }
 
 label {

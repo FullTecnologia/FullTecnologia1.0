@@ -18,15 +18,15 @@ function validateForm(atividade) {
     const errors = {};
 
     if (!atividade.responsavel) {
-        errors.responsavel = "Campo obrigatório";
+        errors.responsavel = "Campo obrigatório.";
     }
 
     if (!atividade.descricao) {
-        errors.descricao = "Campo obrigatório";
+        errors.descricao = "Campo obrigatório.";
     }
 
     if (!atividade.dataFim) {
-        errors.dataFim = "Campo obrigatório";
+        errors.dataFim = "Campo obrigatório.";
     } else if (!isValidDate(atividade.dataFim)) {
         errors.dataFim = "Data inválida";
     }
@@ -36,7 +36,7 @@ function validateForm(atividade) {
     }
 
     if (atividade.tipo !== 0 && atividade.tipo !== 1) {
-        errors.tipo = "Tipo inválido";
+        errors.tipo = "Tipo inválido.";
     }
 
     return errors;
@@ -47,23 +47,23 @@ function validateColaborador(colaborador) {
     const usuario = colaborador.usuario;
 
     if (!usuario.nome) {
-        errors.nome = "Campo obrigatório";
+        errors.nome = "Campo obrigatório.";
     }
 
     if (!usuario.email) {
-        errors.email = "Campo obrigatório";
+        errors.email = "Campo obrigatório.";
     } else if (!isValidEmail(usuario.email)) {
-        errors.email = "E-mail inválido";
+        errors.email = "E-mail inválido.";
     }
 
     if (!usuario.senha) {
-        errors.senha = "Campo obrigatório";
+        errors.senha = "Campo obrigatório.";
     } else if (usuario.senha.length < 6) {
-        errors.senha = "A senha deve conter pelo menos 6 caracteres";
+        errors.senha = "A senha deve conter pelo menos 6 caracteres.";
     }
 
     if (usuario.nivel !== 0 && usuario.nivel !== 1) {
-        errors.nivel = "Nível inválido";
+        errors.nivel = "Nível inválido.";
     }
 
     // Adicione mais validações conforme necessário para os campos de ficha e habilidades

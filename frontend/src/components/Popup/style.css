@@ -14,6 +14,7 @@
     transform: scale(1.1);
     transition: visibility 0.25s ease-in-out, opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
     overflow-y: auto;
+    z-index: 1000;
 }
 
 .modal-content {
@@ -88,7 +89,7 @@ select {
 }
 
 button[type="submit"] {
-    background: #0077b6;
+    background: #0056b3;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -98,7 +99,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background: #005c8b;
+    background: #007bff;
 }
 
 .activitySection,
@@ -134,9 +135,12 @@ button[type="submit"]:hover {
 }
 
 .error {
-    color: #0077b6;
-    font-size: 14px;
+    color: black;
+    font-size: 12px;
+    top: 10px;
+    /* Ajuste este valor conforme necessário */
 }
+
 
 .caixinha-foto {
     align-items: center;
