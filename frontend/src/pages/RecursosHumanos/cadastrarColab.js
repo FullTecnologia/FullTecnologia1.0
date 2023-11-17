@@ -67,6 +67,7 @@ function CadastrarColaborador() {
   const [validationErrors, setValidationErrors] = useState({});
 
   const estadosCivis = [
+    "Selecione um estado civil",
     "Solteiro(a)",
     "Casado(a)",
     "Divorciado(a)",
@@ -76,6 +77,7 @@ function CadastrarColaborador() {
   ];
 
   const cargos = [
+    "Selecione um cargo",
     "Líder de Projeto",
     "Projetista",
     "Comercial",
@@ -201,6 +203,26 @@ function CadastrarColaborador() {
     navigate("/recursoshumanos");
   }
 
+  function handleKeyPress(event) {
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+
+    const isValidInput = /^\d*\,?\d*$/.test(keyValue);
+
+    if (!isValidInput) {
+      event.preventDefault();
+    }
+  }
+
+  function permitirApenasNumeros(event) {
+    const teclaPermitida = event.key;
+    const regexApenasNumeros = /^[0-9\b]+$/;
+
+    if (!teclaPermitida.match(regexApenasNumeros)) {
+      event.preventDefault();
+    }
+  }
+
   function InformacoesPessoais(dadosUsuario) {
     return (
       <div className="modalColab">
@@ -214,6 +236,7 @@ function CadastrarColaborador() {
               type="text"
               id="nome"
               name="nome"
+              placeholder="Nome completo"
               value={dadosUsuario.nome}
               onChange={handleColaboradorInputChange}
             />
@@ -258,6 +281,7 @@ function CadastrarColaborador() {
               value={dadosUsuario.nivel}
               onChange={handleColaboradorInputChange}
             >
+              <option value=" ">Selecione um Nível </option>
               <option value="1">Nível 1</option>
               <option value="2">Nível 2</option>
               <option value="3">Nível 3</option>
@@ -324,6 +348,7 @@ function CadastrarColaborador() {
               type="text"
               id="nome_mae"
               name="nome_mae"
+              placeholder="Nome completo"
               value={dadosFicha.nome_mae}
               onChange={handleColaboradorInputChange}
             />
@@ -338,6 +363,7 @@ function CadastrarColaborador() {
               type="text"
               id="nome_pai"
               name="nome_pai"
+              placeholder="Nome completo"
               value={dadosFicha.nome_pai}
               onChange={handleColaboradorInputChange}
             />
@@ -354,6 +380,8 @@ function CadastrarColaborador() {
               name="cpf"
               value={dadosFicha.cpf} // Certifique-se de usar a propriedade correta
               onChange={handleColaboradorInputChange} // Certifique-se de usar o tip
+              placeholder="___.___.___-__"
+              maxLength="14"
             />
             <span className="error">{validationErrors.cpf}</span>
           </div>
@@ -361,14 +389,21 @@ function CadastrarColaborador() {
             <label className="form-label" htmlFor="raca_cor">
               Raça/Cor:
             </label>
-            <input
-              className="form-input"
-              type="text"
+            <select
+              className="form-select"
               id="raca_cor"
               name="raca_cor"
               value={dadosFicha.raca_cor}
               onChange={handleColaboradorInputChange}
-            />
+            >
+              <option value="">Selecione a Raça/Cor</option>
+              <option value="Branco">Branco</option>
+              <option value="Negro">Negro</option>
+              <option value="Pardo">Pardo</option>
+              <option value="Amarelo">Amarelo</option>
+              <option value="Indígena">Indígena</option>
+              <option value="Outro">Outro</option>
+            </select>
             <span className="error">{validationErrors.raca_cor}</span>
           </div>
         </div>
@@ -382,6 +417,7 @@ function CadastrarColaborador() {
               type="text"
               id="nome_companheiro"
               name="nome_companheiro"
+              placeholder="Nome completo"
               value={dadosFicha.nome_companheiro}
               onChange={handleColaboradorInputChange}
             />
@@ -412,6 +448,7 @@ function CadastrarColaborador() {
               name="endereco_numero"
               value={dadosFicha.endereco_numero}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.endereco_numero}</span>
           </div>
@@ -424,8 +461,10 @@ function CadastrarColaborador() {
               type="text"
               id="endereco_cep"
               name="endereco_cep"
+              placeholder="_____-___"
               value={dadosFicha.endereco_cep}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.endereco_cep}</span>
           </div>
@@ -438,6 +477,7 @@ function CadastrarColaborador() {
               type="text"
               id="endereco_complemento"
               name="endereco_complemento"
+              placeholder="Ex: Apto.3"
               value={dadosFicha.endereco_complemento}
               onChange={handleColaboradorInputChange}
             />
@@ -498,8 +538,11 @@ function CadastrarColaborador() {
               type="text"
               id="carteira_identidade"
               name="carteira_identidade"
+              placeholder="__.___.___"
+              maxLength="8"
               value={dadosFicha.carteira_identidade}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
               {validationErrors.carteira_identidade}
@@ -548,6 +591,7 @@ function CadastrarColaborador() {
               name="titulo_eleitor_numero"
               value={dadosFicha.titulo_eleitor_numero}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
               {validationErrors.titulo_eleitor_numero}
@@ -566,6 +610,7 @@ function CadastrarColaborador() {
               name="titulo_eleitor_zona"
               value={dadosFicha.titulo_eleitor_zona}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
               {validationErrors.titulo_eleitor_zona}
@@ -582,6 +627,7 @@ function CadastrarColaborador() {
               name="titulo_eleitor_secao"
               value={dadosFicha.titulo_eleitor_secao}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
               {validationErrors.titulo_eleitor_secao}
@@ -598,6 +644,7 @@ function CadastrarColaborador() {
               name="ctps_numero"
               value={dadosFicha.ctps_numero}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.ctps_numero}</span>
           </div>
@@ -670,6 +717,7 @@ function CadastrarColaborador() {
               name="pis_data_cadastro"
               value={dadosFicha.pis_data_cadastro}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.pis_data_cadastro}</span>
           </div>
@@ -684,6 +732,7 @@ function CadastrarColaborador() {
               name="carteira_habilitacao_numero"
               value={dadosFicha.carteira_habilitacao_numero}
               onChange={handleColaboradorInputChange}
+              onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
               {validationErrors.carteira_habilitacao_numero}
@@ -733,14 +782,38 @@ function CadastrarColaborador() {
             <label className="form-label" htmlFor="escolaridade">
               Escolaridade:
             </label>
-            <input
-              className="form-input"
-              type="text"
+            <select
+              className="form-select"
               id="escolaridade"
               name="escolaridade"
               value={dadosFicha.escolaridade}
               onChange={handleColaboradorInputChange}
-            />
+            >
+              <option value="">Selecione a Escolaridade</option>
+              <option value="Sem escolaridade">Sem escolaridade</option>
+              <option value="Ensino fundamental incompleto">
+                Ensino fundamental incompleto
+              </option>
+              <option value="Ensino fundamental completo">
+                Ensino fundamental completo
+              </option>
+              <option value="Ensino médio incompleto">
+                Ensino médio incompleto
+              </option>
+              <option value="Ensino médio completo">
+                Ensino médio completo
+              </option>
+              <option value="Ensino superior incompleto">
+                Ensino superior incompleto
+              </option>
+              <option value="Ensino superior completo">
+                Ensino superior completo
+              </option>
+              <option value="Pós-graduação">Pós-graduação</option>
+              <option value="Mestrado">Mestrado</option>
+              <option value="Doutorado">Doutorado</option>
+            </select>
+
             <span className="error">{validationErrors.escolaridade}</span>
           </div>
           <div>
@@ -806,7 +879,7 @@ function CadastrarColaborador() {
             </label>
             <input
               className="form-input"
-              type="number"
+              type="text"
               id="cbo"
               name="cbo"
               value={dadosFicha.cbo}
@@ -836,23 +909,25 @@ function CadastrarColaborador() {
             </label>
             <input
               className="form-input"
-              type="number"
+              type="text"
               id="salario"
               name="salario"
               value={dadosFicha.salario}
               onChange={handleColaboradorInputChange}
+              onKeyPress={handleKeyPress}
             />
             <span className="error">{validationErrors.salario}</span>
           </div>
           <div>
             <label className="form-label" htmlFor="intervalo">
-              Intervalo:
+              Intervalo (HH:MM):
             </label>
             <input
               className="form-input"
               type="text"
               id="intervalo"
               name="intervalo"
+              placeholder="Ex: 01:30"
               value={dadosFicha.intervalo}
               onChange={handleColaboradorInputChange}
             />
@@ -860,27 +935,30 @@ function CadastrarColaborador() {
           </div>
           <div>
             <label className="form-label" htmlFor="descanso">
-              Descanso:
+              Descanso (HH:MM):
             </label>
             <input
               className="form-input"
               type="text"
               id="descanso"
               name="descanso"
+              placeholder="Ex: 00:45"
               value={dadosFicha.descanso}
               onChange={handleColaboradorInputChange}
             />
             <span className="error">{validationErrors.descanso}</span>
           </div>
+
           <div>
             <label className="form-label" htmlFor="horario_sabado">
-              Horário de Trabalho aos Sábados:
+              Horário de Trabalho aos Sábados (HH:MM):
             </label>
             <input
               className="form-input"
               type="text"
               id="horario_sabado"
               name="horario_sabado"
+              placeholder="Ex: 00:45"
               value={dadosFicha.horario_sabado}
               onChange={handleColaboradorInputChange}
             />
@@ -897,6 +975,7 @@ function CadastrarColaborador() {
               value={dadosFicha.vale_transporte}
               onChange={handleColaboradorInputChange}
             >
+              <option value={true}>Selecione um alternativa</option>
               <option value={true}>Sim</option>
               <option value={false}>Não</option>
             </select>
