@@ -13,7 +13,7 @@ const Table = () => {
         // Função para buscar os dados do banco de dados
         const fetchDataFromDatabase = async () => {
             try {
-                const response = await axios.get('http://localhost:3003/api/sua-rota-atividades'); // Substitua pela rota correta
+                const response = await axios.get('http://localhost:3003/api/cadastrarAtividade'); // Substitua pela rota correta
 
                 if (response.status === 200) {
                     setAtividades(response.data);
@@ -91,7 +91,7 @@ const Colab = () => {
         // Função para buscar os dados dos colaboradores do banco de dados
         const fetchDataFromDatabase = async () => {
             try {
-                const response = await axios.get('http://localhost:3003/api/sua-rota-colaboradores'); // Substitua pela rota correta
+                const response = await axios.get('http://localhost:3003/api/cadastrarFicha'); // Substitua pela rota correta
 
                 if (response.status === 200) {
                     setColaboradores(response.data);

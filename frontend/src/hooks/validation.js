@@ -35,10 +35,6 @@ function validateForm(atividade) {
         errors.status = "Status inválido";
     }
 
-    if (atividade.tipo !== 0 && atividade.tipo !== 1) {
-        errors.tipo = "Tipo inválido.";
-    }
-
     return errors;
 }
 

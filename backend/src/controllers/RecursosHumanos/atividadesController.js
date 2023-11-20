@@ -2,7 +2,12 @@ import AtividadeProgramada from "../../models/atividadeProgramada.js";
 
 async function cadastrarAtividade(req, res) {
     try {
-        const {dadosAtividade} = req.body;
+        // Verifique se req.user está definido
+        if (!req.user) {
+            return res.status(400).json({ mensagem: "Usuário não autenticado." });
+        }
+
+        const { dadosAtividade } = req.body;
         const nivelUsuario = req.user.nivel;
 
         // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
@@ -14,16 +19,18 @@ async function cadastrarAtividade(req, res) {
         const atividade = await AtividadeProgramada.create(dadosAtividade);
 
         // Retorna a atividade cadastrada
-        return atividade;
+        return res.status(201).json(atividade);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ mensagem: "Erro ao cadastrar atividade." });
     }
 }
 
+// ALTERAÇÕES NESSA FUNÇÃO
+
 async function editarAtividade(req, res) {
     try {
-        const { id } = req.params; 
+        const { id } = req.params;
         const { dadosAtividade } = req.body;
         const nivelUsuario = req.user.nivel;
 
@@ -52,7 +59,7 @@ async function editarAtividade(req, res) {
 
 async function excluirAtividade(req, res) {
     try {
-        const { id } = req.params; 
+        const { id } = req.params;
         const nivelUsuario = req.user.nivel;
 
         // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
@@ -94,10 +101,7 @@ async function listarAtividades(req, res) {
 
         // Consulte todas as atividades programadas para o usuário específico
         const atividades = await AtividadeProgramada.findAll({
-            where: {
-                id_usuario: id,
-                conditions,
-            },
+            where: conditions,
         });
 
         // Retorna a lista de atividades do usuário

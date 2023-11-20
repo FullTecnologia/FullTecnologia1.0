@@ -1,10 +1,12 @@
-import React, { useState } from "react";
 import { Table, Colab } from "../../components/Table/Table";
 import NavBar from "../../components/NavBar/NavBar";
 import { validateForm } from "../../hooks/validation";
 import "../../components/Popup/style.css";
 import styles from "./RecursosHumanos.module.css";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 
 function RecursosHumanos() {
   const [atividade, setAtividade] = useState({
@@ -16,8 +18,33 @@ function RecursosHumanos() {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  const [atividades, setAtividades] = useState([]); // Adicionando estado para armazenar atividades
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Chama a função para buscar os dados ao carregar o componente
+    fetchDataFromDatabase();
+  }, []);
+
+  // ALTERAÇÃO DAQUI 
+
+  // Função para buscar os dados do banco de dados
+  const fetchDataFromDatabase = async () => {
+    try {
+      const response = await axios.get("http://localhost:3003/api/cadastrarAtividade");
+
+      if (response.status === 200) {
+        setAtividades(response.data);
+      } else {
+        console.error("Erro ao buscar dados do banco de dados.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados do banco de dados:", error);
+    }
+  };
+
+  // ALTERAÇÃO ATÉ AQUI
 
   function showModal(modalType) {
     var element = document.getElementById(`modal${modalType}`);
@@ -50,37 +77,52 @@ function RecursosHumanos() {
     });
   }
 
-  function handleSubmit(event) {
+  // ALTERAÇÕES NESSA FUNÇÃO ABAIXO
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     const errors = validateForm(atividade);
 
     if (Object.keys(errors).length === 0) {
-      // Dados do formulário de atividade são válidos
-      fetch("/cadastrarAtividade", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(atividade),
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Erro na solicitação");
-          }
-        })
-        .then((data) => {
+      try {
+        const response = await fetch("http://localhost:3003/api/cadastrarAtividade", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ dadosAtividade: atividade }),
+        });
+
+        // Verificar se o cadastro foi bem-sucedido com base no status da resposta
+        if (response.ok) {
+          const data = await response.json();
           console.log(data);
           closeModal("modalAtividade");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+
+          // Atualize as atividades após cadastrar uma nova
+          fetchDataFromDatabase();
+        } else {
+          // Caso contrário, tratamento de erro
+          const errorData = await response.json();
+          console.error("Erro na solicitação:", errorData);
+
+          // Verificar se o erro está relacionado a autenticação
+          if (errorData.mensagem && errorData.mensagem === 'Usuário não autenticado.') {
+            // Adicionar lógica adicional se necessário
+            console.error('Usuário não autenticado. Redirecione para a página de login.');
+            // Exemplo de redirecionamento para a página de login
+            // navigate('/login');
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       setValidationErrors(errors);
     }
-  }
+  };
+
 
   function handleClick() {
     // Navegar para outra rota
@@ -165,7 +207,7 @@ function RecursosHumanos() {
         </div>
 
         <div>
-          <button type="submit" className="submit-button">
+          <button type="submit" className="submit-button" onClick={handleSubmit}>
             Cadastrar
           </button>
         </div>
@@ -194,7 +236,7 @@ function RecursosHumanos() {
             >
               Cadastrar Atividade
             </button>
-            <Table />
+            <Table atividades={atividades} />
           </div>
 
           <div className="modal" id="modalAtividade">

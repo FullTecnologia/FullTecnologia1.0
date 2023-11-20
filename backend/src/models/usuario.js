@@ -2,7 +2,7 @@ import { sequelize } from '../config/configDataBase.js';
 import Sequelize from 'sequelize';
 const { DataTypes, Model } = Sequelize;
 
-class Usuario extends Model {}
+class Usuario extends Model { }
 
 Usuario.init({
     id: {
@@ -20,8 +20,8 @@ Usuario.init({
         allowNull: false,
         unique: true
     },
-    senha: { 
-        type: DataTypes.STRING, 
+    senha: {
+        type: DataTypes.STRING,
         allowNull: true,
     },
     nivel: {
