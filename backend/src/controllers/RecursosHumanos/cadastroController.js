@@ -8,7 +8,7 @@ async function cadastrar(req, res) {
   try {
     const { nome, email, senha, nivel, fotoPerfil } = req.body;
     const nivelUsuario = req.nivel;
-    const rootDir = "C:/Users/Julia/FullTecnologia1.0/backend/src";
+    const rootDir = "/FullTecnologia1.0/backend/src";
 
     // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
     if (nivelUsuario < 3) {
