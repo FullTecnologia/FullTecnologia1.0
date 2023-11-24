@@ -4,29 +4,19 @@ import styles from './Table.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { fetchDataFromAtividades } from '../../hooks/apiService';
 
 
 const Table = () => {
     const [atividades, setAtividades] = useState([]);
 
     useEffect(() => {
-        // Função para buscar os dados do banco de dados
-        const fetchDataFromDatabase = async () => {
-            try {
-                const response = await axios.get('http://localhost:3003/api/cadastrarAtividade'); // Substitua pela rota correta
-
-                if (response.status === 200) {
-                    setAtividades(response.data);
-                } else {
-                    console.error('Erro ao buscar dados do banco de dados.');
-                }
-            } catch (error) {
-                console.error('Erro ao buscar dados do banco de dados:', error);
-            }
+        const fetchData = async () => {
+            const atividadesData = await fetchDataFromAtividades();
+            setAtividades(atividadesData);
         };
 
-        // Chama a função para buscar os dados ao carregar o componente
-        fetchDataFromDatabase();
+        fetchData();
     }, []);
 
     return (

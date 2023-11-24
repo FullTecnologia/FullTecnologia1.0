@@ -1,12 +1,12 @@
+import styles from "./RecursosHumanos.module.css";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
+
+import { fetchDataFromAtividades, cadastrarAtividade } from '../../hooks/apiService';
 import { Table, Colab } from "../../components/Table/Table";
 import NavBar from "../../components/NavBar/NavBar";
 import { validateForm } from "../../hooks/validation";
 import "../../components/Popup/style.css";
-import styles from "./RecursosHumanos.module.css";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-
 
 function RecursosHumanos() {
   const [atividade, setAtividade] = useState({
@@ -24,23 +24,18 @@ function RecursosHumanos() {
 
   useEffect(() => {
     // Chama a função para buscar os dados ao carregar o componente
-    fetchDataFromDatabase();
+    listarAtividades();
   }, []);
 
   // ALTERAÇÃO DAQUI 
 
   // Função para buscar os dados do banco de dados
-  const fetchDataFromDatabase = async () => {
+  const listarAtividades = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/api/cadastrarAtividade");
-
-      if (response.status === 200) {
-        setAtividades(response.data);
-      } else {
-        console.error("Erro ao buscar dados do banco de dados.");
-      }
+      const atividadesData = await fetchDataFromAtividades();
+      setAtividades(atividadesData);
     } catch (error) {
-      console.error("Erro ao buscar dados do banco de dados:", error);
+      console.error(error);
     }
   };
 
@@ -86,34 +81,12 @@ function RecursosHumanos() {
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("http://localhost:3003/api/cadastrarAtividade", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ dadosAtividade: atividade }),
-        });
+        const data = await cadastrarAtividade(atividade);
 
-        // Verificar se o cadastro foi bem-sucedido com base no status da resposta
-        if (response.ok) {
-          const data = await response.json();
+        if (data) {
           console.log(data);
-          closeModal("modalAtividade");
-
-          // Atualize as atividades após cadastrar uma nova
-          fetchDataFromDatabase();
-        } else {
-          // Caso contrário, tratamento de erro
-          const errorData = await response.json();
-          console.error("Erro na solicitação:", errorData);
-
-          // Verificar se o erro está relacionado a autenticação
-          if (errorData.mensagem && errorData.mensagem === 'Usuário não autenticado.') {
-            // Adicionar lógica adicional se necessário
-            console.error('Usuário não autenticado. Redirecione para a página de login.');
-            // Exemplo de redirecionamento para a página de login
-            // navigate('/login');
-          }
+          closeModal('modalAtividade');
+          listarAtividades();
         }
       } catch (error) {
         console.error(error);
@@ -122,7 +95,6 @@ function RecursosHumanos() {
       setValidationErrors(errors);
     }
   };
-
 
   function handleClick() {
     // Navegar para outra rota
