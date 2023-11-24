@@ -134,7 +134,7 @@ async function listarUsuarios(req, res) {
     const { dataInicio, dataFim, termoBusca } = req.query;
 
     // Construa as condições de pesquisa com base nos filtros de data e termo de busca
-    const conditions = 0;
+    const conditions = null;
     if (dataInicio && dataFim) {
       conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
     }

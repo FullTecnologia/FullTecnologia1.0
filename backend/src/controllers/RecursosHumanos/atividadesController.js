@@ -22,7 +22,7 @@ async function cadastrarAtividade(req, res) {
     }
 
     // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 1) {
+    if (usuario.nivel < 3) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
@@ -47,10 +47,14 @@ async function editarAtividade(req, res) {
   try {
     const { id } = req.params;
     const { dadosAtividade } = req.body;
-    const nivelUsuario = req.user.nivel;
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
+    const usuario = await Usuario.findByPk(req.body.id_usuario);
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 3) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
@@ -75,10 +79,15 @@ async function editarAtividade(req, res) {
 async function excluirAtividade(req, res) {
   try {
     const { id } = req.params;
-    const nivelUsuario = req.user.nivel;
+    const { dadosAtividade } = req.body;
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
+    const usuario = await Usuario.findByPk(req.body.id_usuario);
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 3) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
