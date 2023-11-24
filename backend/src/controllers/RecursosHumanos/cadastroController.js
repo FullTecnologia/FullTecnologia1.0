@@ -1,12 +1,14 @@
 import Usuario from "../../models/usuario.js";
-import bcrypt from 'bcrypt';
-import fs from 'fs';
-import path from 'path';
+import bcrypt from "bcrypt";
+import fs from "fs";
+import path from "path";
+import { mkdir } from "fs/promises";
 
 async function cadastrar(req, res) {
   try {
     const { nome, email, senha, nivel, fotoPerfil } = req.body;
-    const nivelUsuario = req.user.nivel;
+    const nivelUsuario = req.nivel;
+    const rootDir = "C:/Users/Julia/FullTecnologia1.0/backend/src";
 
     // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
     if (nivelUsuario < 3) {
@@ -20,19 +22,23 @@ async function cadastrar(req, res) {
     }
 
     // Realize o upload da foto de perfil
-    const fotoPerfilPath = '../../../imagens'; 
-    const fotoPerfilNome = `foto_perfil_${Date.now()}.png`; // Gere um nome único para a imagem
-    const fotoPerfilCaminhoCompleto = path.join(fotoPerfilPath, fotoPerfilNome);
-
-    // Crie a pasta se não existir
-    if (!fs.existsSync(fotoPerfilPath)) {
-      fs.mkdirSync(fotoPerfilPath, { recursive: true });
+    const fotoPerfilPath = path.join(rootDir, "imagens");
+    try {
+      await mkdir(fotoPerfilPath, { recursive: true });
+    } catch (mkdirError) {
+      if (mkdirError.code !== "EEXIST") {
+        throw mkdirError;
+      }
     }
 
-    // Escreva a imagem no disco
-    fs.writeFileSync(fotoPerfilCaminhoCompleto, fotoPerfil, 'base64');
+    // Crie a pasta se não existir
+    const fotoPerfilCaminhoCompleto = path.join(
+      fotoPerfilPath,
+      `foto_perfil_${Date.now()}.jpg`
+    );
+    fs.writeFileSync(fotoPerfilCaminhoCompleto, fotoPerfil, "base64");
 
-    // Criptografar a senha usando bcrypt (ou qualquer outra biblioteca de sua preferência)
+    // Criptografar a senha usando bcrypt
     const senhaCriptografada = await bcrypt.hash(senha, 10); // 10 é o número de rounds de criptografia
 
     // Salvar o usuário no banco de dados com a senha criptografada e o caminho da foto de perfil
@@ -46,7 +52,9 @@ async function cadastrar(req, res) {
 
     await novoUsuario.save();
 
-    return res.status(201).json({ mensagem: "Usuário cadastrado com sucesso." });
+    return res
+      .status(201)
+      .json({ mensagem: "Usuário cadastrado com sucesso." });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ mensagem: "Erro ao cadastrar usuário." });
@@ -78,14 +86,16 @@ async function editar(req, res) {
 
     if (senha) {
       // Se uma nova senha for fornecida, criptografe-a e atualize-a
-      // adicionar a autentificação 
-      const senhaCriptografada = senha; 
+      // adicionar a autentificação
+      const senhaCriptografada = senha;
       usuario.firebase = senhaCriptografada;
     }
 
     await usuario.save();
 
-    return res.status(200).json({ mensagem: "Usuário atualizado com sucesso." });
+    return res
+      .status(200)
+      .json({ mensagem: "Usuário atualizado com sucesso." });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ mensagem: "Erro ao editar usuário." });
@@ -126,10 +136,10 @@ async function listarUsuarios(req, res) {
     // Construa as condições de pesquisa com base nos filtros de data e termo de busca
     const conditions = 0;
     if (dataInicio && dataFim) {
-        conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
+      conditions.data_atividade = { [Op.between]: [dataInicio, dataFim] };
     }
     if (termoBusca) {
-        conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
+      conditions.nome_atividade = { [Op.like]: `%${termoBusca}%` };
     }
 
     // Consultar todos os usuários
@@ -142,9 +152,4 @@ async function listarUsuarios(req, res) {
   }
 }
 
-export {
-  cadastrar,
-  editar,
-  excluir,
-  listarUsuarios
-};
+export { cadastrar, editar, excluir, listarUsuarios };
