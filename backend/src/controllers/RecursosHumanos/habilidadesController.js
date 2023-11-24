@@ -35,15 +35,19 @@ async function cadastrarHabilidade(req, res) {
 async function excluirHabilidade(req, res) {
   try {
     const { id } = req.params;
-    const nivelUsuario = req.user.nivel;
+    const usuario = await Usuario.findByPk(id);
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 1) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
     // Verifique se a habilidade existe
-    const habilidade = await Habilidade.findByPk(id);
+    const habilidade = await Habilidade.findAll({ where: { id_usuario: id } });
 
     if (!habilidade) {
       return res.status(404).json({ mensagem: "Habilidade não encontrada." });

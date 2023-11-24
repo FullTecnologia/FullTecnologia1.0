@@ -122,15 +122,19 @@ async function editarFicha(req, res) {
   try {
     const { id } = req.params; // Obtém o ID da ficha a ser editada
     const { dadosFicha } = req.body;
-    const nivelUsuario = req.user.nivel;
+    const usuario = await Usuario.findByPk(id);
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 1) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
     // Encontra a ficha pelo ID
-    const ficha = await Ficha.findByPk(id);
+    const ficha = await Ficha.findAll({ where: { id_usuario: id } });
 
     if (!ficha) {
       return res.status(404).json({ mensagem: "Ficha não encontrada." });
@@ -152,15 +156,19 @@ async function editarFicha(req, res) {
 async function excluirFicha(req, res) {
   try {
     const { id } = req.params; // Obtém o ID da ficha a ser excluída
-    const nivelUsuario = req.user.nivel;
+    const usuario = await Usuario.findByPk(id);
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
+    }
+
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 1) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
     // Encontra a ficha pelo ID
-    const ficha = await Ficha.findByPk(id);
+    const ficha = await Ficha.findAll({ where: { id_usuario: id } });
 
     if (!ficha) {
       return res.status(404).json({ mensagem: "Ficha não encontrada." });

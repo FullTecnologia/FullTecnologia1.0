@@ -65,15 +65,16 @@ async function editar(req, res) {
   try {
     const { id } = req.params;
     const { nome, email, senha, nivel } = req.body;
-    const nivelUsuario = req.user.nivel;
+    const usuario = await Usuario.findByPk(id);
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
     }
 
-    // Verificar se o usuário existe
-    const usuario = await Usuario.findByPk(id);
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 1) {
+      return res.status(403).json({ mensagem: "Permissão negada." });
+    }
 
     if (!usuario) {
       return res.status(404).json({ mensagem: "Usuário não encontrado." });
@@ -105,15 +106,16 @@ async function editar(req, res) {
 async function excluir(req, res) {
   try {
     const { id } = req.params;
-    const nivelUsuario = req.user.nivel;
+    const usuario = await Usuario.findByPk(id);
 
-    // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
     }
 
-    // Verificar se o usuário existe
-    const usuario = await Usuario.findByPk(id);
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel < 1) {
+      return res.status(403).json({ mensagem: "Permissão negada." });
+    }
 
     if (!usuario) {
       return res.status(404).json({ mensagem: "Usuário não encontrado." });
