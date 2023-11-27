@@ -84,7 +84,7 @@ const Colab = () => {
         // Função para buscar os dados dos colaboradores do banco de dados
         const fetchDataFromDatabase = async () => {
             try {
-                const response = await axios.get('http://localhost:3003/api/listarHabilidades/:id'); //
+                const response = await axios.get('http://localhost:3003/api/listarHabilidades/:id'); //tem que ter o :id no final da rota
 
                 if (response.status === 200) {
                     setColaboradores(response.data);
