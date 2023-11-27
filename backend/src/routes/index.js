@@ -70,7 +70,7 @@ router.post("/cadastrarFicha", cadastrarFicha);
 router.get("/fichas/:id", listagem);
 router.delete("/excluirFucha/:id", excluirFicha);
 router.put("/editarFicha/:id", editarFicha);
-router.post("/cadastrarAtividade", cadastrarAtividade);
+router.post("/cadastrarAtividade/:id", cadastrarAtividade);
 router.get("/listarAtividade/:id", listarAtividades);
 router.delete("/excluirAtividade/:id", excluirAtividade);
 router.put("/editarAtividade/:id", editarAtividade);

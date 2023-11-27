@@ -3,10 +3,19 @@ import Usuario from "../../models/usuario.js";
 
 async function cadastrarAtividade(req, res) {
   try {
-    const { id_usuario, descricao, dataFim, status, tipo } = req.body;
+    const { responsavel, descricao, dataFim, status, tipo } = req.body;
+    const id_usuario = req.params;
     // Verifique se req.user está definido
-    if (!id_usuario) {
-      return res.status(400).json({ mensagem: "Usuário não autenticado." });
+    if (!responsavel) {
+      return res.status(400).json({ mensagem: "Usuário não existe." });
+    }
+
+    const id_responsavel = await Usuario.findAll({
+      where: { nome: responsavel },
+    });
+
+    if (!id_responsavel) {
+      return res.status(400).json({ mensagem: "Usuário não encontrado." });
     }
 
     if (!dataFim || !status) {
@@ -18,7 +27,7 @@ async function cadastrarAtividade(req, res) {
     // Busca o usuário no banco de dados pelo ID
     const usuario = await Usuario.findByPk(id_usuario);
     if (!usuario) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado." });
+      return res.status(400).json({ mensagem: "Usuário não autentificado." });
     }
 
     // Verifica o nível do usuário obtido do banco de dados
@@ -28,7 +37,7 @@ async function cadastrarAtividade(req, res) {
 
     // Insere os dados da atividade no banco de dados
     const atividade = await AtividadeProgramada.create({
-      id_usuario,
+      id_usuario: id_responsavel.id,
       descricao,
       dataFim,
       status,
