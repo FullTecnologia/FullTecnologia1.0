@@ -1,5 +1,3 @@
-// apiService.js
-
 import axios from 'axios';
 
 const baseURL = 'http://localhost:3003/api';
@@ -20,12 +18,23 @@ const handleError = (error) => {
 
 export const fetchDataFromAtividades = async () => {
     try {
-        const response = await axios.get(`${baseURL}/listarAtividade`);
+        const response = await axios.get(`${baseURL}/listarAtividade/:id`);
+        console.log('Response from fetchDataFromAtividades:', response);
+
+        if (response.status === 404) {
+            console.error('Error 404: Resource not found');
+            // Trate o erro 404 conforme necessário
+            return null;
+        }
+
         return handleResponse(response);
     } catch (error) {
+        console.error('Error in fetchDataFromAtividades:', error);
         handleError(error);
     }
 };
+
+
 
 export const cadastrarAtividade = async (atividade) => {
     try {
@@ -36,4 +45,3 @@ export const cadastrarAtividade = async (atividade) => {
     }
 };
 
-// Adicione mais funções conforme necessário para outras operações na API

@@ -1,5 +1,3 @@
-// hooks/useValidation.js
-
 import { useState } from 'react';
 
 const useValidation = () => {

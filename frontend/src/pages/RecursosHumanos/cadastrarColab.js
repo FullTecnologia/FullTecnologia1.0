@@ -207,7 +207,7 @@ function CadastrarColaborador() {
     const keyCode = event.keyCode || event.which;
     const keyValue = String.fromCharCode(keyCode);
 
-    const isValidInput = /^\d*\,?\d*$/.test(keyValue);
+    const isValidInput = /^\d*,?\d*$/.test(keyValue);
 
     if (!isValidInput) {
       event.preventDefault();

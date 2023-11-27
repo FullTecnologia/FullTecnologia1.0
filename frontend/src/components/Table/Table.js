@@ -12,13 +12,16 @@ const Table = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const atividadesData = await fetchDataFromAtividades();
-            setAtividades(atividadesData);
+            try {
+                const atividadesData = await fetchDataFromAtividades(); // Chama a função do apiService
+                setAtividades(atividadesData);
+            } catch (error) {
+                console.error('Erro ao buscar dados de atividades:', error);
+            }
         };
 
         fetchData();
     }, []);
-
     return (
         <div>
             <table className={styles.table}>
@@ -81,7 +84,7 @@ const Colab = () => {
         // Função para buscar os dados dos colaboradores do banco de dados
         const fetchDataFromDatabase = async () => {
             try {
-                const response = await axios.get('http://localhost:3003/api/cadastrarFicha'); // Substitua pela rota correta
+                const response = await axios.get('http://localhost:3003/api/listarHabilidades/:id'); //
 
                 if (response.status === 200) {
                     setColaboradores(response.data);
