@@ -27,8 +27,6 @@ function RecursosHumanos() {
     listarAtividades();
   }, []);
 
-  // ALTERAÇÃO DAQUI 
-
   // Função para buscar os dados do banco de dados
   const listarAtividades = async () => {
     try {
@@ -38,8 +36,6 @@ function RecursosHumanos() {
       console.error(error);
     }
   };
-
-  // ALTERAÇÃO ATÉ AQUI
 
   function showModal(modalType) {
     var element = document.getElementById(`modal${modalType}`);

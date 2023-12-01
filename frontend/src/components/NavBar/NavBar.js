@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom'
 
 // css
@@ -8,7 +8,29 @@ import styles from "./NavBar.module.css";
 import LogoImage from '../../assets/Logo-Full-Engenharia.png';
 import AvatarImage from '../../assets/avatar.png';
 
+// hooks
+
+import { fetchUserData } from '../../hooks/apiService';
+
 const NavBar = ({ user, username, logout }) => {
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const userDataFromApi = await fetchUserData();
+
+                console.log('Dados do usuário (NavBar):', userDataFromApi);
+
+                setUserData(userDataFromApi);
+            } catch (error) {
+                console.error('Erro ao buscar dados do usuário:', error);
+            }
+        };
+
+        fetchUser();
+    }, []);
+
     return (
         <div className={styles.navbar}>
             <div className={styles.logo}>
@@ -16,14 +38,13 @@ const NavBar = ({ user, username, logout }) => {
             </div>
 
             <div className={styles.userProfile}>
-                <div>
-                    <img src={AvatarImage} alt="Avatar" className={styles.logoImageAvatar} />
-                    <p>Eduardo da Silva Torres Grillo</p>
-                </div>
-
-                <div className={styles.userName}>
-                    {user && <p>{username}</p>}
-                </div>
+                {userData && (
+                    <div>
+                        <img src={AvatarImage} alt="Avatar" className={styles.logoImageAvatar} />
+                        <p>{userData.nome}</p>
+                    </div>
+                )}
+                <div className={styles.userName}>{user && <p>{username}</p>}</div>
             </div>
 
             <ul className={styles.linksList}>
