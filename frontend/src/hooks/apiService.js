@@ -33,9 +33,9 @@ export const dataAtividades = async (id) => {
     }
 };
 
-export const cadastrarAtividade = async (atividade, id_usuario) => {
+export const cadastrarAtividade = async (atividade, id) => {
     try {
-        const response = await axios.post(`${baseURL}/cadastrarAtividade/:${id_usuario}`, {
+        const response = await axios.post(`${baseURL}/cadastrarAtividade/:${id}`, {
             dadosAtividade: atividade,
         });
 
