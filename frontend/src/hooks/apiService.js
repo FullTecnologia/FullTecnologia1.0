@@ -33,18 +33,15 @@ export const dataAtividades = async (id) => {
     }
 };
 
-export const cadastrarAtividade = async (atividade, id) => {
+export const cadastrarAtividade = async (atividade, id_usuario) => {
     try {
-        const response = await axios.post(`${baseURL}/cadastrarAtividade/:${id}`, {
+        const response = await axios.post(`${baseURL}/cadastrarAtividade/:${id_usuario}`, {
             dadosAtividade: atividade,
         });
 
-        const idUsuario = response.data.id_usuario;
-
-        return handleResponse(response, idUsuario);
+        return handleResponse(response);
     } catch (error) {
         handleError(error);
     }
 };
-
 
