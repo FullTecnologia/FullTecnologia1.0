@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 // css
 import styles from "./NavBar.module.css";
@@ -8,28 +8,14 @@ import styles from "./NavBar.module.css";
 import LogoImage from '../../assets/Logo-Full-Engenharia.png';
 import AvatarImage from '../../assets/avatar.png';
 
-// hooks
+// contexts
+import { useAuth } from '../../contexts/AuthContext';
 
-import { fetchUserData } from '../../hooks/apiService';
+const NavBar = () => {
+    const { state } = useAuth();  // Obtenha o estado de autenticação do contexto
+    const { id_usuario } = state;
 
-const NavBar = ({ user, username, logout }) => {
-    const [userData, setUserData] = useState(null);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const userDataFromApi = await fetchUserData();
-
-                console.log('Dados do usuário (NavBar):', userDataFromApi);
-
-                setUserData(userDataFromApi);
-            } catch (error) {
-                console.error('Erro ao buscar dados do usuário:', error);
-            }
-        };
-
-        fetchUser();
-    }, []);
+    console.log("ID do usuário no NavBar:", id_usuario);
 
     return (
         <div className={styles.navbar}>
@@ -38,75 +24,71 @@ const NavBar = ({ user, username, logout }) => {
             </div>
 
             <div className={styles.userProfile}>
-                {userData && (
-                    <div>
-                        <img src={AvatarImage} alt="Avatar" className={styles.logoImageAvatar} />
-                        <p>{userData.nome}</p>
-                    </div>
-                )}
-                <div className={styles.userName}>{user && <p>{username}</p>}</div>
+                <div>
+                    <img src={AvatarImage} alt="Avatar" className={styles.logoImageAvatar} />
+                    {/* Utilize o nome do usuário obtido do contexto */}
+                    <p>{id_usuario && <>{id_usuario.nome}</>}</p>
+                </div>
+                <div className={styles.userName}>{id_usuario && <p>{id_usuario.nome}</p>}</div>
             </div>
 
             <ul className={styles.linksList}>
                 <li>
-                    <NavLink to="/home" activeclass={styles.active}>
+                    <NavLink to="/home" activeClassName={styles.active}>
                         Home
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/profissional" activeclass={styles.active}>
+                    <NavLink to="/profissional" activeClassName={styles.active}>
                         Profissional
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/lider" activeclass={styles.active}>
+                    <NavLink to="/lider" activeClassName={styles.active}>
                         Líder
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/planejamento" activeclass={styles.active}>
+                    <NavLink to="/planejamento" activeClassName={styles.active}>
                         Planejamento
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/comercial" activeclass={styles.active}>
+                    <NavLink to="/comercial" activeClassName={styles.active}>
                         Comercial
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/financeiro" activeclass={styles.active}>
+                    <NavLink to="/financeiro" activeClassName={styles.active}>
                         Financeiro
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/recursoshumanos" activeclass={styles.active}>
+                    <NavLink to="/recursoshumanos" activeClassName={styles.active}>
                         Recursos Humanos
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/diretoria" activeclass={styles.active}>
+                    <NavLink to="/diretoria" activeClassName={styles.active}>
                         Diretoria
                     </NavLink>
                 </li>
 
                 <li>
-                    <NavLink to="/" activeclass={styles.active}>
+                    <NavLink to="/" activeClassName={styles.active}>
                         Sair
                     </NavLink>
                 </li>
-
             </ul>
-
         </div>
+    );
+};
 
-    )
-}
-
-export default NavBar
+export default NavBar;

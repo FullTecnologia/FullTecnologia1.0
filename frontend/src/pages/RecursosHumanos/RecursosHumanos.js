@@ -2,7 +2,7 @@ import styles from "./RecursosHumanos.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
-import { fetchDataFromAtividades, cadastrarAtividade } from '../../hooks/apiService';
+import { dataAtividades, cadastrarAtividade } from '../../hooks/apiService';
 import { Table, Colab } from "../../components/Table/Table";
 import NavBar from "../../components/NavBar/NavBar";
 import { validateForm } from "../../hooks/validation";
@@ -30,7 +30,7 @@ function RecursosHumanos() {
   // Função para buscar os dados do banco de dados
   const listarAtividades = async () => {
     try {
-      const atividadesData = await fetchDataFromAtividades();
+      const atividadesData = await dataAtividades();
       setAtividades(atividadesData);
     } catch (error) {
       console.error(error);
@@ -68,8 +68,6 @@ function RecursosHumanos() {
     });
   }
 
-  // ALTERAÇÕES NESSA FUNÇÃO ABAIXO
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -85,7 +83,7 @@ function RecursosHumanos() {
           listarAtividades();
         }
       } catch (error) {
-        console.error(error);
+        console.error("Procurando o erro desse negocio: ", error);
       }
     } else {
       setValidationErrors(errors);

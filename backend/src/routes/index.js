@@ -62,7 +62,7 @@ router.delete("/usuarios/:id", excluir);
 router.get("/usuarios", listarUsuarios);
 
 // Login
-router.post("/login/:id", login);
+router.post("/login", login);
 router.get("/logout/:id", logout);
 
 // Recursos Humanos

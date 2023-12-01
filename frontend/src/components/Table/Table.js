@@ -4,7 +4,7 @@ import styles from './Table.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { fetchDataFromAtividades } from '../../hooks/apiService';
+import { dataAtividades } from '../../hooks/apiService';
 
 
 const Table = () => {
@@ -13,7 +13,7 @@ const Table = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const atividadesData = await fetchDataFromAtividades(); // Chama a função do apiService
+                const atividadesData = await dataAtividades(); // Chama a função do apiService
                 setAtividades(atividadesData);
             } catch (error) {
                 console.error('Erro ao buscar dados de atividades:', error);

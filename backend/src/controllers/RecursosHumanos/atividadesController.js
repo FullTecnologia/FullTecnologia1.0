@@ -4,7 +4,7 @@ import Usuario from "../../models/usuario.js";
 async function cadastrarAtividade(req, res) {
   try {
     const { responsavel, descricao, dataFim, status, tipo } = req.body;
-    const id_usuario = req.params;
+    const { id_usuario } = req.params;
     // Verifique se req.user está definido
     if (!responsavel) {
       return res.status(400).json({ mensagem: "Usuário não existe." });

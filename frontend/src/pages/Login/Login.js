@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import useValidationLogin from '../../hooks/useValidationLogin'; // Importe o hook de validação
+import { useAuth } from '../../contexts/AuthContext';
 
 import styles from './Login.module.css'; // Importe o arquivo de módulo CSS
 import LogoImage from '../../assets/Logo-Full-Engenharia.png'; // Importe a imagem diretamente
 
 const Login = () => {
+    const { dispatch } = useAuth();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -38,8 +40,18 @@ const Login = () => {
                     senha,
                 });
 
-                // Se o login for bem-sucedido, você pode redirecionar o usuário para a página de Recursos Humanos
+                console.log("Dados do response:", response.data);
+
+                // Se o login for bem-sucedido, despache a ação de LOGIN
                 if (response) {
+                    dispatch({
+                        type: 'LOGIN',
+                        payload: {
+                            user: response.data, // ou ajuste para a propriedade correta no seu objeto de resposta
+                            token: response.data.token,
+                            login: response.data.login,
+                        },
+                    });
 
                     // Redirecione para a página de Recursos Humanos com as informações do usuário como parâmetros na URL
                     navigate(`/recursoshumanos`);
@@ -53,6 +65,9 @@ const Login = () => {
             console.error('Dados inválidos. Corrija os erros antes de fazer o login.');
         }
     };
+
+
+
 
     return (
         <div className={styles.loginContainer}>
@@ -98,5 +113,6 @@ const Login = () => {
         </div>
     );
 };
+
 
 export default Login;
