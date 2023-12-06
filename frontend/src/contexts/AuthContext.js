@@ -5,7 +5,6 @@ const AuthContext = createContext();
 
 // Função de provedor que envolve seu aplicativo
 export const AuthProvider = ({ children }) => {
-    // Redutor para gerenciar o estado de autenticação
     const reducer = (state, action) => {
         switch (action.type) {
             case 'LOGIN':

@@ -1,14 +1,27 @@
-import styles from "./RecursosHumanos.module.css";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
-import { dataAtividades, cadastrarAtividade } from '../../hooks/apiService';
+// components
 import { Table, Colab } from "../../components/Table/Table";
 import NavBar from "../../components/NavBar/NavBar";
-import { validateForm } from "../../hooks/validation";
 import "../../components/Popup/style.css";
 
+//hooks
+import { dataAtividades, cadastrarAtividade } from '../../hooks/apiService';
+import { validateForm } from "../../hooks/validation";
+
+// css
+import styles from "./RecursosHumanos.module.css";
+
+// contexts
+import { useAuth } from "../../contexts/AuthContext";
+
 function RecursosHumanos() {
+  const { state } = useAuth();  // Obtenha o estado de autenticação do contexto
+  const { id_usuario } = state;
+
+  console.log("ID do usuário no Cadastrar Atividade:", id_usuario);
+
   const [atividade, setAtividade] = useState({
     responsavel: "",
     descricao: "",
@@ -75,7 +88,8 @@ function RecursosHumanos() {
 
     if (Object.keys(errors).length === 0) {
       try {
-        const data = await cadastrarAtividade(atividade);
+        // Certifique-se de passar id_usuario ao chamar a função
+        const data = await cadastrarAtividade({ ...atividade, id_usuario });
 
         if (data) {
           console.log(data);

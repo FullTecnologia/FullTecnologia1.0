@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuth } from '../contexts/AuthContext';
 
 const baseURL = "http://localhost:3003/api";
 
@@ -33,9 +34,10 @@ export const dataAtividades = async (id) => {
     }
 };
 
-export const cadastrarAtividade = async (atividade, id) => {
+export const cadastrarAtividade = async (atividade) => {
     try {
-        const response = await axios.post(`${baseURL}/cadastrarAtividade/:${id}`, {
+        const { id_usuario } = atividade; // Certifique-se de passar id_usuario ao chamar a função
+        const response = await axios.post(`${baseURL}/cadastrarAtividade/:${id_usuario}`, {
             dadosAtividade: atividade,
         });
 
