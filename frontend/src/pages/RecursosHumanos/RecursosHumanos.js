@@ -89,20 +89,38 @@ function RecursosHumanos() {
     if (Object.keys(errors).length === 0) {
       try {
         // Certifique-se de passar id_usuario ao chamar a função
-        const data = await cadastrarAtividade({ ...atividade, id_usuario });
+        const response = await cadastrarAtividade({ ...atividade, id_usuario });
 
-        if (data) {
-          console.log(data);
+        if (response.data) {
+          console.log("Dados enviados para cadastrarAtividade:", { ...atividade, id_usuario });
+          console.log("Resposta da solicitação:", response.data);
+
           closeModal('modalAtividade');
           listarAtividades();
         }
       } catch (error) {
-        console.error("Procurando o erro desse negocio: ", error);
+        console.error("Erro na solicitação:", error);
+
+        if (error.response) {
+          // O servidor retornou uma resposta com um código de status diferente de 2xx
+          console.error("Dados da resposta do servidor:", error.response.data);
+          console.error("Código de status da resposta:", error.response.status);
+          console.error("O valor do id do usuario que está retornando: ", error.response.data.id_usuario);
+        } else if (error.request) {
+          // A solicitação foi feita, mas não recebeu resposta
+          console.error("A solicitação foi feita, mas não recebeu resposta");
+        } else {
+          // Algo aconteceu durante a configuração da solicitação que desencadeou um erro
+          console.error("Erro durante a configuração da solicitação:", error.message);
+        }
+
+        // Se necessário, adicione mais lógica para lidar com o erro
       }
     } else {
       setValidationErrors(errors);
     }
   };
+
 
   function handleClick() {
     // Navegar para outra rota
