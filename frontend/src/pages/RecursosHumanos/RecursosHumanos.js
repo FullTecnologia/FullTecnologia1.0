@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 // components
 import { Table, Colab } from "../../components/Table/Table";
@@ -7,20 +7,17 @@ import NavBar from "../../components/NavBar/NavBar";
 import "../../components/Popup/style.css";
 
 //hooks
-import { dataAtividades, cadastrarAtividade } from '../../hooks/apiService';
+import { dataAtividades, cadastrarAtividade } from "../../hooks/apiService";
 import { validateForm } from "../../hooks/validation";
 
 // css
 import styles from "./RecursosHumanos.module.css";
 
 // contexts
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuthState } from "../../contexts/AuthContext";
 
 function RecursosHumanos() {
-  const { state } = useAuth();  // Obtenha o estado de autenticação do contexto
-  const { id_usuario } = state;
-
-  console.log("ID do usuário no Cadastrar Atividade:", id_usuario);
+  const { id_usuario } = useAuthState();
 
   const [atividade, setAtividade] = useState({
     responsavel: "",
@@ -43,7 +40,7 @@ function RecursosHumanos() {
   // Função para buscar os dados do banco de dados
   const listarAtividades = async () => {
     try {
-      const atividadesData = await dataAtividades();
+      const atividadesData = await dataAtividades(id_usuario);
       setAtividades(atividadesData);
     } catch (error) {
       console.error(error);
@@ -89,13 +86,16 @@ function RecursosHumanos() {
     if (Object.keys(errors).length === 0) {
       try {
         // Certifique-se de passar id_usuario ao chamar a função
-        const response = await cadastrarAtividade({ ...atividade, id_usuario });
+        const response = await cadastrarAtividade({ id_usuario, ...atividade });
 
         if (response.data) {
-          console.log("Dados enviados para cadastrarAtividade:", { ...atividade, id_usuario });
+          console.log("Dados enviados para cadastrarAtividade:", {
+            ...atividade,
+            id_usuario,
+          });
           console.log("Resposta da solicitação:", response.data);
 
-          closeModal('modalAtividade');
+          closeModal("modalAtividade");
           listarAtividades();
         }
       } catch (error) {
@@ -105,13 +105,19 @@ function RecursosHumanos() {
           // O servidor retornou uma resposta com um código de status diferente de 2xx
           console.error("Dados da resposta do servidor:", error.response.data);
           console.error("Código de status da resposta:", error.response.status);
-          console.error("O valor do id do usuario que está retornando: ", error.response.data.id_usuario);
+          console.error(
+            "O valor do id do usuario que está retornando: ",
+            error.response.data.id_usuario
+          );
         } else if (error.request) {
           // A solicitação foi feita, mas não recebeu resposta
           console.error("A solicitação foi feita, mas não recebeu resposta");
         } else {
           // Algo aconteceu durante a configuração da solicitação que desencadeou um erro
-          console.error("Erro durante a configuração da solicitação:", error.message);
+          console.error(
+            "Erro durante a configuração da solicitação:",
+            error.message
+          );
         }
 
         // Se necessário, adicione mais lógica para lidar com o erro
@@ -120,7 +126,6 @@ function RecursosHumanos() {
       setValidationErrors(errors);
     }
   };
-
 
   function handleClick() {
     // Navegar para outra rota
@@ -205,7 +210,11 @@ function RecursosHumanos() {
         </div>
 
         <div>
-          <button type="submit" className="submit-button" onClick={handleSubmit}>
+          <button
+            type="submit"
+            className="submit-button"
+            onClick={handleSubmit}
+          >
             Cadastrar
           </button>
         </div>

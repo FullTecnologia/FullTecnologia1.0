@@ -34,7 +34,7 @@ async function login(req, res) {
       hora_logout: null, // Inicialmente, hora_logout é nula
     });
 
-    return res.status(200).json({ token, login, mensagem: "Login realizado com sucesso!" });
+    return res.status(200).json({ token, usuario, mensagem: "Login realizado com sucesso!" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ mensagem: "Erro ao logar usuário." });
