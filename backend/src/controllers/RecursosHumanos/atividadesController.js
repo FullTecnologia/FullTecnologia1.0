@@ -33,7 +33,7 @@ async function cadastrarAtividade(req, res) {
     }
 
     // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel > 1) {
+    if (usuario.nivel !== 1 && usuario.nivel !== 3) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
