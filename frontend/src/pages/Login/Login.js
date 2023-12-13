@@ -9,7 +9,7 @@ import styles from "./Login.module.css"; // Importe o arquivo de módulo CSS
 import LogoImage from "../../assets/Logo-Full-Engenharia.png"; // Importe a imagem diretamente
 
 const Login = () => {
-  const { dispatch } = useAuthDispatch();
+  const dispatch = useAuthDispatch();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -39,13 +39,15 @@ const Login = () => {
           senha,
         });
 
-        if (response.status === 200) {
+        console.log(response);
+
+        if (response) {
           //   Verifica se a requisição foi bem-sucedida (status 200)
           dispatch({
             type: "LOGIN",
             payload: {
               token: response.data.token,
-              id_usuario: response.data.usuario.id_usuario,
+              id_usuario: response.data.usuario.id,
               nome: response.data.usuario.nome,
             },
           }); // Redirecione para a página de Recursos Humanos com as informações do usuário como parâmetros na URL

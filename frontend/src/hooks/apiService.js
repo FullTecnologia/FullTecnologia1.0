@@ -34,11 +34,11 @@ export const dataAtividades = async (id) => {
 
 export const cadastrarAtividade = async (id_usuario, atividade) => {
   try {
-    const response = await axios.post(
+    const res = await axios.post(
       `${baseURL}/cadastrarAtividade/${id_usuario}`,
       atividade
     );
-    return handleResponse(response);
+    return handleResponse(res);
   } catch (error) {
     handleError(error);
   }
