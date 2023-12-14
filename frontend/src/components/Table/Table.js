@@ -7,13 +7,13 @@ import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { dataAtividades } from '../../hooks/apiService';
 
 
-const Table = () => {
+const Table = ({ userId }) => {
     const [atividades, setAtividades] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const atividadesData = await dataAtividades(); // Chama a função do apiService
+                const atividadesData = await dataAtividades(userId);
                 setAtividades(atividadesData);
             } catch (error) {
                 console.error('Erro ao buscar dados de atividades:', error);
@@ -21,55 +21,28 @@ const Table = () => {
         };
 
         fetchData();
-    }, []);
+    }, [userId]);
+
     return (
         <div>
             <table className={styles.table}>
                 <thead>
                     <tr>
-                        <th>Título</th>
                         <th>Responsável</th>
                         <th>Descrição</th>
                         <th>Data-Fim</th>
                         <th>Status</th>
-                        <th>Tipo</th>
                     </tr>
                 </thead>
                 <tbody>
                     {atividades.map((atividade) => (
                         <tr key={atividade.id} className={styles.row}>
-                            <td>{atividade.titulo}</td>
                             <td>{atividade.responsavel}</td>
                             <td>{atividade.descricao}</td>
                             <td>{atividade.dataFim}</td>
                             <td>{atividade.status}</td>
-                            <td>{atividade.tipo}</td>
                         </tr>
                     ))}
-                    <tr className={styles.row}>
-                        <td>Exemplo 1</td>
-                        <td>João</td>
-                        <td>Fazer relatório</td>
-                        <td>2023-11-15</td>
-                        <td>Em andamento</td>
-                        <td>Trabalho</td>
-                    </tr>
-                    <tr className={styles.row}>
-                        <td>Exemplo 2</td>
-                        <td>Maria</td>
-                        <td>Reunião de equipe</td>
-                        <td>2023-11-20</td>
-                        <td>Pendente</td>
-                        <td>Reunião</td>
-                    </tr>
-                    <tr className={styles.row}>
-                        <td>Exemplo 3</td>
-                        <td>Carlos</td>
-                        <td>Entregar projeto</td>
-                        <td>2023-11-25</td>
-                        <td>Concluído</td>
-                        <td>Projeto</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -181,4 +154,5 @@ const Colab = () => {
 
 };
 
-export { Table, Colab };
+export default Table;
+export { Colab };

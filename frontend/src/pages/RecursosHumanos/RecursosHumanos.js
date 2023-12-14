@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 // components
-import { Table, Colab } from "../../components/Table/Table";
+import Table, { Colab } from "../../components/Table/Table";
 import NavBar from "../../components/NavBar/NavBar";
 import "../../components/Popup/style.css";
 
@@ -28,24 +28,22 @@ function RecursosHumanos() {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
-  const [atividades, setAtividades] = useState([]); // Adicionando estado para armazenar atividades
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Chama a função para buscar os dados ao carregar o componente
-    listarAtividades();
-  }, []);
+    // Definindo a função dentro do useEffect para evitar problemas de dependência
+    const listarAtividades = async () => {
+      try {
+        await dataAtividades(id_usuario); // Se não precisar da variável 'atividadesData', apenas chame a função
+        // ... lógica adicional, se necessário
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  // Função para buscar os dados do banco de dados
-  const listarAtividades = async () => {
-    try {
-      const atividadesData = await dataAtividades(id_usuario);
-      setAtividades(atividadesData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    listarAtividades();
+  }, [id_usuario]); // Inclua id_usuario como dependência se ela influenciar na função 'listarAtividades'
 
   function showModal(modalType) {
     var element = document.getElementById(`modal${modalType}`);
@@ -90,7 +88,6 @@ function RecursosHumanos() {
 
         if (response) {
           closeModal("modalAtividade");
-          listarAtividades();
         }
       } catch (error) {
         console.error("Erro na solicitação:", error);
@@ -230,7 +227,7 @@ function RecursosHumanos() {
             >
               Cadastrar Atividade
             </button>
-            <Table atividades={atividades} />
+            <Table userId={id_usuario} />
           </div>
 
           <div className="modal" id="modalAtividade">
@@ -260,6 +257,7 @@ function RecursosHumanos() {
             <Colab />
           </div>
         </div>
+
       </div>
     </div>
   );

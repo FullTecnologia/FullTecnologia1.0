@@ -20,14 +20,8 @@ export const dataAtividades = async (id) => {
   try {
     const response = await axios.get(`${baseURL}/listarAtividade/${id}`);
 
-    if (response.status === 404) {
-      console.error("Error 404: Resource not found");
-      return null;
-    }
-
     return handleResponse(response);
   } catch (error) {
-    console.error("Error in dataAtividades:", error);
     handleError(error);
   }
 };

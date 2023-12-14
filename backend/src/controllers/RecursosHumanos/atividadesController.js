@@ -90,7 +90,6 @@ async function editarAtividade(req, res) {
 async function excluirAtividade(req, res) {
   try {
     const { id } = req.params;
-    const { dadosAtividade } = req.body;
 
     const usuario = await Usuario.findByPk(req.body.id_usuario);
     if (!usuario) {
