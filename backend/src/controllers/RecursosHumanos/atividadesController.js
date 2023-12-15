@@ -58,16 +58,6 @@ async function editarAtividade(req, res) {
     const { id } = req.params;
     const { dadosAtividade } = req.body;
 
-    const usuario = await Usuario.findByPk(req.body.id_usuario);
-    if (!usuario) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado." });
-    }
-
-    // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 3) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
-    }
-
     // Verifique se a atividade existe
     const atividade = await AtividadeProgramada.findByPk(id);
 
@@ -93,11 +83,6 @@ async function excluirAtividade(req, res) {
     const usuario = await Usuario.findByPk(req.body.id_usuario);
     if (!usuario) {
       return res.status(400).json({ mensagem: "Usuário não encontrado." });
-    }
-
-    // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 3) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
     }
 
     // Verifique se a atividade existe

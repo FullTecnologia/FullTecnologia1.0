@@ -1,4 +1,6 @@
 import Usuario from "../../models/usuario.js";
+import Ficha from "../../models/ficha.js";
+import Habilidade from "../../models/habilidade.js";
 import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
@@ -119,17 +121,28 @@ async function excluir(req, res) {
       return res.status(400).json({ mensagem: "Usuário não encontrado." });
     }
 
-    // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 1) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
-    }
-
     if (!usuario) {
       return res.status(404).json({ mensagem: "Usuário não encontrado." });
     }
 
+    const ficha = await Ficha.findAll({ where: { id_usuario: id } });
+
+    if (!ficha) {
+      return res.status(404).json({ mensagem: "Ficha não encontrada." });
+    }
+
+    const habilidade = await Habilidade.findAll({ where: { id_usuario: id } });
+
+    if (!habilidade) {
+      return res.status(404).json({ mensagem: "Habilidade não encontrada." });
+    }
+
+    // Exclui a ficha
+    await ficha.destroy();
     // Excluir o usuário
     await usuario.destroy();
+    // Exclua a habilidade
+    await habilidade.destroy();
 
     return res.status(200).json({ mensagem: "Usuário excluído com sucesso." });
   } catch (error) {
