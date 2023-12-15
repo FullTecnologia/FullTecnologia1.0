@@ -1,4 +1,3 @@
-// utils.js
 export const formatData = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();

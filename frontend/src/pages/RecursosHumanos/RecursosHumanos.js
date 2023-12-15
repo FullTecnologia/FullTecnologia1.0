@@ -8,7 +8,7 @@ import "../../components/Popup/style.css";
 
 //hooks
 import { dataAtividades, cadastrarAtividade, editarAtividade } from "../../hooks/apiService";
-import { validateForm } from "../../hooks/validation";
+import { validateForm } from '../../hooks/validation';
 
 // css
 import styles from "./RecursosHumanos.module.css";
@@ -284,6 +284,7 @@ function RecursosHumanos() {
           atividade={currentAtividade}
           onClose={() => setCurrentAtividade(null)}
           onSave={handleSaveEdit}
+          validateForm={validateForm}
         />
       )}
     </div>

@@ -3,7 +3,7 @@ import styles from './modalEdit.module.css';
 
 import { formatData } from '../../utils/utils';
 
-const ModalEdit = ({ atividade, onClose, onSave, validateForm }) => {
+const ModalEdit = ({ atividade, onClose, onSave }) => {
     const [formData, setFormData] = useState({ ...atividade });
     const [validationErrors, setValidationErrors] = useState({});
 
@@ -22,15 +22,59 @@ const ModalEdit = ({ atividade, onClose, onSave, validateForm }) => {
         }));
     };
 
+    function isValidDate(dateString) {
+        const regEx = /^\d{4}-\d{2}-\d{2}$/;
+        if (!dateString.match(regEx)) return false;
+        const d = new Date(dateString);
+        if (!d.getTime() || isNaN(d.getTime())) return false;
+        return d.toISOString().slice(0, 10) === dateString;
+    }
+
+
+    function validateForm(atividade) {
+        const errors = {};
+
+        if (!atividade.responsavel) {
+            errors.responsavel = "Campo obrigatório.";
+        }
+
+        if (!atividade.descricao) {
+            errors.descricao = "Campo obrigatório.";
+        }
+
+        if (!atividade.dataFim) {
+            errors.dataFim = "Campo obrigatório.";
+        } else if (!isValidDate(atividade.dataFim)) {
+            errors.dataFim = "Data inválida";
+        }
+
+        if (
+            atividade.status !== "iniciado" &&
+            atividade.status !== "concluido" &&
+            atividade.status !== "finalizado"
+        ) {
+            errors.status = "Status inválido";
+        }
+
+        return errors;
+    }
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        const errors = validateForm(formData);
-        if (Object.keys(errors).length === 0) {
-            onSave(formData);
+        // Verifica se validateForm é uma função antes de chamá-la
+        if (typeof validateForm === 'function') {
+            const errors = validateForm(formData);
+            if (Object.keys(errors).length === 0) {
+                onSave(formData);
+            } else {
+                setValidationErrors(errors);
+            }
         } else {
-            setValidationErrors(errors);
+            console.error('validateForm is not a function');
+            // Você pode optar por lidar com este erro de maneira diferente, se necessário
         }
     };
+
 
     if (!atividade) return null;
 
