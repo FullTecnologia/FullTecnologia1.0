@@ -80,11 +80,6 @@ async function excluirAtividade(req, res) {
   try {
     const { id } = req.params;
 
-    const usuario = await Usuario.findByPk(req.body.id_usuario);
-    if (!usuario) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado." });
-    }
-
     // Verifique se a atividade existe
     const atividade = await AtividadeProgramada.findByPk(id);
 
