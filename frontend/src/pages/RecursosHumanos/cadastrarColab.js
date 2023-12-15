@@ -163,7 +163,7 @@ function CadastrarColaborador() {
     if (Object.keys(errors).length === 0) {
       try {
         const response = await cadastrarFicha(dadosFicha);
-        console.log(response);
+
         // Verifica se a resposta foi bem-sucedida
         if (response) {
           console.log(response);
