@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
+//css
 import styles from './Table.module.css';
 
+//import em icones 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { dataAtividades } from '../../hooks/apiService';
+import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
+//hooks
+import { dataAtividades, editarAtividade, excluirAtividade } from '../../hooks/apiService';
 
-const Table = ({ userId }) => {
+//contexts
+import { useAuthState } from "../../contexts/AuthContext";
+
+//components
+import ModalEdit from '../Popup/modalEdit';
+
+//utils
+import { formatData } from '../../utils/utils';
+
+const Table = ({ userId, dataAtv }) => {
     const [atividades, setAtividades] = useState([]);
+    const { nome } = useAuthState();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentAtividade, setCurrentAtividade] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,6 +39,41 @@ const Table = ({ userId }) => {
         fetchData();
     }, [userId]);
 
+    const openModal = (atividade) => {
+        setCurrentAtividade(atividade);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setCurrentAtividade(null);
+    };
+
+    const handleSave = async (updatedAtividade) => {
+        try {
+            await editarAtividade(updatedAtividade.id, updatedAtividade);
+            const updatedList = atividades.map(ativ =>
+                ativ.id === updatedAtividade.id ? { ...ativ, ...updatedAtividade } : ativ);
+            setAtividades(updatedList);
+            closeModal();
+        } catch (error) {
+            console.error('Erro ao atualizar atividade:', error);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Tem certeza que deseja excluir esta atividade?')) {
+            try {
+                await excluirAtividade(id);
+                setAtividades(atividades.filter(ativ => ativ.id !== id));
+            } catch (error) {
+                console.error('Erro ao excluir atividade:', error);
+            }
+        }
+    };
+
+
+
     return (
         <div>
             <table className={styles.table}>
@@ -32,22 +83,43 @@ const Table = ({ userId }) => {
                         <th>Descrição</th>
                         <th>Data-Fim</th>
                         <th>Status</th>
+                        <th>Editar</th>
+                        <th>Excluir</th>
                     </tr>
                 </thead>
                 <tbody>
                     {atividades.map((atividade) => (
                         <tr key={atividade.id} className={styles.row}>
-                            <td>{atividade.responsavel}</td>
+                            <td>{nome}</td>
                             <td>{atividade.descricao}</td>
-                            <td>{atividade.dataFim}</td>
+                            <td>{formatData(atividade.dataFim)}</td>
                             <td>{atividade.status}</td>
+                            <td>
+                                <button onClick={() => openModal(atividade)} className={styles.actionButton}>
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                </button>
+                            </td>
+                            <td>
+                                <button onClick={() => handleDelete(atividade.id)} className={styles.actionButton}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            {isModalOpen && (
+                <ModalEdit
+                    atividade={currentAtividade}
+                    onClose={closeModal}
+                    onSave={handleSave}
+                />
+            )}
         </div>
     );
 };
+
 
 const Colab = () => {
     const [colaboradores, setColaboradores] = useState([]);

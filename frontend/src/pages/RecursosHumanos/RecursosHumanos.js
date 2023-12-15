@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 // components
 import Table, { Colab } from "../../components/Table/Table";
@@ -7,7 +7,7 @@ import NavBar from "../../components/NavBar/NavBar";
 import "../../components/Popup/style.css";
 
 //hooks
-import { dataAtividades, cadastrarAtividade } from "../../hooks/apiService";
+import { dataAtividades, cadastrarAtividade, editarAtividade } from "../../hooks/apiService";
 import { validateForm } from "../../hooks/validation";
 
 // css
@@ -15,9 +15,13 @@ import styles from "./RecursosHumanos.module.css";
 
 // contexts
 import { useAuthState } from "../../contexts/AuthContext";
+import ModalEdit from "../../components/Popup/modalEdit";
 
 function RecursosHumanos() {
   const { id_usuario } = useAuthState();
+  const [atividades, setAtividades] = useState([]);
+  const [currentAtividade, setCurrentAtividade] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const [atividade, setAtividade] = useState({
     responsavel: "",
@@ -31,19 +35,29 @@ function RecursosHumanos() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Definindo a função dentro do useEffect para evitar problemas de dependência
-    const listarAtividades = async () => {
-      try {
-        await dataAtividades(id_usuario); // Se não precisar da variável 'atividadesData', apenas chame a função
-        // ... lógica adicional, se necessário
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const listarAtividades = useCallback(async () => {
+    try {
+      const atividadesData = await dataAtividades(id_usuario);
+      setAtividades(atividadesData); // Atualize o estado com as atividades recebidas
+    } catch (error) {
+      console.error(error);
+    }
+  }, [id_usuario]); // id_usuario é uma dependência
 
+  useEffect(() => {
     listarAtividades();
-  }, [id_usuario]); // Inclua id_usuario como dependência se ela influenciar na função 'listarAtividades'
+  }, [listarAtividades]); // listarAtividades é uma dependência
+
+  const handleSaveEdit = async (updatedAtividade) => {
+    try {
+      await editarAtividade(updatedAtividade.id, updatedAtividade);
+      setSuccessMessage('Alteração bem sucedida');
+      listarAtividades(); // Atualize a lista
+    } catch (error) {
+      console.error('Erro ao editar atividade:', error);
+    }
+  };
+
 
   function showModal(modalType) {
     var element = document.getElementById(`modal${modalType}`);
@@ -83,23 +97,20 @@ function RecursosHumanos() {
 
     if (Object.keys(errors).length === 0) {
       try {
-        // Certifique-se de passar id_usuario ao chamar a função
         const response = await cadastrarAtividade(id_usuario, atividade);
 
         if (response) {
           closeModal("modalAtividade");
+          await listarAtividades(); // Chame novamente para atualizar a lista
         }
       } catch (error) {
         console.error("Erro na solicitação:", error);
 
         if (error.response) {
-          // O servidor retornou uma resposta com um código de status diferente de 2xx
           console.error("Dados da resposta do servidor:", error.response.data);
         } else if (error.request) {
-          // A solicitação foi feita, mas não recebeu resposta
           console.error("A solicitação foi feita, mas não recebeu resposta");
         } else {
-          // Algo aconteceu durante a configuração da solicitação que desencadeou um erro
           console.error(
             "Erro durante a configuração da solicitação:",
             error.message
@@ -227,7 +238,7 @@ function RecursosHumanos() {
             >
               Cadastrar Atividade
             </button>
-            <Table userId={id_usuario} />
+            <Table userId={id_usuario} dataAtv={atividades} />
           </div>
 
           <div className="modal" id="modalAtividade">
@@ -259,8 +270,25 @@ function RecursosHumanos() {
         </div>
 
       </div>
+
+      {/* Exibe a mensagem de sucesso se ela existir */}
+      {successMessage && (
+        <div className={styles.successMessage}>
+          {successMessage}
+        </div>
+      )}
+
+      {/* Modal de Edição de Atividade */}
+      {currentAtividade && (
+        <ModalEdit
+          atividade={currentAtividade}
+          onClose={() => setCurrentAtividade(null)}
+          onSave={handleSaveEdit}
+        />
+      )}
     </div>
   );
+
 }
 
 export default RecursosHumanos;
