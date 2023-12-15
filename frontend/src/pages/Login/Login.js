@@ -39,8 +39,6 @@ const Login = () => {
           senha,
         });
 
-        console.log(response);
-
         if (response) {
           //   Verifica se a requisição foi bem-sucedida (status 200)
           dispatch({

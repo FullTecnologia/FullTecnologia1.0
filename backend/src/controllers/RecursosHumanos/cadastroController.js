@@ -7,11 +7,18 @@ import { mkdir } from "fs/promises";
 async function cadastrar(req, res) {
   try {
     const { nome, email, senha, nivel, fotoPerfil } = req.body;
-    const nivelUsuario = req.nivel;
+    const { id } = req.params;
+
     const rootDir = "/FullTecnologia1.0/frontend/src";
 
     // Verifique se o nível do usuário é adequado (exemplo: nível 3 ou superior)
-    if (nivelUsuario < 3) {
+    const usuario = await Usuario.findByPk(id);
+    if (!usuario) {
+      return res.status(400).json({ mensagem: "Usuário não autentificado." });
+    }
+
+    // Verifica o nível do usuário obtido do banco de dados
+    if (usuario.nivel !== 1 && usuario.nivel !== 3) {
       return res.status(403).json({ mensagem: "Permissão negada." });
     }
     // Verificar se o email já está em uso
@@ -53,8 +60,8 @@ async function cadastrar(req, res) {
     await novoUsuario.save();
 
     return res
-      .status(201)
-      .json({ mensagem: "Usuário cadastrado com sucesso." });
+      .status(200)
+      .json({ mensagem: "Usuário cadastrado com sucesso.", novoUsuario });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ mensagem: "Erro ao cadastrar usuário." });

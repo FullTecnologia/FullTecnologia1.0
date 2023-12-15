@@ -57,11 +57,6 @@ async function cadastrarFicha(req, res) {
       return res.status(400).json({ mensagem: "Usuário não encontrado." });
     }
 
-    // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 1) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
-    }
-
     // Insere os dados da ficha no banco de dados
     const ficha = await Ficha.create({
       id_usuario,
@@ -111,10 +106,14 @@ async function cadastrarFicha(req, res) {
     });
 
     // Retorna a ficha cadastrada
-    return ficha;
+    return res
+      .status(200)
+      .json({ mensagem: "Usuário cadastrado com sucesso.", ficha });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ mensagem: "Erro ao cadastrar ficha." });
+    return res
+      .status(500)
+      .json({ mensagem: "Erro ao cadastrar ficha.", ficha });
   }
 }
 

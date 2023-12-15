@@ -6,7 +6,6 @@ async function cadastrarAtividade(req, res) {
     const { responsavel, descricao, dataFim, status, tipo } = req.body;
     const { id } = req.params;
 
-    console.log(req.body, id);
     // Verifique se req.user está definido
     if (!responsavel) {
       return res.status(400).json({ mensagem: "Usuário não existe." });

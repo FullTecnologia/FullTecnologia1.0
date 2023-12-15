@@ -1,10 +1,25 @@
 import React, { useState } from "react";
-import { validateColaborador } from "../../hooks/validation";
+import {
+  validateUsuario,
+  validateFicha,
+  validateHabilidades,
+} from "../../hooks/validation";
 import "./cadastroColab.css";
 import { useNavigate } from "react-router-dom";
 
+// contexts
+import { useAuthState } from "../../contexts/AuthContext";
+
+import {
+  cadastrarUsuario,
+  cadastrarFicha,
+  cadastrarHabilidades,
+} from "../../hooks/apiService";
+
 function CadastrarColaborador() {
+  const { id_usuario } = useAuthState();
   const navigate = useNavigate();
+
   const [dadosUsuario, setDadosUsuario] = useState({
     nome: "",
     email: "",
@@ -14,6 +29,7 @@ function CadastrarColaborador() {
   });
 
   const [dadosFicha, setDadosFicha] = useState({
+    id_usuario: "",
     data_nascimento: "",
     naturalidade: "",
     nome_mae: "",
@@ -60,9 +76,12 @@ function CadastrarColaborador() {
   });
 
   const [habilidades, setHabilidades] = useState({
+    id_usuario: "",
     habilidade: "",
     especialidade: "",
   });
+
+  const [usuarioCadastrado, setUser] = useState(null);
 
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -87,115 +106,135 @@ function CadastrarColaborador() {
     "Outro",
   ];
 
-  function handleColaboradorInputChange(event) {
-    const { name, value } = event.target;
-    setDadosUsuario({
-      ...dadosUsuario,
-      [name]: value,
-    });
-    setDadosFicha({
-      ...dadosFicha,
-      [name]: value,
-    });
-    setHabilidades({
-      ...habilidades,
-      [name]: value,
-    });
-  }
+  const [showUserForm, setShowUserForm] = useState(true);
+  const [showFichaButton, setShowFichaButton] = useState(false);
+  const [showFichaForm, setShowFichaForm] = useState(false);
+  const [showHabilidadesButton, setShowHabilidadesButton] = useState(false);
+  const [showHabilidadesForm, setShowHabilidadesForm] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
 
-  function handleColaboradorSubmit(event, type) {
+  async function handleUsuarioSubmit(event) {
     event.preventDefault();
-    const errors = validateColaborador({
-      dadosUsuario,
-      dadosFicha,
-      habilidades,
-    });
+    const errors = validateUsuario(dadosUsuario);
 
     if (Object.keys(errors).length === 0) {
-      // Dados do formulário de colaborador são válidos
-      if (type === "usuario") {
-        // Enviar dados do usuário
-        fetch("/cadastro", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dadosUsuario),
-        })
-          .then((response) => {
-            if (response.ok) {
-              // A solicitação foi bem-sucedida
-              return response.json();
-            } else {
-              // A solicitação falhou
-              throw new Error("Erro na solicitação");
-            }
-          })
-          .then((data) => {
-            // Lidar com a resposta do servidor, se houver
-            console.log(data);
-          })
-          .catch((error) => {
-            // Lidar com erros de solicitação
-            console.error(error);
+      try {
+        const response = await cadastrarUsuario(id_usuario, dadosUsuario); // Usar a função de cadastro de usuário da API
+
+        if (response) {
+          setShowUserForm(false);
+          setShowFichaButton(true); // Mostra o botão para inserir a ficha
+          setCurrentStep(2); // Avança para a próxima etapa
+          setUser(response.novoUsuario);
+          setDadosFicha({
+            ...dadosFicha,
+            id_usuario: response.novoUsuario.id, // Definir o ID do novo usuário nas informações da ficha
           });
-      } else if (type === "ficha") {
-        // Enviar dados da ficha
-        fetch("/cadastrarFicha", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dadosFicha),
-        })
-          .then((response) => {
-            if (response.ok) {
-              // A solicitação foi bem-sucedida
-              return response.json();
-            } else {
-              // A solicitação falhou
-              throw new Error("Erro na solicitação");
-            }
-          })
-          .then((data) => {
-            // Lidar com a resposta do servidor, se houver
-            console.log(data);
-          })
-          .catch((error) => {
-            // Lidar com erros de solicitação
-            console.error(error);
-          });
-      } else if (type === "habilidades") {
-        // Enviar dados de habilidades
-        fetch("/cadastrarHabilidades", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(habilidades),
-        })
-          .then((response) => {
-            if (response.ok) {
-              // A solicitação foi bem-sucedida
-              return response.json();
-            } else {
-              // A solicitação falhou
-              throw new Error("Erro na solicitação");
-            }
-          })
-          .then((data) => {
-            // Lidar com a resposta do servidor, se houver
-            console.log(data);
-          })
-          .catch((error) => {
-            // Lidar com erros de solicitação
-            console.error(error);
-          });
+          setValidationErrors({});
+        }
+      } catch (error) {
+        console.error("Erro na solicitação:", error);
+
+        if (error.response) {
+          console.error("Dados da resposta do servidor:", error.response.data);
+        } else if (error.request) {
+          console.error("A solicitação foi feita, mas não recebeu resposta");
+        } else {
+          console.error(
+            "Erro durante a configuração da solicitação:",
+            error.message
+          );
+        }
       }
-      setValidationErrors({});
     } else {
       setValidationErrors(errors);
     }
+  }
+
+  function handleUsuarioChange(event) {
+    const { name, value } = event.target;
+    setDadosUsuario({ ...dadosUsuario, [name]: value });
+  }
+
+  async function handleFichaSubmit(event) {
+    event.preventDefault();
+    const errors = validateFicha(dadosFicha);
+
+    if (Object.keys(errors).length === 0) {
+      try {
+        const response = await cadastrarFicha(dadosFicha);
+
+        // Verifica se a resposta foi bem-sucedida
+        if (response) {
+          console.log(response);
+          setShowFichaForm(false);
+          setHabilidades({
+            ...habilidades,
+            id_usuario: response.ficha.id_usuario,
+          });
+          setShowHabilidadesButton(true);
+          setCurrentStep(4); // Atualiza o estado para mostrar o botão de inserir habilidades
+          setValidationErrors({});
+        }
+      } catch (error) {
+        console.error(error);
+        // Lidar com erro no cadastro da ficha
+      }
+    } else {
+      setValidationErrors(errors);
+    }
+  }
+
+  function handleFichaChange(event) {
+    const { name, value } = event.target;
+    setDadosFicha({ ...dadosFicha, [name]: value });
+  }
+
+  function handleShowFicha() {
+    setShowFichaForm(true);
+    setShowFichaButton(false);
+    setCurrentStep(3);
+  }
+
+  async function handleHabilidadesSubmit(event) {
+    event.preventDefault();
+    const errors = validateHabilidades(habilidades);
+
+    if (Object.keys(errors).length === 0) {
+      try {
+        const response = await cadastrarHabilidades(habilidades);
+
+        if (response) {
+          navigate("/recursoshumanos"); // Navegar para outra rota
+        }
+      } catch (error) {
+        console.error("Erro na solicitação:", error);
+
+        if (error.response) {
+          console.error("Dados da resposta do servidor:", error.response.data);
+        } else if (error.request) {
+          console.error("A solicitação foi feita, mas não recebeu resposta");
+        } else {
+          console.error(
+            "Erro durante a configuração da solicitação:",
+            error.message
+          );
+        }
+      }
+    } else {
+      setValidationErrors(errors);
+    }
+  }
+
+  function handleHabilidadesChange(event) {
+    const { name, value } = event.target;
+    setHabilidades({ ...habilidades, [name]: value });
+  }
+
+  function handleShowHabilidades() {
+    setShowHabilidadesForm(true);
+    setShowHabilidadesButton(false);
+    setCurrentStep(5);
   }
 
   function handleClick() {
@@ -223,7 +262,7 @@ function CadastrarColaborador() {
     }
   }
 
-  function InformacoesPessoais(dadosUsuario) {
+  function InformacoesUsuario(dadosUsuario) {
     return (
       <div className="modalColab">
         <div className="form-row">
@@ -238,7 +277,7 @@ function CadastrarColaborador() {
               name="nome"
               placeholder="Nome completo"
               value={dadosUsuario.nome}
-              onChange={handleColaboradorInputChange}
+              onChange={handleUsuarioChange}
             />
             <span className="error">{validationErrors.nome}</span>
           </div>
@@ -252,7 +291,7 @@ function CadastrarColaborador() {
               id="email"
               name="email"
               value={dadosUsuario.email}
-              onChange={handleColaboradorInputChange}
+              onChange={handleUsuarioChange}
             />
             <span className="error">{validationErrors.email}</span>
           </div>
@@ -266,7 +305,7 @@ function CadastrarColaborador() {
               id="senha"
               name="senha"
               value={dadosUsuario.senha}
-              onChange={handleColaboradorInputChange}
+              onChange={handleUsuarioChange}
             />
             <span className="error">{validationErrors.senha}</span>
           </div>
@@ -279,7 +318,7 @@ function CadastrarColaborador() {
               id="nivel"
               name="nivel"
               value={dadosUsuario.nivel}
-              onChange={handleColaboradorInputChange}
+              onChange={handleUsuarioChange}
             >
               <option value=" ">Selecione um Nível </option>
               <option value="1">Nível 1</option>
@@ -297,20 +336,36 @@ function CadastrarColaborador() {
               type="file" // Alterado para o tipo "file"
               id="fotoPerfil" // Adicionei o id "fotoPerfil"
               name="fotoPerfil" // Adicionei o name "fotoPerfil"
-              onChange={handleColaboradorInputChange} // Adicionei um novo manipulador de eventos para a mudança de fotoPerfil
+              onChange={handleUsuarioChange} // Adicionei um novo manipulador de eventos para a mudança de fotoPerfil
             />
             <span className="error">{validationErrors.fotoPerfil}</span>
           </div>
         </div>
+        <button type="submit" onClick={handleUsuarioSubmit}>
+          Cadastrar
+        </button>
       </div>
     );
   }
 
   // Componente para a etapa de informações de contato
-  function InformacoesContato(dadosFicha) {
+  function InformacoesFicha(dadosFicha, usuarioCadastrado) {
     return (
       <div className="modalColb">
         <div className="form-row">
+          <div>
+            <label className="form-label" htmlFor="nomeUsuario">
+              Nome do Usuário:
+            </label>
+            <input
+              className="form-input"
+              type="text"
+              id="nomeUsuario"
+              name="nomeUsuario"
+              value={usuarioCadastrado.nome}
+              readOnly // Para tornar somente leitura
+            />
+          </div>
           <div>
             <label className="form-label" htmlFor="data_nascimento">
               Data de Nascimento:
@@ -321,7 +376,7 @@ function CadastrarColaborador() {
               id="data_nascimento"
               name="data_nascimento"
               value={dadosFicha.data_nascimento}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.data_nascimento}</span>
           </div>
@@ -335,7 +390,7 @@ function CadastrarColaborador() {
               id="naturalidade"
               name="naturalidade"
               value={dadosFicha.naturalidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.naturalidade}</span>
           </div>
@@ -350,7 +405,7 @@ function CadastrarColaborador() {
               name="nome_mae"
               placeholder="Nome completo"
               value={dadosFicha.nome_mae}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.nome_mae}</span>
           </div>
@@ -365,7 +420,7 @@ function CadastrarColaborador() {
               name="nome_pai"
               placeholder="Nome completo"
               value={dadosFicha.nome_pai}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.nome_pai}</span>
           </div>
@@ -379,7 +434,7 @@ function CadastrarColaborador() {
               id="cpf"
               name="cpf"
               value={dadosFicha.cpf} // Certifique-se de usar a propriedade correta
-              onChange={handleColaboradorInputChange} // Certifique-se de usar o tip
+              onChange={handleFichaChange} // Certifique-se de usar o tip
               placeholder="___.___.___-__"
               maxLength="14"
             />
@@ -394,7 +449,7 @@ function CadastrarColaborador() {
               id="raca_cor"
               name="raca_cor"
               value={dadosFicha.raca_cor}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             >
               <option value="">Selecione a Raça/Cor</option>
               <option value="Branco">Branco</option>
@@ -419,7 +474,7 @@ function CadastrarColaborador() {
               name="nome_companheiro"
               placeholder="Nome completo"
               value={dadosFicha.nome_companheiro}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.nome_companheiro}</span>
           </div>
@@ -433,7 +488,7 @@ function CadastrarColaborador() {
               id="endereco"
               name="endereco"
               value={dadosFicha.endereco}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.endereco}</span>
           </div>
@@ -447,7 +502,7 @@ function CadastrarColaborador() {
               id="endereco_numero"
               name="endereco_numero"
               value={dadosFicha.endereco_numero}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.endereco_numero}</span>
@@ -463,7 +518,7 @@ function CadastrarColaborador() {
               name="endereco_cep"
               placeholder="_____-___"
               value={dadosFicha.endereco_cep}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.endereco_cep}</span>
@@ -479,7 +534,7 @@ function CadastrarColaborador() {
               name="endereco_complemento"
               placeholder="Ex: Apto.3"
               value={dadosFicha.endereco_complemento}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.endereco_complemento}
@@ -495,7 +550,7 @@ function CadastrarColaborador() {
               id="endereco_cidade"
               name="endereco_cidade"
               value={dadosFicha.endereco_cidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.endereco_cidade}</span>
           </div>
@@ -511,7 +566,7 @@ function CadastrarColaborador() {
               id="endereco_bairro"
               name="endereco_bairro"
               value={dadosFicha.endereco_bairro}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.endereco_bairro}</span>
           </div>
@@ -525,7 +580,7 @@ function CadastrarColaborador() {
               id="endereco_uf"
               name="endereco_uf"
               value={dadosFicha.endereco_uf}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.endereco_uf}</span>
           </div>
@@ -541,7 +596,7 @@ function CadastrarColaborador() {
               placeholder="__.___.___"
               maxLength="8"
               value={dadosFicha.carteira_identidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
@@ -558,7 +613,7 @@ function CadastrarColaborador() {
               id="expedidor_identidade"
               name="expedidor_identidade"
               value={dadosFicha.expedidor_identidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.expedidor_identidade}
@@ -574,7 +629,7 @@ function CadastrarColaborador() {
               id="data_emissao_identidade"
               name="data_emissao_identidade"
               value={dadosFicha.data_emissao_identidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.data_emissao_identidade}
@@ -590,7 +645,7 @@ function CadastrarColaborador() {
               id="titulo_eleitor_numero"
               name="titulo_eleitor_numero"
               value={dadosFicha.titulo_eleitor_numero}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
@@ -609,7 +664,7 @@ function CadastrarColaborador() {
               id="titulo_eleitor_zona"
               name="titulo_eleitor_zona"
               value={dadosFicha.titulo_eleitor_zona}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
@@ -626,7 +681,7 @@ function CadastrarColaborador() {
               id="titulo_eleitor_secao"
               name="titulo_eleitor_secao"
               value={dadosFicha.titulo_eleitor_secao}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
@@ -643,7 +698,7 @@ function CadastrarColaborador() {
               id="ctps_numero"
               name="ctps_numero"
               value={dadosFicha.ctps_numero}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.ctps_numero}</span>
@@ -658,7 +713,7 @@ function CadastrarColaborador() {
               id="ctps_serie"
               name="ctps_serie"
               value={dadosFicha.ctps_serie}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.ctps_serie}</span>
           </div>
@@ -672,7 +727,7 @@ function CadastrarColaborador() {
               id="ctps_uf"
               name="ctps_uf"
               value={dadosFicha.ctps_uf}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.ctps_uf}</span>
           </div>
@@ -686,7 +741,7 @@ function CadastrarColaborador() {
               id="ctps_data_emissao"
               name="ctps_data_emissao"
               value={dadosFicha.ctps_data_emissao}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.ctps_data_emissao}</span>
           </div>
@@ -702,7 +757,7 @@ function CadastrarColaborador() {
               id="pis_numero"
               name="pis_numero"
               value={dadosFicha.pis_numero}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.pis_numero}</span>
           </div>
@@ -716,7 +771,7 @@ function CadastrarColaborador() {
               id="pis_data_cadastro"
               name="pis_data_cadastro"
               value={dadosFicha.pis_data_cadastro}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">{validationErrors.pis_data_cadastro}</span>
@@ -731,7 +786,7 @@ function CadastrarColaborador() {
               id="carteira_habilitacao_numero"
               name="carteira_habilitacao_numero"
               value={dadosFicha.carteira_habilitacao_numero}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={permitirApenasNumeros}
             />
             <span className="error">
@@ -751,7 +806,7 @@ function CadastrarColaborador() {
               id="carteira_habilitacao_categoria"
               name="carteira_habilitacao_categoria"
               value={dadosFicha.carteira_habilitacao_categoria}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.carteira_habilitacao_categoria}
@@ -766,7 +821,7 @@ function CadastrarColaborador() {
               id="estado_civil"
               name="estado_civil"
               value={dadosFicha.estado_civil}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             >
               {estadosCivis.map((estadoCivil, index) => (
                 <option key={index} value={estadoCivil}>
@@ -787,7 +842,7 @@ function CadastrarColaborador() {
               id="escolaridade"
               name="escolaridade"
               value={dadosFicha.escolaridade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             >
               <option value="">Selecione a Escolaridade</option>
               <option value="Sem escolaridade">Sem escolaridade</option>
@@ -829,7 +884,7 @@ function CadastrarColaborador() {
               id="certificado_reservista_numero"
               name="certificado_reservista_numero"
               value={dadosFicha.certificado_reservista_numero}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.certificado_reservista_numero}
@@ -848,7 +903,7 @@ function CadastrarColaborador() {
               id="certificado_reservista_categoria"
               name="certificado_reservista_categoria"
               value={dadosFicha.certificado_reservista_categoria}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.certificado_reservista_categoria}
@@ -863,7 +918,7 @@ function CadastrarColaborador() {
               id="cargo"
               name="cargo"
               value={dadosFicha.cargo}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             >
               {cargos.map((cargo, index) => (
                 <option key={index} value={cargo}>
@@ -883,7 +938,7 @@ function CadastrarColaborador() {
               id="cbo"
               name="cbo"
               value={dadosFicha.cbo}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.cbo}</span>
           </div>
@@ -897,7 +952,7 @@ function CadastrarColaborador() {
               id="data_admissao"
               name="data_admissao"
               value={dadosFicha.data_admissao}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.data_admissao}</span>
           </div>
@@ -913,7 +968,7 @@ function CadastrarColaborador() {
               id="salario"
               name="salario"
               value={dadosFicha.salario}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
               onKeyPress={handleKeyPress}
             />
             <span className="error">{validationErrors.salario}</span>
@@ -929,7 +984,7 @@ function CadastrarColaborador() {
               name="intervalo"
               placeholder="Ex: 01:30"
               value={dadosFicha.intervalo}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.intervalo}</span>
           </div>
@@ -944,7 +999,7 @@ function CadastrarColaborador() {
               name="descanso"
               placeholder="Ex: 00:45"
               value={dadosFicha.descanso}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.descanso}</span>
           </div>
@@ -960,7 +1015,7 @@ function CadastrarColaborador() {
               name="horario_sabado"
               placeholder="Ex: 00:45"
               value={dadosFicha.horario_sabado}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">{validationErrors.horario_sabado}</span>
           </div>
@@ -973,7 +1028,7 @@ function CadastrarColaborador() {
               id="vale_transporte"
               name="vale_transporte"
               value={dadosFicha.vale_transporte}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             >
               <option value={true}>Selecione um alternativa</option>
               <option value={true}>Sim</option>
@@ -991,13 +1046,16 @@ function CadastrarColaborador() {
               id="informacoes_complementares"
               name="informacoes_complementares"
               value={dadosFicha.informacoes_complementares}
-              onChange={handleColaboradorInputChange}
+              onChange={handleFichaChange}
             />
             <span className="error">
               {validationErrors.informacoes_complementares}
             </span>
           </div>
         </div>
+        <button type="submit" onClick={handleFichaSubmit}>
+          Cadastrar
+        </button>
       </div>
     );
   }
@@ -1017,7 +1075,7 @@ function CadastrarColaborador() {
               id="habilidade"
               name="habilidade"
               value={habilidades.habilidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleHabilidadesChange}
             />
             <span className="error">{validationErrors.habilidade}</span>
           </div>
@@ -1031,11 +1089,14 @@ function CadastrarColaborador() {
               id="especialidade"
               name="especialidade"
               value={habilidades.especialidade}
-              onChange={handleColaboradorInputChange}
+              onChange={handleHabilidadesChange}
             />
             <span className="error">{validationErrors.especialidade}</span>
           </div>
         </div>
+        <button type="submit" onClick={handleHabilidadesSubmit}>
+          Cadastrar
+        </button>
       </div>
     );
   }
@@ -1043,12 +1104,23 @@ function CadastrarColaborador() {
   return (
     <div>
       <h2>Cadastrar Colaborador</h2>
-      <form className="form-container" onSubmit={handleColaboradorSubmit}>
-        {InformacoesPessoais(dadosUsuario)}
-        {InformacoesContato(dadosFicha)}
-        {Habilidades(habilidades)}
+      <form className="form-container" onSubmit={handleUsuarioSubmit}>
+        {currentStep === 1 && showUserForm && InformacoesUsuario(dadosUsuario)}
+        {currentStep === 2 && showFichaButton && (
+          <button type="submit" onClick={handleShowFicha}>
+            Inserir Ficha
+          </button>
+        )}
+        {currentStep === 3 &&
+          showFichaForm &&
+          InformacoesFicha(dadosFicha, usuarioCadastrado)}
+        {currentStep === 4 && showHabilidadesButton && (
+          <button type="submit" onClick={handleShowHabilidades}>
+            Inserir Habilidades
+          </button>
+        )}
+        {currentStep === 5 && showHabilidadesForm && Habilidades(habilidades)}
         <div>
-          <button type="submit">Cadastrar</button>
           <button type="submit" onClick={handleClick}>
             Cancelar
           </button>

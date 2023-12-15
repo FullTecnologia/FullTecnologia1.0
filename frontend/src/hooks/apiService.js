@@ -52,6 +52,18 @@ export const editarAtividade = async (id_usuario, atividade) => {
   }
 };
 
+export const cadastrarUsuario = async (id_usuario, dadosUsuario) => {
+  try {
+    const response = await axios.post(
+      `${baseURL}/cadastro/${id_usuario}`,
+      dadosUsuario
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const excluirAtividade = async (id) => {
   try {
     const res = await axios.delete(`${baseURL}/excluirAtividade/${id}`);
@@ -61,3 +73,23 @@ export const excluirAtividade = async (id) => {
   }
 };
 
+export const cadastrarFicha = async (dadosFicha) => {
+  try {
+    const response = await axios.post(`${baseURL}/cadastrarFicha`, dadosFicha);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const cadastrarHabilidades = async (habilidades) => {
+  try {
+    const res = await axios.post(
+      `${baseURL}/cadastrarHabilidades`,
+      habilidades
+    );
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+  }
+};
