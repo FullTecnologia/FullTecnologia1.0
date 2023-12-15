@@ -57,7 +57,7 @@ const router = express.Router();
 // Rotas
 
 // Usuário Cadastro
-router.post("/cadastro", cadastrar);
+router.post("/cadastro/:id", cadastrar);
 router.put("/usuarios/:id", editar);
 router.delete("/usuarios/:id", excluir);
 router.get("/usuarios", listarUsuarios);

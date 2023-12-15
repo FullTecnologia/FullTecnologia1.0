@@ -5,16 +5,6 @@ import Usuario from "../../models/usuario.js";
 async function cadastrarHabilidade(req, res) {
   try {
     const { id_usuario, habilidade, especialidade } = req.body;
-    const usuario = await Usuario.findByPk(id_usuario);
-
-    if (!usuario) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado." });
-    }
-
-    // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 1) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
-    }
 
     // Insira os dados da habilidade no banco de dados
     const novaHabilidade = await Habilidade.create({

@@ -37,3 +37,36 @@ export const cadastrarAtividade = async (id_usuario, atividade) => {
     handleError(error);
   }
 };
+
+export const cadastrarUsuario = async (id_usuario, dadosUsuario) => {
+  try {
+    const response = await axios.post(
+      `${baseURL}/cadastro/${id_usuario}`,
+      dadosUsuario
+    );
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const cadastrarFicha = async (dadosFicha) => {
+  try {
+    const response = await axios.post(`${baseURL}/cadastrarFicha`, dadosFicha);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const cadastrarHabilidades = async (habilidades) => {
+  try {
+    const res = await axios.post(
+      `${baseURL}/cadastrarHabilidades`,
+      habilidades
+    );
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+  }
+};
