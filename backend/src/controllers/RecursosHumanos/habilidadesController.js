@@ -21,39 +21,6 @@ async function cadastrarHabilidade(req, res) {
   }
 }
 
-// Função para excluir uma habilidade por ID
-async function excluirHabilidade(req, res) {
-  try {
-    const { id } = req.params;
-    const usuario = await Usuario.findByPk(id);
-
-    if (!usuario) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado." });
-    }
-
-    // Verifica o nível do usuário obtido do banco de dados
-    if (usuario.nivel < 1) {
-      return res.status(403).json({ mensagem: "Permissão negada." });
-    }
-
-    // Verifique se a habilidade existe
-    const habilidade = await Habilidade.findAll({ where: { id_usuario: id } });
-
-    if (!habilidade) {
-      return res.status(404).json({ mensagem: "Habilidade não encontrada." });
-    }
-
-    // Exclua a habilidade
-    await habilidade.destroy();
-
-    // Retorna uma mensagem de sucesso
-    return res.status(204).send();
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ mensagem: "Erro ao excluir habilidade." });
-  }
-}
-
 // Função para listar as habilidades de um usuário pelo ID do usuário
 async function listarHabilidadesDoUsuario(req, res) {
   try {
@@ -84,4 +51,4 @@ async function listarHabilidadesDoUsuario(req, res) {
   }
 }
 
-export { cadastrarHabilidade, excluirHabilidade, listarHabilidadesDoUsuario };
+export { cadastrarHabilidade, listarHabilidadesDoUsuario };

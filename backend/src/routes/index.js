@@ -13,7 +13,6 @@ import {
   cadastrarFicha,
   editarFicha,
   listagem,
-  excluirFicha,
 } from "../controllers/RecursosHumanos/fichaController.js";
 import {
   cadastrarAtividade,
@@ -29,7 +28,6 @@ import {
 } from "../controllers/RecursosHumanos/epiControllers.js";
 import {
   cadastrarHabilidade,
-  excluirHabilidade,
   listarHabilidadesDoUsuario,
 } from "../controllers/RecursosHumanos/habilidadesController.js";
 import {
@@ -69,7 +67,6 @@ router.get("/logout/:id", logout);
 // Recursos Humanos
 router.post("/cadastrarFicha", cadastrarFicha);
 router.get("/fichas/:id", listagem);
-router.delete("/excluirFucha/:id", excluirFicha);
 router.put("/editarFicha/:id", editarFicha);
 router.post("/cadastrarAtividade/:id", cadastrarAtividade);
 router.get("/listarAtividade/:id", listarAtividades);
@@ -81,7 +78,6 @@ router.delete("/excluirPedidoEPI/:id", excluirPedidoEPI);
 router.put("/editarFicha/:id", editarPedidoEPI);
 router.post("/cadastrarHabilidades", cadastrarHabilidade);
 router.get("/listarHabilidades/:id", listarHabilidadesDoUsuario);
-router.delete("/excluirHabilidade/:id", excluirHabilidade);
 router.post("/encargos", cadastrarEncargo);
 router.put("/encargos/:id", editarEncargo);
 router.delete("/encargos/:id", excluirEncargo);
