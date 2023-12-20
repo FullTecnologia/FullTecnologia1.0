@@ -223,9 +223,8 @@ const Colab = () => {
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Cargo</th>
                         <th>Email</th>
-                        <th>CPF</th>
+                        <th>Nível</th>
                         <th>Editar</th>
                         <th>Excluir</th>
                         <th>Detalhes</th>
@@ -235,9 +234,8 @@ const Colab = () => {
                     {colaboradores.map((colaborador) => (
                         <tr key={colaborador.id} className={styles.row}>
                             <td>{colaborador.nome}</td>
-                            <td>{colaborador.cargo}</td>
                             <td>{colaborador.email}</td>
-                            <td>{colaborador.cpf}</td>
+                            <td>{colaborador.nivel}</td>
                             <td>
                                 <button onClick={() => openModal(colaborador)} className={styles.editButton}>
                                     <FontAwesomeIcon icon={faPencilAlt} />

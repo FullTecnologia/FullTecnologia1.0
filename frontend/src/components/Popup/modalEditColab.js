@@ -18,21 +18,17 @@ const ModalEditColab = ({ colaborador, onClose, onSave }) => {
 
         const errors = {};
 
-        if (!formData.nome.trim()) {
+        if (!formData.nome()) {
             errors.nome = "Nome é obrigatório.";
         }
 
-        if (!formData.cargo.trim()) {
-            errors.cargo = "Cargo é obrigatório.";
-        }
-
-        if (!formData.email.trim()) {
+        if (!formData.email()) {
             errors.email = "Email é obrigatório.";
         } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(formData.email)) {
             errors.email = "Email inválido.";
         }
 
-        if (!formData.cpf.trim()) {
+        if (!formData.cpf()) {
             errors.cpf = "CPF é obrigatório.";
         } else if (!/^\d{3}\.\d{3}\.\d{3}-\d{2}$/g.test(formData.cpf)) {
             errors.cpf = "CPF inválido.";

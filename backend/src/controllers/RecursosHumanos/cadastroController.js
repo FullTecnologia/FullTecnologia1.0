@@ -118,31 +118,17 @@ async function excluir(req, res) {
     const usuario = await Usuario.findByPk(id);
 
     if (!usuario) {
-      return res.status(400).json({ mensagem: "Usuário não encontrado." });
-    }
-
-    if (!usuario) {
       return res.status(404).json({ mensagem: "Usuário não encontrado." });
     }
 
-    const ficha = await Ficha.findAll({ where: { id_usuario: id } });
+    // Exclui as fichas associadas, se houver
+    await Ficha.destroy({ where: { id_usuario: id } });
 
-    if (!ficha) {
-      return res.status(404).json({ mensagem: "Ficha não encontrada." });
-    }
+    // Exclui as habilidades associadas, se houver
+    await Habilidade.destroy({ where: { id_usuario: id } });
 
-    const habilidade = await Habilidade.findAll({ where: { id_usuario: id } });
-
-    if (!habilidade) {
-      return res.status(404).json({ mensagem: "Habilidade não encontrada." });
-    }
-
-    // Exclui a ficha
-    await ficha.destroy();
     // Excluir o usuário
     await usuario.destroy();
-    // Exclua a habilidade
-    await habilidade.destroy();
 
     return res.status(200).json({ mensagem: "Usuário excluído com sucesso." });
   } catch (error) {
@@ -150,6 +136,7 @@ async function excluir(req, res) {
     return res.status(500).json({ mensagem: "Erro ao excluir usuário." });
   }
 }
+
 
 async function listarUsuarios(req, res) {
   try {
