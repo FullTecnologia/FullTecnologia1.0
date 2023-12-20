@@ -113,7 +113,7 @@ async function cadastrarFicha(req, res) {
     console.error(error);
     return res
       .status(500)
-      .json({ mensagem: "Erro ao cadastrar ficha.", ficha });
+      .json({ mensagem: "Erro ao cadastrar ficha." });
   }
 }
 
