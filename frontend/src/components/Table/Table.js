@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-//css
-import styles from './Table.module.css';
 
 //import em icones 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+    faPencilAlt,
+    faTrashAlt,
+    faBookOpen
+} from '@fortawesome/free-solid-svg-icons';
 
 //hooks
-import { dataAtividades, editarAtividade, excluirAtividade } from '../../hooks/apiService';
+import {
+    dataAtividades,
+    editarAtividade,
+    excluirAtividade,
+    listarColaboradores,
+    editarColaborador,
+    excluirColaborador
+} from '../../hooks/apiService';
 
 //contexts
 import { useAuthState } from "../../contexts/AuthContext";
 
 //components
 import ModalEdit from '../Popup/modalEdit';
+import ModalEditColab from '../Popup/modalEditColab';
+import ModalFicha from '../Popup/modalFicha';
+
+//css
+import styles from './Table.module.css';
 
 //utils
 import { formatData } from '../../utils/utils';
@@ -124,39 +136,71 @@ const Table = ({ userId, dataAtv }) => {
 const Colab = () => {
     const [colaboradores, setColaboradores] = useState([]);
     const [searchName, setSearchName] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentColaborador, setCurrentColaborador] = useState(null);
+    const [isDetalhesModalOpen, setIsDetalhesModalOpen] = useState(false);
+
+    const fetchDataFromDatabase = async () => {
+        try {
+            const dados = await listarColaboradores();
+            setColaboradores(dados);
+        } catch (error) {
+            console.error('Erro ao buscar dados dos colaboradores:', error);
+        }
+    };
 
     useEffect(() => {
-        // Função para buscar os dados dos colaboradores do banco de dados
-        const fetchDataFromDatabase = async () => {
-            try {
-                const response = await axios.get('http://localhost:3003/api/listarHabilidades/:id'); //tem que ter o :id no final da rota
-
-                if (response.status === 200) {
-                    setColaboradores(response.data);
-                } else {
-                    console.error('Erro ao buscar dados do banco de dados.');
-                }
-            } catch (error) {
-                console.error('Erro ao buscar dados do banco de dados:', error);
-            }
-        };
-
-        // Chama a função para buscar os dados ao carregar o componente
         fetchDataFromDatabase();
     }, []);
 
-    const handleSearch = () => {
-        // Filtra os colaboradores com base no nome
-        const filteredColaboradores = colaboradores.filter((colaborador) => {
-            // Transforma o nome e a pesquisa em letras minúsculas para comparar sem diferenciação de maiúsculas e minúsculas
-            const nomeColaborador = colaborador.nome.toLowerCase();
-            const nomePesquisa = searchName.toLowerCase();
+    const openModal = (colaborador) => {
+        setCurrentColaborador(colaborador);
+        setIsModalOpen(true);
+    };
 
-            // Verifica se o nome do colaborador contém a pesquisa
-            return nomeColaborador.includes(nomePesquisa);
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setCurrentColaborador(null);
+    };
+
+    const openDetalhesModal = (colaborador) => {
+        setCurrentColaborador(colaborador);
+        setIsDetalhesModalOpen(true);
+    };
+
+    const closeDetalhesModal = () => {
+        setIsDetalhesModalOpen(false);
+    };
+
+    const handleSave = async (updatedColaborador) => {
+        try {
+            await editarColaborador(updatedColaborador.id, updatedColaborador);
+            const updatedList = colaboradores.map(colab =>
+                colab.id === updatedColaborador.id ? { ...colab, ...updatedColaborador } : colab);
+            setColaboradores(updatedList);
+            closeModal();
+        } catch (error) {
+            console.error('Erro ao atualizar colaborador:', error);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Tem certeza que deseja excluir este colaborador?')) {
+            try {
+                await excluirColaborador(id);
+                await fetchDataFromDatabase(); // Atualiza a tabela após a exclusão
+            } catch (error) {
+                console.error('Erro ao excluir colaborador:', error);
+            }
+        }
+    };
+
+
+    const handleSearch = () => {
+        const filteredColaboradores = colaboradores.filter((colaborador) => {
+            return colaborador.nome.toLowerCase().includes(searchName.toLowerCase());
         });
 
-        // Atualiza a lista de colaboradores com o resultado da pesquisa
         setColaboradores(filteredColaboradores);
     };
 
@@ -181,10 +225,10 @@ const Colab = () => {
                         <th>Nome</th>
                         <th>Cargo</th>
                         <th>Email</th>
-                        <th>Data-Nascimento</th>
                         <th>CPF</th>
-                        <th>PIS</th>
                         <th>Editar</th>
+                        <th>Excluir</th>
+                        <th>Detalhes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -193,37 +237,43 @@ const Colab = () => {
                             <td>{colaborador.nome}</td>
                             <td>{colaborador.cargo}</td>
                             <td>{colaborador.email}</td>
-                            <td>{colaborador.dataNascimento}</td>
                             <td>{colaborador.cpf}</td>
-                            <td>{colaborador.pis}</td>
                             <td>
-                                <button className={styles.editButton}>
+                                <button onClick={() => openModal(colaborador)} className={styles.editButton}>
                                     <FontAwesomeIcon icon={faPencilAlt} />
-                                    {/* Adicione o ícone de lápis aqui */}
+                                </button>
+                            </td>
+                            <td>
+                                <button className={styles.deleteButton} onClick={() => handleDelete(colaborador.id)}>
+                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                </button>
+                            </td>
+                            <td>
+                                <button className={styles.detailsButton} onClick={() => openDetalhesModal(colaborador)}>
+                                    <FontAwesomeIcon icon={faBookOpen} />
                                 </button>
                             </td>
                         </tr>
                     ))}
-                    <tr className={styles.row}>
-                        <td>Colaborador</td>
-                        <td>Analista</td>
-                        <td>exemplo@empresa.com</td>
-                        <td>1990-05-15</td>
-                        <td>123.456.789-00</td>
-                        <td>12345678900</td>
-                        <td>
-                            <button className={styles.editIcon}>
-                                <span className={styles.editIcon}>
-                                    <FontAwesomeIcon icon={faPencilAlt} />
-                                </span>
-                            </button>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
+
+            {isModalOpen && (
+                <ModalEditColab
+                    colaborador={currentColaborador}
+                    onClose={closeModal}
+                    onSave={handleSave}
+                />
+            )}
+
+            {isDetalhesModalOpen && (
+                <ModalFicha
+                    colaborador={currentColaborador}
+                    onClose={closeDetalhesModal}
+                />
+            )}
         </div>
     );
-
 };
 
 export default Table;

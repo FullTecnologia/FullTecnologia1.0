@@ -93,3 +93,50 @@ export const cadastrarHabilidades = async (habilidades) => {
     handleError(error);
   }
 };
+
+// dados do colaborador 
+
+export const listarColaboradores = async () => {
+  try {
+    const response = await axios.get(`${baseURL}/usuarios`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const editarFicha = async (id, dadosFicha) => {
+  try {
+    const res = await axios.put(`${baseURL}/editarFicha/${id}`, dadosFicha);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const editarColaborador = async (id, dadosColaborador) => {
+  try {
+    const res = await axios.put(`${baseURL}/usuarios/${id}`, dadosColaborador);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const listarFicha = async (id) => {
+  try {
+    const response = await axios.get(`${baseURL}/fichas/${id}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const excluirColaborador = async (id) => {
+  try {
+    const res = await axios.delete(`${baseURL}/usuarios/${id}`);
+    return handleResponse(res);
+  } catch (error) {
+    handleError(error);
+  }
+};
