@@ -1,5 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback
+} from "react";
 
 // components
 import Table, { Colab } from "../../components/Table/Table";
@@ -7,7 +11,11 @@ import NavBar from "../../components/NavBar/NavBar";
 import "../../components/Popup/style.css";
 
 //hooks
-import { dataAtividades, cadastrarAtividade, editarAtividade } from "../../hooks/apiService";
+import {
+  dataAtividades,
+  cadastrarAtividade,
+  editarAtividade
+} from "../../hooks/apiService";
 import { validateForm } from '../../hooks/validation';
 
 // css

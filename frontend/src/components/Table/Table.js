@@ -14,6 +14,7 @@ import {
     editarAtividade,
     excluirAtividade,
     listarColaboradores,
+    listarFicha,
     editarColaborador,
     excluirColaborador
 } from '../../hooks/apiService';
@@ -139,6 +140,7 @@ const Colab = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentColaborador, setCurrentColaborador] = useState(null);
     const [isDetalhesModalOpen, setIsDetalhesModalOpen] = useState(false);
+    const [currentFicha, setCurrentFicha] = useState(null);
 
     const fetchDataFromDatabase = async () => {
         try {
@@ -163,10 +165,23 @@ const Colab = () => {
         setCurrentColaborador(null);
     };
 
-    const openDetalhesModal = (colaborador) => {
+    const openDetalhesModal = async (colaborador) => {
         setCurrentColaborador(colaborador);
+
+        try {
+            const fichaData = await listarFicha(colaborador.id);
+            if (fichaData && fichaData.length > 0) {
+                setCurrentFicha(fichaData[0]);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar ficha do colaborador:', error);
+            setCurrentFicha(null);
+        }
+
         setIsDetalhesModalOpen(true);
     };
+
+
 
     const closeDetalhesModal = () => {
         setIsDetalhesModalOpen(false);
@@ -266,7 +281,7 @@ const Colab = () => {
 
             {isDetalhesModalOpen && (
                 <ModalFicha
-                    colaborador={currentColaborador}
+                    ficha={currentFicha}
                     onClose={closeDetalhesModal}
                 />
             )}
