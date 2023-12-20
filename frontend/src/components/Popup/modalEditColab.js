@@ -18,16 +18,19 @@ const ModalEditColab = ({ colaborador, onClose, onSave }) => {
 
         const errors = {};
 
-        if (!formData.nome()) {
+        // Verifique se o nome está preenchido corretamente
+        if (!formData.nome) {
             errors.nome = "Nome é obrigatório.";
         }
 
-        if (!formData.email()) {
+        // Verifique se o email está preenchido corretamente
+        if (!formData.email) {
             errors.email = "Email é obrigatório.";
         } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(formData.email)) {
             errors.email = "Email inválido.";
         }
 
+        // Verifique se não há erros e, em caso afirmativo, salve os dados
         if (Object.keys(errors).length === 0) {
             onSave(formData);
         } else {
@@ -68,9 +71,25 @@ const ModalEditColab = ({ colaborador, onClose, onSave }) => {
                     />
                     <span className={styles.error}>{validationErrors.email}</span>
 
+                    <label htmlFor="nivel">Nível</label>
+                    <select
+                        id="nivel"
+                        name="nivel"
+                        value={formData.nivel}
+                        onChange={handleChange}
+                    >
+                        <option value="">Selecione um nível</option>
+                        <option value="1">Nível 1</option>
+                        <option value="2">Nível 2</option>
+                        <option value="3">Nível 3</option>
+                        {/* Adicionar mais opções conforme necessário */}
+                    </select>
+                    <span className={styles.error}>{validationErrors.nivel}</span>
+
                     <div className={styles.modalActions}>
                         <button type="submit" className={styles.saveButton}>Salvar</button>
                     </div>
+
                 </form>
             </div>
         </div>
