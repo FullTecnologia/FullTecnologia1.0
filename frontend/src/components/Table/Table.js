@@ -179,6 +179,7 @@ const Colab = () => {
         }
 
         setIsDetalhesModalOpen(true);
+        return <ModalFicha onUpdate={fetchDataFromDatabase} />;
     };
 
 
@@ -283,6 +284,7 @@ const Colab = () => {
                 <ModalFicha
                     ficha={currentFicha}
                     onClose={closeDetalhesModal}
+                    onUpdate={fetchDataFromDatabase}
                 />
             )}
         </div>

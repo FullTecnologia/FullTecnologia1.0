@@ -2,27 +2,32 @@ import styles from './modalFicha.module.css';
 
 import React, { useState, useEffect } from 'react';
 
+
 // hooks
 import { listarHabilidades, editarFicha } from '../../hooks/apiService';
 
 // utils
 import { formatData } from '../../utils/utils';
 
-const ModalFicha = ({ ficha, onClose }) => {
+const ModalFicha = ({ ficha, onClose, onUpdate }) => {
     const [habilidades, setHabilidades] = useState([]);
     const [isEditing, setIsEditing] = useState(false); // Estado para controlar a exibição do formulário de edição
     const [editedData, setEditedData] = useState({ ...ficha });
 
-    // Função para lidar com a submissão do formulário de edição
-    const handleEditSubmit = async () => {
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
         try {
-            // Enviar os dados editados para a função de edição da ficha
-            await editarFicha(editedData);
+            // Chamada da função editarFicha sem atribuir a resposta a uma variável
+            await editarFicha(ficha.id, editedData);
 
-            // Atualize os detalhes da ficha com os novos dados
+            // Chame a função onUpdate após a edição bem-sucedida
+            if (onUpdate) {
+                await onUpdate();
+            }
+
             setIsEditing(false);
 
-            // Recarregue as habilidades após a edição
+            // Atualizar habilidades, etc.
             const habilidadesUsuario = await listarHabilidades(ficha.id_usuario);
             setHabilidades(habilidadesUsuario);
         } catch (error) {
@@ -30,9 +35,15 @@ const ModalFicha = ({ ficha, onClose }) => {
         }
     };
 
-    // Função para cancelar a edição e voltar à exibição dos detalhes
     const cancelEdit = () => {
         setIsEditing(false);
+    };
+
+    const handleInputChange = (field, value) => {
+        setEditedData((prevData) => ({
+            ...prevData,
+            [field]: value,
+        }));
     };
 
     useEffect(() => {
@@ -57,10 +68,9 @@ const ModalFicha = ({ ficha, onClose }) => {
                 <h2>Detalhes da Ficha</h2>
 
                 {isEditing ? (
-                    // Renderize o formulário de edição aqui
                     <div>
                         <h3>Editar Ficha</h3>
-                        <form>
+                        <form onSubmit={handleEditSubmit}>
                             <div className="form-group">
                                 <label htmlFor="data_nascimento">Data de Nascimento:</label>
                                 <input
@@ -68,9 +78,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="data_nascimento"
                                     name="data_nascimento"
                                     value={formatData(editedData.data_admissao)}
-                                    onChange={(e) => setEditedData({ ...editedData, data_nascimento: e.target.value })}
+                                    onChange={(e) => handleInputChange("data_nascimento", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="naturalidade">Naturalidade:</label>
                                 <input
@@ -78,9 +89,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="naturalidade"
                                     name="naturalidade"
                                     value={editedData.naturalidade}
-                                    onChange={(e) => setEditedData({ ...editedData, naturalidade: e.target.value })}
+                                    onChange={(e) => handleInputChange("naturalidade", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="nome_mae">Nome da Mãe:</label>
                                 <input
@@ -88,9 +100,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="nome_mae"
                                     name="nome_mae"
                                     value={editedData.nome_mae}
-                                    onChange={(e) => setEditedData({ ...editedData, nome_mae: e.target.value })}
+                                    onChange={(e) => handleInputChange("nome_mae", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="nome_pai">Nome do Pai:</label>
                                 <input
@@ -98,9 +111,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="nome_pai"
                                     name="nome_pai"
                                     value={editedData.nome_pai}
-                                    onChange={(e) => setEditedData({ ...editedData, nome_pai: e.target.value })}
+                                    onChange={(e) => handleInputChange("nome_pai", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="cpf">CPF:</label>
                                 <input
@@ -108,20 +122,21 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="cpf"
                                     name="cpf"
                                     value={editedData.cpf}
-                                    onChange={(e) => setEditedData({ ...editedData, cpf: e.target.value })}
+                                    onChange={(e) => handleInputChange("cpf", e.target.value)}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="expedidor_identidade">Órgão Expedidor:</label>
+                                <label htmlFor="expedidor_identidade">Expedidor da Identidade:</label>
                                 <input
                                     type="text"
                                     id="expedidor_identidade"
                                     name="expedidor_identidade"
                                     value={editedData.expedidor_identidade}
-                                    onChange={(e) => setEditedData({ ...editedData, expedidor_identidade: e.target.value })}
+                                    onChange={(e) => handleInputChange("expedidor_identidade", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="data_emissao_identidade">Data de Emissão da Identidade:</label>
                                 <input
@@ -129,121 +144,131 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="data_emissao_identidade"
                                     name="data_emissao_identidade"
                                     value={formatData(editedData.data_emissao_identidade)}
-                                    onChange={(e) => setEditedData({ ...editedData, data_emissao_identidade: e.target.value })}
+                                    onChange={(e) => handleInputChange("data_emissao_identidade", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="titulo_eleitor_numero">Título de Eleitor:</label>
+                                <label htmlFor="titulo_eleitor_numero">Número do Título de Eleitor:</label>
                                 <input
                                     type="text"
                                     id="titulo_eleitor_numero"
                                     name="titulo_eleitor_numero"
                                     value={editedData.titulo_eleitor_numero}
-                                    onChange={(e) => setEditedData({ ...editedData, titulo_eleitor_numero: e.target.value })}
+                                    onChange={(e) => handleInputChange("titulo_eleitor_numero", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="titulo_eleitor_zona">Zona Eleitoral:</label>
+                                <label htmlFor="titulo_eleitor_zona">Zona do Título de Eleitor:</label>
                                 <input
                                     type="text"
                                     id="titulo_eleitor_zona"
                                     name="titulo_eleitor_zona"
                                     value={editedData.titulo_eleitor_zona}
-                                    onChange={(e) => setEditedData({ ...editedData, titulo_eleitor_zona: e.target.value })}
+                                    onChange={(e) => handleInputChange("titulo_eleitor_zona", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="titulo_eleitor_secao">Seção Eleitoral:</label>
+                                <label htmlFor="titulo_eleitor_secao">Seção do Título de Eleitor:</label>
                                 <input
                                     type="text"
                                     id="titulo_eleitor_secao"
                                     name="titulo_eleitor_secao"
                                     value={editedData.titulo_eleitor_secao}
-                                    onChange={(e) => setEditedData({ ...editedData, titulo_eleitor_secao: e.target.value })}
+                                    onChange={(e) => handleInputChange("titulo_eleitor_secao", e.target.value)}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="ctps_numero">CTPS (Número):</label>
+                                <label htmlFor="ctps_numero">Número da CTPS:</label>
                                 <input
                                     type="text"
                                     id="ctps_numero"
                                     name="ctps_numero"
                                     value={editedData.ctps_numero}
-                                    onChange={(e) => setEditedData({ ...editedData, ctps_numero: e.target.value })}
+                                    onChange={(e) => handleInputChange("ctps_numero", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="ctps_serie">CTPS (Série):</label>
+                                <label htmlFor="ctps_serie">Série da CTPS:</label>
                                 <input
                                     type="text"
                                     id="ctps_serie"
                                     name="ctps_serie"
                                     value={editedData.ctps_serie}
-                                    onChange={(e) => setEditedData({ ...editedData, ctps_serie: e.target.value })}
+                                    onChange={(e) => handleInputChange("ctps_serie", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="ctps_uf">CTPS (UF):</label>
+                                <label htmlFor="ctps_uf">UF da CTPS:</label>
                                 <input
                                     type="text"
                                     id="ctps_uf"
                                     name="ctps_uf"
                                     value={editedData.ctps_uf}
-                                    onChange={(e) => setEditedData({ ...editedData, ctps_uf: e.target.value })}
+                                    onChange={(e) => handleInputChange("ctps_uf", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="ctps_data_emissao">Data de Emissão CTPS:</label>
+                                <label htmlFor="ctps_data_emissao">Data de Emissão da CTPS:</label>
                                 <input
                                     type="text"
                                     id="ctps_data_emissao"
                                     name="ctps_data_emissao"
                                     value={formatData(editedData.ctps_data_emissao)}
-                                    onChange={(e) => setEditedData({ ...editedData, ctps_data_emissao: e.target.value })}
+                                    onChange={(e) => handleInputChange("ctps_data_emissao", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="pis_numero">Número PIS:</label>
+                                <label htmlFor="pis_numero">Número do PIS:</label>
                                 <input
                                     type="text"
                                     id="pis_numero"
                                     name="pis_numero"
                                     value={editedData.pis_numero}
-                                    onChange={(e) => setEditedData({ ...editedData, pis_numero: e.target.value })}
+                                    onChange={(e) => handleInputChange("pis_numero", e.target.value)}
                                 />
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="pis_data_cadastro">Data de Cadastro PIS:</label>
+                                <label htmlFor="pis_data_cadastro">Data de Cadastro do PIS:</label>
                                 <input
                                     type="text"
                                     id="pis_data_cadastro"
                                     name="pis_data_cadastro"
                                     value={formatData(editedData.pis_data_cadastro)}
-                                    onChange={(e) => setEditedData({ ...editedData, pis_data_cadastro: e.target.value })}
+                                    onChange={(e) => handleInputChange("pis_data_cadastro", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="carteira_habilitacao_numero">Carteira de Habilitação (Número):</label>
+                                <label htmlFor="carteira_habilitacao_numero">Número da Carteira de Habilitação:</label>
                                 <input
                                     type="text"
                                     id="carteira_habilitacao_numero"
                                     name="carteira_habilitacao_numero"
                                     value={editedData.carteira_habilitacao_numero}
-                                    onChange={(e) => setEditedData({ ...editedData, carteira_habilitacao_numero: e.target.value })}
+                                    onChange={(e) => handleInputChange("carteira_habilitacao_numero", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor="carteira_habilitacao_categoria">Categoria CNH:</label>
+                                <label htmlFor="carteira_habilitacao_categoria">Categoria da Carteira de Habilitação:</label>
                                 <input
                                     type="text"
                                     id="carteira_habilitacao_categoria"
                                     name="carteira_habilitacao_categoria"
                                     value={editedData.carteira_habilitacao_categoria}
-                                    onChange={(e) => setEditedData({ ...editedData, carteira_habilitacao_categoria: e.target.value })}
+                                    onChange={(e) => handleInputChange("carteira_habilitacao_categoria", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="estado_civil">Estado Civil:</label>
                                 <input
@@ -251,9 +276,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="estado_civil"
                                     name="estado_civil"
                                     value={editedData.estado_civil}
-                                    onChange={(e) => setEditedData({ ...editedData, estado_civil: e.target.value })}
+                                    onChange={(e) => handleInputChange("estado_civil", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="escolaridade">Escolaridade:</label>
                                 <input
@@ -261,7 +287,7 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="escolaridade"
                                     name="escolaridade"
                                     value={editedData.escolaridade}
-                                    onChange={(e) => setEditedData({ ...editedData, escolaridade: e.target.value })}
+                                    onChange={(e) => handleInputChange("escolaridade", e.target.value)}
                                 />
                             </div>
 
@@ -272,19 +298,19 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="raca_cor"
                                     name="raca_cor"
                                     value={editedData.raca_cor}
-                                    onChange={(e) => setEditedData({ ...editedData, raca_cor: e.target.value })}
+                                    onChange={(e) => handleInputChange("raca_cor", e.target.value)}
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="certificado_reservista_numero">Reservista (Número):</label>
-                                <input
-                                    type="text"
-                                    id="certificado_reservista_numero"
-                                    name="certificado_reservista_numero"
-                                    value={editedData.certificado_reservista_numero}
-                                    onChange={(e) => setEditedData({ ...editedData, certificado_reservista_numero: e.target.value })}
-                                />
-                            </div>
+
+
+                            <input
+                                type="text"
+                                id="certificado_reservista_numero"
+                                name="certificado_reservista_numero"
+                                value={editedData.certificado_reservista_numero}
+                                onChange={(e) => handleInputChange("certificado_reservista_numero", e.target.value)}
+                            />
+
                             <div className="form-group">
                                 <label htmlFor="certificado_reservista_categoria">Categoria Reservista:</label>
                                 <input
@@ -292,9 +318,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="certificado_reservista_categoria"
                                     name="certificado_reservista_categoria"
                                     value={editedData.certificado_reservista_categoria}
-                                    onChange={(e) => setEditedData({ ...editedData, certificado_reservista_categoria: e.target.value })}
+                                    onChange={(e) => handleInputChange("certificado_reservista_categoria", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="nome_companheiro">Nome do Companheiro(a):</label>
                                 <input
@@ -302,9 +329,11 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="nome_companheiro"
                                     name="nome_companheiro"
                                     value={editedData.nome_companheiro}
-                                    onChange={(e) => setEditedData({ ...editedData, nome_companheiro: e.target.value })}
+                                    onChange={(e) => handleInputChange("nome_companheiro", e.target.value)}
                                 />
                             </div>
+
+
                             <div className="form-group">
                                 <label htmlFor="endereco">Endereço:</label>
                                 <input
@@ -312,7 +341,7 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco"
                                     name="endereco"
                                     value={editedData.endereco}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco", e.target.value)}
                                 />
                             </div>
 
@@ -323,9 +352,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco_numero"
                                     name="endereco_numero"
                                     value={editedData.endereco_numero}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco_numero: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco_numero", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="endereco_cep">CEP:</label>
                                 <input
@@ -333,9 +363,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco_cep"
                                     name="endereco_cep"
                                     value={editedData.endereco_cep}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco_cep: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco_cep", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="endereco_complemento">Complemento:</label>
                                 <input
@@ -343,9 +374,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco_complemento"
                                     name="endereco_complemento"
                                     value={editedData.endereco_complemento}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco_complemento: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco_complemento", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="endereco_cidade">Cidade:</label>
                                 <input
@@ -353,9 +385,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco_cidade"
                                     name="endereco_cidade"
                                     value={editedData.endereco_cidade}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco_cidade: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco_cidade", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="endereco_bairro">Bairro:</label>
                                 <input
@@ -363,9 +396,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco_bairro"
                                     name="endereco_bairro"
                                     value={editedData.endereco_bairro}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco_bairro: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco_bairro", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="endereco_uf">UF:</label>
                                 <input
@@ -373,9 +407,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="endereco_uf"
                                     name="endereco_uf"
                                     value={editedData.endereco_uf}
-                                    onChange={(e) => setEditedData({ ...editedData, endereco_uf: e.target.value })}
+                                    onChange={(e) => handleInputChange("endereco_uf", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="cargo">Cargo:</label>
                                 <input
@@ -383,9 +418,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="cargo"
                                     name="cargo"
                                     value={editedData.cargo}
-                                    onChange={(e) => setEditedData({ ...editedData, cargo: e.target.value })}
+                                    onChange={(e) => handleInputChange("cargo", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="cbo">CBO:</label>
                                 <input
@@ -393,9 +429,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="cbo"
                                     name="cbo"
                                     value={editedData.cbo}
-                                    onChange={(e) => setEditedData({ ...editedData, cbo: e.target.value })}
+                                    onChange={(e) => handleInputChange("cbo", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="data_admissao">Data de Admissão:</label>
                                 <input
@@ -403,9 +440,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="data_admissao"
                                     name="data_admissao"
                                     value={editedData.data_admissao}
-                                    onChange={(e) => setEditedData({ ...editedData, data_admissao: e.target.value })}
+                                    onChange={(e) => handleInputChange("data_admissao", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="salario">Salário:</label>
                                 <input
@@ -413,7 +451,7 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="salario"
                                     name="salario"
                                     value={editedData.salario}
-                                    onChange={(e) => setEditedData({ ...editedData, salario: e.target.value })}
+                                    onChange={(e) => handleInputChange("salario", e.target.value)}
                                 />
                             </div>
 
@@ -424,9 +462,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="contrato_experiencia"
                                     name="contrato_experiencia"
                                     value={editedData.contrato_experiencia}
-                                    onChange={(e) => setEditedData({ ...editedData, contrato_experiencia: e.target.value })}
+                                    onChange={(e) => handleInputChange("contrato_experiencia", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="horario_trabalho">Horário de Trabalho:</label>
                                 <input
@@ -434,9 +473,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="horario_trabalho"
                                     name="horario_trabalho"
                                     value={editedData.horario_trabalho}
-                                    onChange={(e) => setEditedData({ ...editedData, horario_trabalho: e.target.value })}
+                                    onChange={(e) => handleInputChange("horario_trabalho", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="intervalo">Intervalo:</label>
                                 <input
@@ -444,9 +484,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="intervalo"
                                     name="intervalo"
                                     value={editedData.intervalo}
-                                    onChange={(e) => setEditedData({ ...editedData, intervalo: e.target.value })}
+                                    onChange={(e) => handleInputChange("intervalo", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="descanso">Descanso:</label>
                                 <input
@@ -454,9 +495,10 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="descanso"
                                     name="descanso"
                                     value={editedData.descanso}
-                                    onChange={(e) => setEditedData({ ...editedData, descanso: e.target.value })}
+                                    onChange={(e) => handleInputChange("descanso", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="horario_sabado">Horário de Trabalho aos Sábados:</label>
                                 <input
@@ -464,21 +506,23 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="horario_sabado"
                                     name="horario_sabado"
                                     value={editedData.horario_sabado}
-                                    onChange={(e) => setEditedData({ ...editedData, horario_sabado: e.target.value })}
+                                    onChange={(e) => handleInputChange("horario_sabado", e.target.value)}
                                 />
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="vale_transporte">Vale Transporte:</label>
                                 <select
                                     id="vale_transporte"
                                     name="vale_transporte"
                                     value={editedData.vale_transporte}
-                                    onChange={(e) => setEditedData({ ...editedData, vale_transporte: e.target.value })}
+                                    onChange={(e) => handleInputChange("vale_transporte", e.target.value)}
                                 >
                                     <option value="true">Sim</option>
                                     <option value="false">Não</option>
                                 </select>
                             </div>
+
                             <div className="form-group">
                                 <label htmlFor="informacoes_complementares">Informações Complementares:</label>
                                 <input
@@ -486,7 +530,7 @@ const ModalFicha = ({ ficha, onClose }) => {
                                     id="informacoes_complementares"
                                     name="informacoes_complementares"
                                     value={editedData.informacoes_complementares}
-                                    onChange={(e) => setEditedData({ ...editedData, informacoes_complementares: e.target.value })}
+                                    onChange={(e) => handleInputChange("informacoes_complementares", e.target.value)}
                                 />
                             </div>
                         </form>
