@@ -1,9 +1,31 @@
 import styles from './modalFicha.module.css';
 
+import React, { useState, useEffect } from 'react';
+
+// hooks
+import { listarHabilidades } from '../../hooks/apiService';
+
 // utils
 import { formatData } from '../../utils/utils';
 
 const ModalFicha = ({ ficha, onClose }) => {
+    const [habilidades, setHabilidades] = useState([]);
+
+    useEffect(() => {
+        const fetchHabilidades = async () => {
+            try {
+                const habilidadesUsuario = await listarHabilidades(ficha.id_usuario);
+                setHabilidades(habilidadesUsuario);
+            } catch (error) {
+                console.error('Erro ao buscar habilidades:', error);
+            }
+        };
+
+        if (ficha && ficha.id_usuario) {
+            fetchHabilidades();
+        }
+    }, [ficha]);
+
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modal}>
@@ -53,6 +75,21 @@ const ModalFicha = ({ ficha, onClose }) => {
                         <p>Horário de Trabalho aos Sábados: {ficha.horario_sabado}</p>
                         <p>Vale Transporte: {ficha.vale_transporte ? 'Sim' : 'Não'}</p>
                         <p>Informações Complementares: {ficha.informacoes_complementares}</p>
+
+                        <h3>Habilidades</h3>
+                        {habilidades.map((habilidade, index) => (
+                            <div key={index}>
+                                <p>Habilidade: {habilidade.habilidade}</p>
+                                <p>Especialidade: {habilidade.especialidade}</p>
+                            </div>
+                        ))}
+
+                        <div className={styles.modalActions}>
+                            <button onClick={() => {/* Adicione a lógica para abrir o formulário de edição aqui */ }}>
+                                Editar Ficha
+                            </button>
+                        </div>
+
                     </div>
                 ) : (
                     <p>Carregando dados...</p>

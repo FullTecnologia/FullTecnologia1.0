@@ -132,6 +132,15 @@ export const listarFicha = async (id) => {
   }
 };
 
+export const listarHabilidades = async (id) => {
+  try {
+    const response = await axios.get(`${baseURL}/listarHabilidades/${id}`);
+    return handleResponse(response);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const excluirColaborador = async (id) => {
   try {
     const res = await axios.delete(`${baseURL}/usuarios/${id}`);
