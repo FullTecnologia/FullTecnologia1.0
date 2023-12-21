@@ -1,8 +1,3 @@
-@font-face {
-  font-family: 'Ketika  ';
-  src: url(./fonts/KetikaSans-Regular.ttf) format('ttf');
-}
-
 body {
   margin: 0;
   font-family: ketika, sans-serif;

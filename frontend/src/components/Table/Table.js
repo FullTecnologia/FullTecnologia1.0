@@ -136,6 +136,7 @@ const Table = ({ userId, dataAtv }) => {
 
 const Colab = () => {
     const [colaboradores, setColaboradores] = useState([]);
+    const [filteredColaboradores, setFilteredColaboradores] = useState([]);
     const [searchName, setSearchName] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentColaborador, setCurrentColaborador] = useState(null);
@@ -154,6 +155,10 @@ const Colab = () => {
     useEffect(() => {
         fetchDataFromDatabase();
     }, []);
+
+    useEffect(() => {
+        setFilteredColaboradores(colaboradores);
+    }, [colaboradores]);
 
     const openModal = (colaborador) => {
         setCurrentColaborador(colaborador);
@@ -179,10 +184,7 @@ const Colab = () => {
         }
 
         setIsDetalhesModalOpen(true);
-        return <ModalFicha onUpdate={fetchDataFromDatabase} />;
     };
-
-
 
     const closeDetalhesModal = () => {
         setIsDetalhesModalOpen(false);
@@ -191,33 +193,29 @@ const Colab = () => {
     const handleSave = async (updatedColaborador) => {
         try {
             await editarColaborador(updatedColaborador.id, updatedColaborador);
-            const updatedList = colaboradores.map(colab =>
-                colab.id === updatedColaborador.id ? { ...colab, ...updatedColaborador } : colab);
-            setColaboradores(updatedList);
-            closeModal();
+            fetchDataFromDatabase(); // Para atualizar a lista de colaboradores
         } catch (error) {
             console.error('Erro ao atualizar colaborador:', error);
         }
+        closeModal();
     };
 
     const handleDelete = async (id) => {
         if (window.confirm('Tem certeza que deseja excluir este colaborador?')) {
             try {
                 await excluirColaborador(id);
-                await fetchDataFromDatabase(); // Atualiza a tabela após a exclusão
+                fetchDataFromDatabase(); // Para atualizar a lista de colaboradores
             } catch (error) {
                 console.error('Erro ao excluir colaborador:', error);
             }
         }
     };
 
-
     const handleSearch = () => {
-        const filteredColaboradores = colaboradores.filter((colaborador) => {
-            return colaborador.nome.toLowerCase().includes(searchName.toLowerCase());
-        });
-
-        setColaboradores(filteredColaboradores);
+        const filtered = colaboradores.filter(colaborador =>
+            colaborador.nome.toLowerCase().includes(searchName.toLowerCase())
+        );
+        setFilteredColaboradores(filtered);
     };
 
     return (
@@ -247,7 +245,7 @@ const Colab = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {colaboradores.map((colaborador) => (
+                    {filteredColaboradores.map(colaborador => (
                         <tr key={colaborador.id} className={styles.row}>
                             <td>{colaborador.nome}</td>
                             <td>{colaborador.email}</td>
