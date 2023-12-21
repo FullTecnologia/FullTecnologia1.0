@@ -4,9 +4,10 @@ const AuthStateContext = createContext();
 const AuthDispatchContext = createContext();
 
 const initialState = {
-  token: null, // Adicione o token no estado inicial
+  token: null,
   id_usuario: null,
   nome: null,
+  fotoPerfil: null,
 };
 
 const authReducer = (state, action) => {
@@ -17,6 +18,7 @@ const authReducer = (state, action) => {
         token: action.payload.token,
         id_usuario: action.payload.id_usuario,
         nome: action.payload.nome,
+        fotoPerfil: action.payload.fotoPerfil,
       };
     // ... outros casos conforme necessário
     default:

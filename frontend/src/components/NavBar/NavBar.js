@@ -6,7 +6,6 @@ import styles from "./NavBar.module.css";
 
 // assets
 import LogoImage from "../../assets/Logo-Full-Engenharia.png";
-import AvatarImage from "../../assets/avatar.png";
 
 // contexts
 import { useAuthState } from "../../contexts/AuthContext";
@@ -27,7 +26,6 @@ const NavBar = () => {
       <div className={styles.userProfile}>
         <div>
           <img
-            src={AvatarImage}
             alt="Avatar"
             className={styles.logoImageAvatar}
           />
